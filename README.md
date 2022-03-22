@@ -8,7 +8,7 @@ This bundle is a continuation of the [WhiteOctoberPagerfantaBundle](https://gith
 
 ## Documentation
 
-Please see the [BabDev website](https://www.babdev.com/open-source/packages/pagerfantabundle/docs/3.x) for detailed information on how to use this bundle.
+Please see the [BabDev website](https://www.babdev.com/open-source/packages/pagerfantabundle/docs/3.x/intro) for detailed information on how to use this bundle.
 
 ## Security
 
