@@ -27,9 +27,9 @@ final class LegacyPagerfantaNormalizer implements NormalizerInterface, Cacheable
         return $this->normalizer->normalize($object, $format, $context);
     }
 
-    public function supportsNormalization(mixed $data, string $format = null): bool
+    public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
     {
-        return $this->normalizer->supportsNormalization($data, $format);
+        return $this->normalizer->supportsNormalization($data, $format, $context);
     }
 
     public function hasCacheableSupportsMethod(): bool
