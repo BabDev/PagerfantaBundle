@@ -44,3 +44,5 @@ The bundle comes with basic CSS for the default view so you can get started quic
 ```twig
 <link rel="stylesheet" href="{{ asset('bundles/babdevpagerfanta/css/pagerfanta.css') }}">
 ```
+
+If you are using the [AssetMapper component](https://symfony.com/doc/current/frontend/asset_mapper.html) in your application, the CSS file can also be loaded through that component. Please see the Symfony documentation for examples of [importing assets from bundles](https://symfony.com/doc/current/frontend/asset_mapper.html#third-party-bundles-custom-asset-paths) and [importing assets outside your `/assets` directory](https://symfony.com/doc/current/frontend/asset_mapper.html#importing-assets-outside-of-the-assets-directory).
