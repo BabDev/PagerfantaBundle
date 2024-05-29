@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.5.0 (2024-??-??)
+
+- Add support for Symfony 7.1
+- Drop support for Symfony 6.3
+
 ## 4.4.0 (2023-12-20)
 
 - [#60](https://github.com/BabDev/PagerfantaBundle/pull/60) Added Basque locale

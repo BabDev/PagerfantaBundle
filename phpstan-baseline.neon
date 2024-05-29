@@ -6,6 +6,11 @@ parameters:
 			path: src/RouteGenerator/RequestAwareRouteGeneratorFactory.php
 
 		-
+			message: "#^Parameter \\#2 \\$parameters of method Symfony\\\\Component\\\\Routing\\\\Generator\\\\UrlGeneratorInterface\\:\\:generate\\(\\) expects array, array\\|object given\\.$#"
+			count: 1
+			path: src/RouteGenerator/RouterAwareRouteGenerator.php
+
+		-
 			message: "#^Method BabDev\\\\PagerfantaBundle\\\\View\\\\ContainerBackedImmutableViewFactory\\:\\:get\\(\\) should return Pagerfanta\\\\View\\\\ViewInterface but returns mixed\\.$#"
 			count: 1
 			path: src/View/ContainerBackedImmutableViewFactory.php

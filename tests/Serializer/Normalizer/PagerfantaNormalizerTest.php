@@ -44,7 +44,7 @@ final class PagerfantaNormalizerTest extends TestCase
     public function testNormalizeWithLegacyDecorator(): void
     {
         if (!interface_exists(CacheableSupportsMethodInterface::class)) {
-            self::markTestSkipped('Test requires symfony/serializer:<6.4');
+            self::markTestSkipped('Test requires symfony/serializer:<=6.4');
         }
 
         $pager = new Pagerfanta(
@@ -96,7 +96,7 @@ final class PagerfantaNormalizerTest extends TestCase
     public function testHasCacheableSupportsMethod(): void
     {
         if (!interface_exists(CacheableSupportsMethodInterface::class)) {
-            self::markTestSkipped('Test requires symfony/serializer:<6.4');
+            self::markTestSkipped('Test requires symfony/serializer:<=6.4');
         }
 
         self::assertTrue((new LegacyPagerfantaNormalizer(new PagerfantaNormalizer()))->hasCacheableSupportsMethod());
