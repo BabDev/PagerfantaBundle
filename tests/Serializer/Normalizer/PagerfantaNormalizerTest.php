@@ -10,6 +10,7 @@ use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Serializer;
 
@@ -17,9 +18,7 @@ final class PagerfantaNormalizerTest extends TestCase
 {
     public function testNormalize(): void
     {
-        $pager = new Pagerfanta(
-            new NullAdapter(25),
-        );
+        $pager = new Pagerfanta(new NullAdapter(25));
 
         $expectedResultArray = [
             'items' => $pager->getCurrentPageResults(),
@@ -39,6 +38,50 @@ final class PagerfantaNormalizerTest extends TestCase
     }
 
     /**
+     * @return \Generator<string, array{array<array-key, string>, array<string, mixed>, array<array-key, string>}>
+     */
+    public static function dataNormalizeWithPreserveKeysContext(): \Generator
+    {
+        yield 'Context not set' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], [], [0 => 'item1', 2 => 'item2', 4 => 'item3']];
+
+        yield 'Context with preserve keys disabled' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], [PagerfantaNormalizer::PRESERVE_KEYS_KEY => false], ['item1', 'item2', 'item3']];
+
+        yield 'Context with preserve keys enabled' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], [PagerfantaNormalizer::PRESERVE_KEYS_KEY => true], [0 => 'item1', 2 => 'item2', 4 => 'item3']];
+    }
+
+    /**
+     * @dataProvider dataNormalizeWithPreserveKeysContext
+     */
+    public function testNormalizeWithPreserveKeysContext(array $data, array $context, array $expectedItems): void
+    {
+        $pager = new Pagerfanta(new FixedAdapter(\count($data), $data));
+
+        $expectedResultArray = [
+            'items' => $expectedItems,
+            'pagination' => [
+                'current_page' => $pager->getCurrentPage(),
+                'has_previous_page' => $pager->hasPreviousPage(),
+                'has_next_page' => $pager->hasNextPage(),
+                'per_page' => $pager->getMaxPerPage(),
+                'total_items' => $pager->getNbResults(),
+                'total_pages' => $pager->getNbPages(),
+            ],
+        ];
+
+        $serializer = new Serializer([new PagerfantaNormalizer()]);
+
+        self::assertEquals($expectedResultArray, $serializer->normalize($pager, null, $context));
+    }
+
+    public function testNormalizeRejectsInvalidPreserveKeysContext(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('The "pagerfanta_preserve_keys" context key must be a boolean value or null, "string" given.');
+
+        (new PagerfantaNormalizer())->normalize(new Pagerfanta(new NullAdapter(25)), null, [PagerfantaNormalizer::PRESERVE_KEYS_KEY => 'invalid']);
+    }
+
+    /**
      * @group legacy
      */
     public function testNormalizeWithLegacyDecorator(): void
@@ -47,9 +90,7 @@ final class PagerfantaNormalizerTest extends TestCase
             self::markTestSkipped('Test requires symfony/serializer:<=6.4');
         }
 
-        $pager = new Pagerfanta(
-            new NullAdapter(25),
-        );
+        $pager = new Pagerfanta(new NullAdapter(25));
 
         $expectedResultArray = [
             'items' => $pager->getCurrentPageResults(),

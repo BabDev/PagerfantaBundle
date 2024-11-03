@@ -4,6 +4,7 @@
 
 - Add support for Symfony 7.1 and 7.2
 - Drop support for Symfony 6.3 and 7.0
+- [#63](https://github.com/BabDev/PagerfantaBundle/issues/63) Add a serialization context to control how array keys are preserved when serializing Pagerfanta instances
 
 ## 4.4.0 (2023-12-20)
 

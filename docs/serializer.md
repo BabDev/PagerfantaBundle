@@ -23,9 +23,7 @@ final class PostController extends AbstractController
     {
         $queryBuilder = $blogPostRepository->createBlogListQueryBuilder();
 
-        $pagerfanta = new Pagerfanta(
-            new QueryAdapter($queryBuilder)
-        );
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
 
         return $this->json($pagerfanta);
     }
@@ -57,3 +55,9 @@ Below is an example of how a `Pagerfanta\Pagerfanta` instance is serialized into
     }
 }
 ```
+
+## Serialization Context Configuration
+
+### Preserving Array Keys
+
+Both serialization integrations support configuring the way array keys are preserved using the `pagerfanta_preserve_keys` context attribute. By default, or when the attribute is explicitly set to null, the payload will be serialized exactly as provided by the pagination adapter. However, when the attribute is set to a boolean value, the value will be used as the second argument when calling the native `iterator_to_array()` function.

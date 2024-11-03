@@ -2,6 +2,7 @@
 
 namespace BabDev\PagerfantaBundle\Serializer\Handler;
 
+use JMS\Serializer\Exception\LogicException;
 use JMS\Serializer\GraphNavigatorInterface;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
 use JMS\Serializer\JsonSerializationVisitor;
@@ -11,6 +12,8 @@ use Pagerfanta\PagerfantaInterface;
 
 final class PagerfantaHandler implements SubscribingHandlerInterface
 {
+    public const PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
+
     public static function getSubscribingMethods(): array
     {
         return [
@@ -36,9 +39,28 @@ final class PagerfantaHandler implements SubscribingHandlerInterface
      */
     public function serializeToJson(JsonSerializationVisitor $visitor, PagerfantaInterface $pagerfanta, array $type, SerializationContext $context)
     {
+        $items = $pagerfanta->getCurrentPageResults();
+
+        if ($context->hasAttribute(self::PRESERVE_KEYS_KEY)) {
+            $preserveKeys = $context->getAttribute(self::PRESERVE_KEYS_KEY);
+
+            if (!\is_bool($preserveKeys) && null !== $preserveKeys) {
+                throw new LogicException(\sprintf('The "%s" context key must be a boolean value or null, "%s" given.', self::PRESERVE_KEYS_KEY, get_debug_type($preserveKeys)));
+            }
+
+            if (null !== $preserveKeys) {
+                // When requiring PHP 8.2, this `is_array()` check can be removed
+                if (\is_array($items)) {
+                    $items = new \ArrayIterator($items);
+                }
+
+                $items = iterator_to_array($items, $preserveKeys);
+            }
+        }
+
         return $visitor->visitArray(
             [
-                'items' => $pagerfanta->getCurrentPageResults(),
+                'items' => $items,
                 'pagination' => [
                     'current_page' => $pagerfanta->getCurrentPage(),
                     'has_previous_page' => $pagerfanta->hasPreviousPage(),
