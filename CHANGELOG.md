@@ -2,8 +2,8 @@
 
 ## 4.5.0 (2024-??-??)
 
-- Add support for Symfony 7.1
-- Drop support for Symfony 6.3
+- Add support for Symfony 7.1 and 7.2
+- Drop support for Symfony 6.3 and 7.0
 
 ## 4.4.0 (2023-12-20)
 

@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist
         env:
-          SYMFONY_REQUIRE: '7.1.*@rc'
+          SYMFONY_REQUIRE: '7.2.*@beta'
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze --error-format=github
