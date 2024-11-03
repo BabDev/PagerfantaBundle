@@ -17,7 +17,7 @@ final class RouterAwareRouteGenerator implements RouteGeneratorInterface
     ) {
         // Check missing options
         if (!isset($options['routeName'])) {
-            throw new InvalidArgumentException(sprintf('The "%s" class options requires a "routeName" parameter to be set.', self::class));
+            throw new InvalidArgumentException(\sprintf('The "%s" class options requires a "routeName" parameter to be set.', self::class));
         }
     }
 

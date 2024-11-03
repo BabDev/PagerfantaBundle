@@ -23,6 +23,6 @@ final class UndefinedCallableHandler
             return false;
         }
 
-        throw new SyntaxError(sprintf('Unknown function "%s". Did you forget to run "composer require pagerfanta/twig"?', $name));
+        throw new SyntaxError(\sprintf('Unknown function "%s". Did you forget to run "composer require pagerfanta/twig"?', $name));
     }
 }

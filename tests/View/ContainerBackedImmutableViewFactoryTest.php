@@ -80,7 +80,7 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
 
             public function get(string $id)
             {
-                return $this->views[$id] ?? throw new class() extends \RuntimeException implements NotFoundExceptionInterface {};
+                return $this->views[$id] ?? throw new class extends \RuntimeException implements NotFoundExceptionInterface {};
             }
 
             public function has(string $id): bool

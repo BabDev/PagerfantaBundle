@@ -25,7 +25,7 @@ final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
      */
     public function add(array $views): void
     {
-        throw new ImmutableViewFactoryException(sprintf('"%s" cannot be modified after instantiation.', self::class));
+        throw new ImmutableViewFactoryException(\sprintf('"%s" cannot be modified after instantiation.', self::class));
     }
 
     /**
@@ -47,7 +47,7 @@ final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
      */
     public function clear(): void
     {
-        throw new ImmutableViewFactoryException(sprintf('"%s" cannot be modified after instantiation.', self::class));
+        throw new ImmutableViewFactoryException(\sprintf('"%s" cannot be modified after instantiation.', self::class));
     }
 
     /**
@@ -56,7 +56,7 @@ final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
     public function get(string $name): ViewInterface
     {
         if (!$this->has($name)) {
-            throw new InvalidArgumentException(sprintf('The view "%s" does not exist.', $name));
+            throw new InvalidArgumentException(\sprintf('The view "%s" does not exist.', $name));
         }
 
         return $this->container->get($name);
@@ -72,7 +72,7 @@ final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
      */
     public function remove(string $name): void
     {
-        throw new ImmutableViewFactoryException(sprintf('"%s" cannot be modified after instantiation.', self::class));
+        throw new ImmutableViewFactoryException(\sprintf('"%s" cannot be modified after instantiation.', self::class));
     }
 
     /**
@@ -80,6 +80,6 @@ final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
      */
     public function set(string $name, ViewInterface $view): void
     {
-        throw new ImmutableViewFactoryException(sprintf('"%s" cannot be modified after instantiation.', self::class));
+        throw new ImmutableViewFactoryException(\sprintf('"%s" cannot be modified after instantiation.', self::class));
     }
 }

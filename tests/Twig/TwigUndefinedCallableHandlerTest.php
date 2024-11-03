@@ -27,7 +27,7 @@ final class TwigUndefinedCallableHandlerTest extends TestCase
     public function testThrowsASyntaxErrorForSupportedTwigFunctionsWhenNotDefined(string $function): void
     {
         $this->expectException(SyntaxError::class);
-        $this->expectExceptionMessage(sprintf('Unknown function "%s". Did you forget to run "composer require pagerfanta/twig"?', $function));
+        $this->expectExceptionMessage(\sprintf('Unknown function "%s". Did you forget to run "composer require pagerfanta/twig"?', $function));
 
         (new UndefinedCallableHandler())->onUndefinedFunction($function);
     }

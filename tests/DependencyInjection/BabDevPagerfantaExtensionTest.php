@@ -141,7 +141,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $refl = new \ReflectionClass(PagerfantaExtension::class);
 
         if (false === $refl->getFileName()) {
-            self::fail(sprintf('Could not reflect "%s"', PagerfantaExtension::class));
+            self::fail(\sprintf('Could not reflect "%s"', PagerfantaExtension::class));
         }
 
         $path = \dirname($refl->getFileName(), 2).'/templates/';

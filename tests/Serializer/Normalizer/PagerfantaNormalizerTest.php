@@ -112,7 +112,7 @@ final class PagerfantaNormalizerTest extends TestCase
     public function testNormalizeOnlyAcceptsPagerfantaInstances(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('The object must be an instance of "%s".', PagerfantaInterface::class));
+        $this->expectExceptionMessage(\sprintf('The object must be an instance of "%s".', PagerfantaInterface::class));
 
         (new PagerfantaNormalizer())->normalize(new \stdClass());
     }
