@@ -81,7 +81,7 @@ final class TwigViewIntegrationTest extends TestCase
     }
 
     /**
-     * @return Pagerfanta<int>
+     * @return Pagerfanta<int<1, 100>>
      */
     private function createPagerfanta(): Pagerfanta
     {

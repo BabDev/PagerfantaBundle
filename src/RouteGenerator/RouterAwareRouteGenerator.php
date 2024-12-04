@@ -8,8 +8,14 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * @phpstan-type RouteGeneratorOptions array{routeName: non-empty-string, pageParameter?: non-empty-string, omitFirstPage?: bool, routeParams?: array<string, mixed>, referenceType?: UrlGeneratorInterface::*}
+ */
 final class RouterAwareRouteGenerator implements RouteGeneratorInterface
 {
+    /**
+     * @phpstan-param RouteGeneratorOptions $options
+     */
     public function __construct(
         private readonly UrlGeneratorInterface $router,
         private readonly PropertyAccessorInterface $propertyAccessor,

@@ -17,7 +17,7 @@ final class UndefinedCallableHandler
     /**
      * @throws SyntaxError if the undefined function is supported by this handler
      */
-    public function onUndefinedFunction(string $name): ?bool
+    public function onUndefinedFunction(string $name): bool
     {
         if (!\in_array($name, self::SUPPORTED_FUNCTIONS, true)) {
             return false;

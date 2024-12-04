@@ -1,32 +1,68 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
+			message: '#^Cannot access offset ''not_valid_current_page'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/DependencyInjection/BabDevPagerfantaExtension.php
+
+		-
+			message: '#^Cannot access offset ''out_of_range_page'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/DependencyInjection/BabDevPagerfantaExtension.php
+
+		-
+			message: '#^Cannot access offset ''alias'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/DependencyInjection/CompilerPass/RegisterPagerfantaViewsPass.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
+			identifier: argument.type
 			count: 2
 			path: src/RouteGenerator/RequestAwareRouteGeneratorFactory.php
 
 		-
-			message: "#^Parameter \\#2 \\$parameters of method Symfony\\\\Component\\\\Routing\\\\Generator\\\\UrlGeneratorInterface\\:\\:generate\\(\\) expects array, array\\|object given\\.$#"
+			message: '#^Parameter \#3 \$options of class BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwareRouteGenerator constructor expects array\{routeName\: non\-empty\-string, pageParameter\?\: non\-empty\-string, omitFirstPage\?\: bool, routeParams\?\: array\<string, mixed\>, referenceType\?\: 0\|1\|2\|3\}, non\-empty\-array\<string, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/RouteGenerator/RequestAwareRouteGeneratorFactory.php
+
+		-
+			message: '#^Default value of the parameter \#3 \$options \(array\{\}\) of method BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwareRouteGenerator\:\:__construct\(\) is incompatible with type array\{routeName\: non\-empty\-string, pageParameter\?\: non\-empty\-string, omitFirstPage\?\: bool, routeParams\?\: array\<string, mixed\>, referenceType\?\: 0\|1\|2\|3\}\.$#'
+			identifier: parameter.defaultValue
 			count: 1
 			path: src/RouteGenerator/RouterAwareRouteGenerator.php
 
 		-
-			message: "#^Method BabDev\\\\PagerfantaBundle\\\\View\\\\ContainerBackedImmutableViewFactory\\:\\:get\\(\\) should return Pagerfanta\\\\View\\\\ViewInterface but returns mixed\\.$#"
+			message: '#^Method BabDev\\PagerfantaBundle\\Serializer\\Handler\\PagerfantaHandler\:\:serializeToJson\(\) should return array\<string, mixed\>\|ArrayObject\<string, mixed\> but returns array\|ArrayObject\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Serializer/Handler/PagerfantaHandler.php
+
+		-
+			message: '#^Method BabDev\\PagerfantaBundle\\View\\ContainerBackedImmutableViewFactory\:\:get\(\) should return Pagerfanta\\View\\ViewInterface but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: src/View/ContainerBackedImmutableViewFactory.php
 
 		-
-			message: "#^Parameter \\#2 \\$array of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertArrayHasKey\\(\\) expects array\\|ArrayAccess, mixed given\\.$#"
+			message: '#^Parameter \#2 \$array of static method PHPUnit\\Framework\\Assert\:\:assertArrayHasKey\(\) expects array\|ArrayAccess, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/DependencyInjection/BabDevPagerfantaExtensionTest.php
 
 		-
-			message: "#^Method BabDev\\\\PagerfantaBundle\\\\Tests\\\\View\\\\TwigViewIntegrationTest\\:\\:removeWhitespacesBetweenTags\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method BabDev\\PagerfantaBundle\\Tests\\View\\TwigViewIntegrationTest\:\:removeWhitespacesBetweenTags\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/View/TwigViewIntegrationTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$path of function dirname expects string, string\\|false given\\.$#"
+			message: '#^Parameter \#1 \$path of function dirname expects string, string\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/View/TwigViewIntegrationTest.php
 

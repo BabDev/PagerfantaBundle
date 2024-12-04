@@ -34,6 +34,9 @@ final class RequestAwareRouteGeneratorFactoryTest extends TestCase
         } while (null !== $request);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testTheGeneratorIsCreatedWhenResolvingTheRouteNameFromTheRequest(): void
     {
         $request = Request::create('/');
@@ -42,12 +45,12 @@ final class RequestAwareRouteGeneratorFactoryTest extends TestCase
 
         $this->requestStack->push($request);
 
-        self::assertInstanceOf(
-            RouteGeneratorInterface::class,
-            $this->createFactory()->create(),
-        );
+        $this->createFactory()->create();
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testTheGeneratorIsCreatedWhenGivenARouteNameDuringASubrequest(): void
     {
         $masterRequest = Request::create('/');
@@ -59,10 +62,7 @@ final class RequestAwareRouteGeneratorFactoryTest extends TestCase
         $this->requestStack->push($masterRequest);
         $this->requestStack->push($subRequest);
 
-        self::assertInstanceOf(
-            RouteGeneratorInterface::class,
-            $this->createFactory()->create(['routeName' => 'pagerfanta_view']),
-        );
+        $this->createFactory()->create(['routeName' => 'pagerfanta_view']);
     }
 
     public function testTheGeneratorIsNotCreatedWhenARouteNameIsNotGivenDuringASubrequest(): void
