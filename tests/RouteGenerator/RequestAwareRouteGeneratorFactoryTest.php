@@ -4,7 +4,6 @@ namespace BabDev\PagerfantaBundle\Tests\RouteGenerator;
 
 use BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory;
 use Pagerfanta\Exception\RuntimeException;
-use Pagerfanta\RouteGenerator\RouteGeneratorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
