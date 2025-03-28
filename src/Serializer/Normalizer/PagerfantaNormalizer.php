@@ -20,13 +20,13 @@ final class PagerfantaNormalizer implements NormalizerInterface, NormalizerAware
      * @throws InvalidArgumentException when the object given is not a supported type for the normalizer
      * @throws LogicException           when the normalizer is not called in an expected context
      */
-    public function normalize(mixed $object, ?string $format = null, array $context = []): array
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
-        if (!$object instanceof PagerfantaInterface) {
+        if (!$data instanceof PagerfantaInterface) {
             throw new InvalidArgumentException(\sprintf('The object must be an instance of "%s".', PagerfantaInterface::class));
         }
 
-        $items = $object->getIterator();
+        $items = $data->getIterator();
 
         if (\array_key_exists(self::PRESERVE_KEYS_KEY, $context)) {
             $preserveKeys = $context[self::PRESERVE_KEYS_KEY];
@@ -36,11 +36,6 @@ final class PagerfantaNormalizer implements NormalizerInterface, NormalizerAware
             }
 
             if (null !== $preserveKeys) {
-                // When requiring PHP 8.2, this `is_array()` check can be removed
-                if (\is_array($items)) {
-                    $items = new \ArrayIterator($items);
-                }
-
                 $items = iterator_to_array($items, $preserveKeys);
             }
         }
@@ -48,12 +43,12 @@ final class PagerfantaNormalizer implements NormalizerInterface, NormalizerAware
         return [
             'items' => $this->normalizer->normalize($items, $format, $context),
             'pagination' => [
-                'current_page' => $object->getCurrentPage(),
-                'has_previous_page' => $object->hasPreviousPage(),
-                'has_next_page' => $object->hasNextPage(),
-                'per_page' => $object->getMaxPerPage(),
-                'total_items' => $object->getNbResults(),
-                'total_pages' => $object->getNbPages(),
+                'current_page' => $data->getCurrentPage(),
+                'has_previous_page' => $data->hasPreviousPage(),
+                'has_next_page' => $data->hasNextPage(),
+                'per_page' => $data->getMaxPerPage(),
+                'total_items' => $data->getNbResults(),
+                'total_pages' => $data->getNbPages(),
             ],
         ];
     }

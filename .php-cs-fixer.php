@@ -4,8 +4,8 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
         '@Symfony:risky' => true,
-        '@PHP81Migration' => true,
-        '@PHP80Migration:risky' => true,
+        '@PHP82Migration' => true,
+        '@PHP82Migration:risky' => true,
         '@PHPUnit91Migration:risky' => true,
         'array_syntax' => ['syntax' => 'short'],
         'blank_line_after_opening_tag' => false,

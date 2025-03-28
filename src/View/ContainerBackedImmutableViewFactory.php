@@ -23,7 +23,7 @@ final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
      *
      * @throws ImmutableViewFactoryException
      */
-    public function add(array $views): void
+    public function add(array $views): never
     {
         throw new ImmutableViewFactoryException(\sprintf('"%s" cannot be modified after instantiation.', self::class));
     }
@@ -45,7 +45,7 @@ final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
     /**
      * @throws ImmutableViewFactoryException
      */
-    public function clear(): void
+    public function clear(): never
     {
         throw new ImmutableViewFactoryException(\sprintf('"%s" cannot be modified after instantiation.', self::class));
     }
@@ -70,7 +70,7 @@ final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
     /**
      * @throws ImmutableViewFactoryException
      */
-    public function remove(string $name): void
+    public function remove(string $name): never
     {
         throw new ImmutableViewFactoryException(\sprintf('"%s" cannot be modified after instantiation.', self::class));
     }
@@ -78,7 +78,7 @@ final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
     /**
      * @throws ImmutableViewFactoryException
      */
-    public function set(string $name, ViewInterface $view): void
+    public function set(string $name, ViewInterface $view): never
     {
         throw new ImmutableViewFactoryException(\sprintf('"%s" cannot be modified after instantiation.', self::class));
     }
