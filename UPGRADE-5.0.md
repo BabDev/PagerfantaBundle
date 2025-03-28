@@ -10,4 +10,8 @@ The below guide will assist in upgrading from the 4.x versions to 5.0.
 
 ## General Changes
 
+- Dropped support for versions of `jms/serializer` before 3.28
+- Dropped support for versions of JMSSerializerBundle before 5.4
+- Dropped support for versions of Twig before 3.12
+
 ## Removed Features
