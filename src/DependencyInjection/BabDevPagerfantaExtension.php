@@ -4,14 +4,11 @@ namespace BabDev\PagerfantaBundle\DependencyInjection;
 
 use BabDev\PagerfantaBundle\EventListener\ConvertNotValidCurrentPageToNotFoundListener;
 use BabDev\PagerfantaBundle\EventListener\ConvertNotValidMaxPerPageToNotFoundListener;
-use BabDev\PagerfantaBundle\Serializer\Normalizer\LegacyPagerfantaNormalizer;
-use Composer\InstalledVersions;
 use Pagerfanta\Twig\Extension\PagerfantaExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -54,16 +51,6 @@ final class BabDevPagerfantaExtension extends ConfigurableExtension implements P
 
         if (interface_exists(NormalizerInterface::class)) {
             $loader->load('serializer.php');
-
-            if (class_exists(InstalledVersions::class)) {
-                $version = InstalledVersions::getVersion('symfony/serializer');
-
-                if (null !== $version && version_compare($version, '6.3', '<')) {
-                    $container->register('pagerfanta.serializer.normalizer.legacy', LegacyPagerfantaNormalizer::class)
-                        ->setDecoratedService('pagerfanta.serializer.normalizer')
-                        ->addArgument(new Reference('.inner'));
-                }
-            }
         }
 
         if (Configuration::EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND === $mergedConfig['exceptions_strategy']['out_of_range_page']) {
