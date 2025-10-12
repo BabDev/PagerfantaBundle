@@ -4,13 +4,13 @@ The below guide will assist in upgrading from the 4.x versions to 5.0.
 
 ## Bundle Requirements
 
-- Symfony 6.4 or 7.2+
-- PHP 8.2 or later
+- Symfony 6.4 or 7.3+
+- PHP 8.4 or later
 - Pagerfanta 4.7 or later
 
 ## General Changes
 
-- Dropped support for versions of `jms/serializer` before 3.28
+- Dropped support for versions of `jms/serializer` before 3.32
 - Dropped support for versions of JMSSerializerBundle before 5.4
 - Dropped support for versions of Twig before 3.12
 

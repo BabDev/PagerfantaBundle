@@ -14,7 +14,7 @@ final class PagerfantaNormalizer implements NormalizerInterface, NormalizerAware
 {
     use NormalizerAwareTrait;
 
-    public const PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
+    public const string PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
 
     /**
      * @throws InvalidArgumentException when the object given is not a supported type for the normalizer

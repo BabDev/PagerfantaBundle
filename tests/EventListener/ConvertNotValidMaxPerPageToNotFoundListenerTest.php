@@ -23,7 +23,7 @@ final class ConvertNotValidMaxPerPageToNotFoundListenerTest extends TestCase
             $exception
         );
 
-        (new ConvertNotValidMaxPerPageToNotFoundListener())->onKernelException($event);
+        new ConvertNotValidMaxPerPageToNotFoundListener()->onKernelException($event);
 
         self::assertInstanceOf(NotFoundHttpException::class, $event->getThrowable());
         self::assertSame($exception, $event->getThrowable()->getPrevious());
@@ -40,7 +40,7 @@ final class ConvertNotValidMaxPerPageToNotFoundListenerTest extends TestCase
             $exception
         );
 
-        (new ConvertNotValidMaxPerPageToNotFoundListener())->onKernelException($event);
+        new ConvertNotValidMaxPerPageToNotFoundListener()->onKernelException($event);
 
         self::assertSame($exception, $event->getThrowable());
     }

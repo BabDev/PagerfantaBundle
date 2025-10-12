@@ -8,8 +8,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
-    public const EXCEPTION_STRATEGY_CUSTOM = 'custom';
-    public const EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND = 'to_http_not_found';
+    public const string EXCEPTION_STRATEGY_CUSTOM = 'custom';
+    public const string EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND = 'to_http_not_found';
 
     public function getConfigTreeBuilder(): TreeBuilder
     {

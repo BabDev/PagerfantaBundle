@@ -8,14 +8,14 @@ use Pagerfanta\View\ViewFactoryInterface;
 use Pagerfanta\View\ViewInterface;
 use Psr\Container\ContainerInterface;
 
-final class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
+final readonly class ContainerBackedImmutableViewFactory implements ViewFactoryInterface
 {
     /**
      * @param array<string, string> $serviceMap
      */
     public function __construct(
-        private readonly ContainerInterface $container,
-        private readonly array $serviceMap,
+        private ContainerInterface $container,
+        private array $serviceMap,
     ) {}
 
     /**

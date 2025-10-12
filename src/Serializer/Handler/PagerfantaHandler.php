@@ -12,7 +12,7 @@ use Pagerfanta\PagerfantaInterface;
 
 final class PagerfantaHandler implements SubscribingHandlerInterface
 {
-    public const PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
+    public const string PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
 
     public static function getSubscribingMethods(): array
     {

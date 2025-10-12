@@ -19,15 +19,17 @@ final class BabDevPagerfantaBundle extends Bundle
         $container->addCompilerPass(new RegisterTwigUndefinedCallablePass());
     }
 
+    #[\Override]
     public function getContainerExtension(): ?ExtensionInterface
     {
-        if (!isset($this->extension)) {
+        if (null === $this->extension) {
             $this->extension = new BabDevPagerfantaExtension();
         }
 
         return $this->extension ?: null;
     }
 
+    #[\Override]
     public function getPath(): string
     {
         return \dirname(__DIR__);

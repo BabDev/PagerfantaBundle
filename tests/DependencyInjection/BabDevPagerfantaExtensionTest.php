@@ -89,6 +89,8 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         );
 
         $this->container->setParameter('kernel.debug', false);
+        $this->container->setParameter('kernel.build_dir', __DIR__);
+        $this->container->setParameter('kernel.cache_dir', __DIR__);
         $this->container->setParameter('kernel.project_dir', __DIR__);
 
         $this->load();

@@ -9,7 +9,6 @@ use Pagerfanta\Twig\Extension\PagerfantaExtension;
 use Pagerfanta\Twig\Extension\PagerfantaRuntime;
 use Pagerfanta\Twig\View\TwigView;
 use Pagerfanta\View\ViewFactory;
-use Pagerfanta\View\ViewFactoryInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,8 +33,6 @@ use Twig\RuntimeLoader\RuntimeLoaderInterface;
  */
 final class TwigViewIntegrationTest extends TestCase
 {
-    public ViewFactoryInterface $viewFactory;
-
     public UrlGeneratorInterface $router;
 
     public RequestStack $requestStack;
@@ -77,7 +74,7 @@ final class TwigViewIntegrationTest extends TestCase
     {
         do {
             $request = $this->requestStack->pop();
-        } while (null !== $request);
+        } while ($request instanceof Request);
     }
 
     /**
@@ -406,10 +403,10 @@ final class TwigViewIntegrationTest extends TestCase
         $this->requestStack->push($request);
 
         self::assertNotEmpty(
-            (new TwigView($this->twig))->render(
+            new TwigView($this->twig)->render(
                 $this->createPagerfanta(),
-                (new RequestAwareRouteGeneratorFactory($this->router, $this->requestStack, $this->propertyAccessor))->create(),
-            )
+                new RequestAwareRouteGeneratorFactory($this->router, $this->requestStack, $this->propertyAccessor)->create(),
+            ),
         );
     }
 
@@ -423,8 +420,8 @@ final class TwigViewIntegrationTest extends TestCase
 
     private function createRuntimeLoader(): RuntimeLoaderInterface
     {
-        return new class($this) implements RuntimeLoaderInterface {
-            public function __construct(private readonly TwigViewIntegrationTest $testCase) {}
+        return new readonly class($this) implements RuntimeLoaderInterface {
+            public function __construct(private TwigViewIntegrationTest $testCase) {}
 
             /**
              * @param string $class

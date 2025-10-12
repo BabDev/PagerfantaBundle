@@ -16,7 +16,7 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
     {
         $this->expectException(ImmutableViewFactoryException::class);
 
-        (new ContainerBackedImmutableViewFactory($this->createMock(ContainerInterface::class), []))
+        new ContainerBackedImmutableViewFactory($this->createMock(ContainerInterface::class), [])
             ->add(['default' => new DefaultView()]);
     }
 
@@ -24,7 +24,7 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
     {
         $this->expectException(ImmutableViewFactoryException::class);
 
-        (new ContainerBackedImmutableViewFactory($this->createMock(ContainerInterface::class), []))
+        new ContainerBackedImmutableViewFactory($this->createMock(ContainerInterface::class), [])
             ->remove('default');
     }
 
@@ -32,7 +32,7 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
     {
         $this->expectException(ImmutableViewFactoryException::class);
 
-        (new ContainerBackedImmutableViewFactory($this->createMock(ContainerInterface::class), []))
+        new ContainerBackedImmutableViewFactory($this->createMock(ContainerInterface::class), [])
             ->set('default', new DefaultView());
     }
 
@@ -40,10 +40,7 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
     {
         $views = ['default' => new DefaultView()];
 
-        self::assertSame(
-            $views,
-            (new ContainerBackedImmutableViewFactory($this->createContainer($views), ['default' => 'default']))->all(),
-        );
+        self::assertSame($views, new ContainerBackedImmutableViewFactory($this->createContainer($views), ['default' => 'default'])->all());
     }
 
     public function testRetrievesNamedViewFromTheContainer(): void
@@ -52,19 +49,14 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
 
         $views = ['default' => $defaultView];
 
-        self::assertSame(
-            $defaultView,
-            (new ContainerBackedImmutableViewFactory($this->createContainer($views), ['default' => 'default']))->get('default'),
-        );
+        self::assertSame($defaultView, new ContainerBackedImmutableViewFactory($this->createContainer($views), ['default' => 'default'])->get('default'));
     }
 
     public function testReportsIfAViewExistsInTheContainer(): void
     {
         $views = ['default' => new DefaultView()];
 
-        self::assertTrue(
-            (new ContainerBackedImmutableViewFactory($this->createContainer($views), ['default' => 'default']))->has('default'),
-        );
+        self::assertTrue(new ContainerBackedImmutableViewFactory($this->createContainer($views), ['default' => 'default'])->has('default'));
     }
 
     /**
@@ -72,11 +64,11 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
      */
     private function createContainer(array $views): ContainerInterface
     {
-        return new class($views) implements ContainerInterface {
+        return new readonly class($views) implements ContainerInterface {
             /**
              * @param array<string, ViewInterface> $views
              */
-            public function __construct(private readonly array $views) {}
+            public function __construct(private array $views) {}
 
             public function get(string $id)
             {

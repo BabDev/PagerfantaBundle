@@ -9,8 +9,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: ['8.2', '8.3', '8.4']
-        symfony: ['6.4.*', '7.2.*']
+        php: ['8.4']
+        symfony: ['6.4.*', '7.3.*']
         pagerfanta: ['']
         composer-flags: ['--prefer-stable']
         can-fail: [false]
@@ -22,7 +22,7 @@ jobs:
             composer-flags: '--prefer-stable'
             can-fail: false
             with-twig: false
-          - php: '8.2'
+          - php: '8.4'
             symfony: '6.4.*'
             composer-flags: '--prefer-stable --prefer-lowest'
             can-fail: false

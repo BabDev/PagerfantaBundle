@@ -10,7 +10,7 @@ final class ConfigurationTest extends TestCase
 {
     public function testDefaultConfig(): void
     {
-        $config = (new Processor())->processConfiguration(new Configuration(), []);
+        $config = new Processor()->processConfiguration(new Configuration(), []);
 
         self::assertEquals(self::getBundleDefaultConfig(), $config);
     }
@@ -21,7 +21,7 @@ final class ConfigurationTest extends TestCase
             'default_view' => 'custom_view',
         ];
 
-        $config = (new Processor())->processConfiguration(new Configuration(), [$extraConfig]);
+        $config = new Processor()->processConfiguration(new Configuration(), [$extraConfig]);
 
         self::assertEquals(
             array_merge(self::getBundleDefaultConfig(), $extraConfig),
@@ -35,7 +35,7 @@ final class ConfigurationTest extends TestCase
             'default_twig_template' => 'custom.html.twig',
         ];
 
-        $config = (new Processor())->processConfiguration(new Configuration(), [$extraConfig]);
+        $config = new Processor()->processConfiguration(new Configuration(), [$extraConfig]);
 
         self::assertEquals(
             array_merge(self::getBundleDefaultConfig(), $extraConfig),
@@ -52,7 +52,7 @@ final class ConfigurationTest extends TestCase
             ],
         ];
 
-        $config = (new Processor())->processConfiguration(new Configuration(), [$extraConfig]);
+        $config = new Processor()->processConfiguration(new Configuration(), [$extraConfig]);
 
         self::assertEquals(
             array_merge(self::getBundleDefaultConfig(), $extraConfig),

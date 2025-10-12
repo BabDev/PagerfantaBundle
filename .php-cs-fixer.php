@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-return (new PhpCsFixer\Config())
+return new PhpCsFixer\Config()
     ->setRules([
         '@Symfony' => true,
         '@Symfony:risky' => true,
-        '@PHP82Migration' => true,
+        '@PHP84Migration' => true,
         '@PHP82Migration:risky' => true,
         '@PHPUnit91Migration:risky' => true,
         'array_syntax' => ['syntax' => 'short'],
@@ -18,7 +18,7 @@ return (new PhpCsFixer\Config())
     ])
     ->setRiskyAllowed(true)
     ->setFinder(
-        (new PhpCsFixer\Finder())
+        new PhpCsFixer\Finder()
             ->in(__DIR__.'/config')
             ->in(__DIR__.'/src')
             ->in(__DIR__.'/tests')

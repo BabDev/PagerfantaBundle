@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class BabDevPagerfantaExtension extends ConfigurableExtension implements PrependExtensionInterface
 {
+    #[\Override]
     public function getAlias(): string
     {
         return 'babdev_pagerfanta';

@@ -23,7 +23,7 @@ final class ConvertNotValidCurrentPageToNotFoundListenerTest extends TestCase
             $exception
         );
 
-        (new ConvertNotValidCurrentPageToNotFoundListener())->onKernelException($event);
+        new ConvertNotValidCurrentPageToNotFoundListener()->onKernelException($event);
 
         self::assertInstanceOf(NotFoundHttpException::class, $event->getThrowable());
         self::assertSame($exception, $event->getThrowable()->getPrevious());
@@ -40,7 +40,7 @@ final class ConvertNotValidCurrentPageToNotFoundListenerTest extends TestCase
             $exception
         );
 
-        (new ConvertNotValidCurrentPageToNotFoundListener())->onKernelException($event);
+        new ConvertNotValidCurrentPageToNotFoundListener()->onKernelException($event);
 
         self::assertSame($exception, $event->getThrowable());
     }

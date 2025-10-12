@@ -9,7 +9,7 @@ final class UndefinedCallableHandler
     /**
      * @var string[]
      */
-    private const SUPPORTED_FUNCTIONS = [
+    private const array SUPPORTED_FUNCTIONS = [
         'pagerfanta',
         'pagerfanta_page_url',
     ];

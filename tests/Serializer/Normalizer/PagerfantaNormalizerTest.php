@@ -76,7 +76,7 @@ final class PagerfantaNormalizerTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The "pagerfanta_preserve_keys" context key must be a boolean value or null, "string" given.');
 
-        (new PagerfantaNormalizer())->normalize(new Pagerfanta(new NullAdapter(25)), null, [PagerfantaNormalizer::PRESERVE_KEYS_KEY => 'invalid']);
+        new PagerfantaNormalizer()->normalize(new Pagerfanta(new NullAdapter(25)), null, [PagerfantaNormalizer::PRESERVE_KEYS_KEY => 'invalid']);
     }
 
     public function testNormalizeOnlyAcceptsPagerfantaInstances(): void
@@ -84,7 +84,7 @@ final class PagerfantaNormalizerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(\sprintf('The object must be an instance of "%s".', PagerfantaInterface::class));
 
-        (new PagerfantaNormalizer())->normalize(new \stdClass());
+        new PagerfantaNormalizer()->normalize(new \stdClass());
     }
 
     public function dataSupportsNormalization(): \Generator
@@ -98,7 +98,7 @@ final class PagerfantaNormalizerTest extends TestCase
      */
     public function testSupportsNormalization(mixed $data, bool $supported): void
     {
-        self::assertSame($supported, (new PagerfantaNormalizer())->supportsNormalization($data));
+        self::assertSame($supported, new PagerfantaNormalizer()->supportsNormalization($data));
     }
 
     public function testItSerializesIterableData(): void

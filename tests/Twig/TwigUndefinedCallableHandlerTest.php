@@ -29,11 +29,11 @@ final class TwigUndefinedCallableHandlerTest extends TestCase
         $this->expectException(SyntaxError::class);
         $this->expectExceptionMessage(\sprintf('Unknown function "%s". Did you forget to run "composer require pagerfanta/twig"?', $function));
 
-        (new UndefinedCallableHandler())->onUndefinedFunction($function);
+        new UndefinedCallableHandler()->onUndefinedFunction($function);
     }
 
     public function testReportsAFunctionAsNotSupported(): void
     {
-        self::assertFalse((new UndefinedCallableHandler())->onUndefinedFunction('asset'));
+        self::assertFalse(new UndefinedCallableHandler()->onUndefinedFunction('asset'));
     }
 }

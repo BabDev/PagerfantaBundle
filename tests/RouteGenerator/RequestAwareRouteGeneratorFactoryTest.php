@@ -30,7 +30,7 @@ final class RequestAwareRouteGeneratorFactoryTest extends TestCase
     {
         do {
             $request = $this->requestStack->pop();
-        } while (null !== $request);
+        } while ($request instanceof Request);
     }
 
     /**
