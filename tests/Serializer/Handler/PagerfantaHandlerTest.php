@@ -11,6 +11,7 @@ use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializerInterface;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class PagerfantaHandlerTest extends TestCase
@@ -41,6 +42,7 @@ final class PagerfantaHandlerTest extends TestCase
     /**
      * @dataProvider dataSerializeWithPreserveKeysContext
      */
+    #[DataProvider('dataSerializeWithPreserveKeysContext')]
     public function testSerializeToJsonWithPreserveKeysContext(array $data, array $context, string $expectedJson): void
     {
         $pager = new Pagerfanta(new FixedAdapter(\count($data), $data));

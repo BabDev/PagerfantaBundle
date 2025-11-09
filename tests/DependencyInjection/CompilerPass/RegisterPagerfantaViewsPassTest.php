@@ -4,11 +4,11 @@ namespace BabDev\PagerfantaBundle\Tests\DependencyInjection\CompilerPass;
 
 use BabDev\PagerfantaBundle\DependencyInjection\CompilerPass\RegisterPagerfantaViewsPass;
 use BabDev\PagerfantaBundle\View\ContainerBackedImmutableViewFactory;
-use Composer\InstalledVersions;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Pagerfanta\View\DefaultView;
 use Pagerfanta\View\ViewFactory;
 use Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -42,19 +42,10 @@ final class RegisterPagerfantaViewsPassTest extends AbstractCompilerPassTestCase
 
         $this->assertContainerBuilderHasService('pagerfanta.view.default', DefaultView::class);
 
-        // The locator ID is different at Symfony 7.1
-        $version = InstalledVersions::getVersion('symfony/dependency-injection');
-
-        if (null === $version) {
-            self::fail('Could not detect installed version of symfony/dependency-injection');
-        }
-
-        $locatorId = version_compare($version, '7.1', '>=') ? '.service_locator.mde9.qA' : '.service_locator.3Jj7I65';
-
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+        $this->assertContainerBuilderHasServiceDefinitionWithServiceLocatorArgument(
             'pagerfanta.view_factory',
             0,
-            new Reference($locatorId),
+            ['default' => new ServiceClosureArgument(new Reference('pagerfanta.view.default'))],
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'pagerfanta.view_factory',

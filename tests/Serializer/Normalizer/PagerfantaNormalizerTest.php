@@ -8,6 +8,8 @@ use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Adapter\NullAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\LogicException;
@@ -52,6 +54,7 @@ final class PagerfantaNormalizerTest extends TestCase
     /**
      * @dataProvider dataNormalizeWithPreserveKeysContext
      */
+    #[DataProvider('dataNormalizeWithPreserveKeysContext')]
     public function testNormalizeWithPreserveKeysContext(array $data, array $context, array $expectedItems): void
     {
         $pager = new Pagerfanta(new FixedAdapter(\count($data), $data));
@@ -84,6 +87,7 @@ final class PagerfantaNormalizerTest extends TestCase
     /**
      * @group legacy
      */
+    #[Group('legacy')]
     public function testNormalizeWithLegacyDecorator(): void
     {
         if (!interface_exists(CacheableSupportsMethodInterface::class)) {
@@ -117,7 +121,7 @@ final class PagerfantaNormalizerTest extends TestCase
         (new PagerfantaNormalizer())->normalize(new \stdClass());
     }
 
-    public function dataSupportsNormalization(): \Generator
+    public static function dataSupportsNormalization(): \Generator
     {
         yield 'Supported' => [new Pagerfanta(new NullAdapter(25)), true];
         yield 'Not Supported' => [new \stdClass(), false];
@@ -126,6 +130,7 @@ final class PagerfantaNormalizerTest extends TestCase
     /**
      * @dataProvider dataSupportsNormalization
      */
+    #[DataProvider('dataSupportsNormalization')]
     public function testSupportsNormalization(mixed $data, bool $supported): void
     {
         self::assertSame($supported, (new PagerfantaNormalizer())->supportsNormalization($data));
@@ -134,6 +139,7 @@ final class PagerfantaNormalizerTest extends TestCase
     /**
      * @group legacy
      */
+    #[Group('legacy')]
     public function testHasCacheableSupportsMethod(): void
     {
         if (!interface_exists(CacheableSupportsMethodInterface::class)) {

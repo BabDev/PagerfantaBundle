@@ -4,6 +4,7 @@ namespace BabDev\PagerfantaBundle\Tests\RouteGenerator;
 
 use BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory;
 use Pagerfanta\Exception\RuntimeException;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,7 @@ final class RequestAwareRouteGeneratorFactoryTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testTheGeneratorIsCreatedWhenResolvingTheRouteNameFromTheRequest(): void
     {
         $request = Request::create('/');
@@ -50,6 +52,7 @@ final class RequestAwareRouteGeneratorFactoryTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testTheGeneratorIsCreatedWhenGivenARouteNameDuringASubrequest(): void
     {
         $masterRequest = Request::create('/');

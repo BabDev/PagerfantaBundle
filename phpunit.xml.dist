@@ -16,13 +16,4 @@
             <directory suffix=".php">./src</directory>
         </include>
     </coverage>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
-    </listeners>
-
-    <php>
-        <!-- Ignore deprecations from lowest stable and symfony/serializer:^6.3 -->
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[indirect]=1&amp;max[indirect]=10&amp;max[direct]=18"/>
-    </php>
 </phpunit>

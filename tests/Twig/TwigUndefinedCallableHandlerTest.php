@@ -3,6 +3,7 @@
 namespace BabDev\PagerfantaBundle\Tests\Twig;
 
 use BabDev\PagerfantaBundle\Twig\UndefinedCallableHandler;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Twig\Error\SyntaxError;
 
@@ -15,7 +16,7 @@ final class TwigUndefinedCallableHandlerTest extends TestCase
         }
     }
 
-    public function dataSupportedFunctions(): \Generator
+    public static function dataSupportedFunctions(): \Generator
     {
         yield '"pagerfanta" function' => ['pagerfanta'];
         yield '"pagerfanta_page_url" function' => ['pagerfanta_page_url'];
@@ -24,6 +25,7 @@ final class TwigUndefinedCallableHandlerTest extends TestCase
     /**
      * @dataProvider dataSupportedFunctions
      */
+    #[DataProvider('dataSupportedFunctions')]
     public function testThrowsASyntaxErrorForSupportedTwigFunctionsWhenNotDefined(string $function): void
     {
         $this->expectException(SyntaxError::class);

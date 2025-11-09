@@ -10,6 +10,7 @@ use Pagerfanta\Twig\Extension\PagerfantaRuntime;
 use Pagerfanta\Twig\View\TwigView;
 use Pagerfanta\View\ViewFactory;
 use Pagerfanta\View\ViewFactoryInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\HttpFoundation\Request;
@@ -88,7 +89,7 @@ final class TwigViewIntegrationTest extends TestCase
         return new Pagerfanta(new FixedAdapter(100, range(1, 100)));
     }
 
-    public function dataPagerfantaRenderer(): \Generator
+    public static function dataPagerfantaRenderer(): \Generator
     {
         yield 'default template at page 1' => [
             1,
@@ -380,6 +381,7 @@ final class TwigViewIntegrationTest extends TestCase
      *
      * @dataProvider dataPagerfantaRenderer
      */
+    #[DataProvider('dataPagerfantaRenderer')]
     public function testPagerfantaRendering(int $page, array $options, string $testOutput): void
     {
         $request = Request::create('/');
