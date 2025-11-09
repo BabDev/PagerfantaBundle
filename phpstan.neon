@@ -8,6 +8,7 @@ parameters:
     - %currentWorkingDirectory%/src
     - %currentWorkingDirectory%/tests
   excludePaths:
+    - %currentWorkingDirectory%/src/DependencyInjection/Configuration.php
     - %currentWorkingDirectory%/src/Serializer/Normalizer/LegacyPagerfantaNormalizer.php
   treatPhpDocTypesAsCertain: false
   ignoreErrors:
