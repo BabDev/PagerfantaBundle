@@ -10,7 +10,7 @@ jobs:
       fail-fast: true
       matrix:
         php: ['8.1', '8.2', '8.3', '8.4']
-        symfony: ['5.4.*', '6.4.*', '7.1.*', '7.2.*']
+        symfony: ['5.4.*', '6.4.*', '7.3.*', '7.4.*@beta']
         pagerfanta: ['']
         composer-flags: ['--prefer-stable']
         can-fail: [false]
@@ -29,9 +29,9 @@ jobs:
             with-twig: true
         exclude:
           - php: '8.1'
-            symfony: '7.1.*'
+            symfony: '7.3.*'
           - php: '8.1'
-            symfony: '7.2.*'
+            symfony: '7.4.*@beta'
 
     name: "PHP ${{ matrix.php }}${{ matrix.pagerfanta != '' && format(' - Pagerfanta {0}', matrix.pagerfanta) || '' }}${{ matrix.with-twig == false && ' - Without Twig' || '' }} - Symfony ${{ matrix.symfony }}${{ matrix.composer-flags != '' && format(' - Composer {0}', matrix.composer-flags) || '' }}"
 
