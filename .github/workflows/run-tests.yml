@@ -10,7 +10,7 @@ jobs:
       fail-fast: true
       matrix:
         php: ['8.4']
-        symfony: ['6.4.*', '7.3.*']
+        symfony: ['6.4.*', '7.3.*', '8.0.*@beta']
         pagerfanta: ['']
         composer-flags: ['--prefer-stable']
         can-fail: [false]
