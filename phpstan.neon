@@ -7,6 +7,8 @@ parameters:
     - %currentWorkingDirectory%/config
     - %currentWorkingDirectory%/src
     - %currentWorkingDirectory%/tests
+  excludePaths:
+    - %currentWorkingDirectory%/src/DependencyInjection/Configuration.php
   treatPhpDocTypesAsCertain: false
   ignoreErrors:
     -

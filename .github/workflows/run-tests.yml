@@ -9,11 +9,12 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: ['8.4']
-        symfony: ['6.4.*', '7.3.*']
+        php: ['8.4', '8.5']
+        symfony: ['6.4.*', '7.3.*', '7.4.*@rc']
         pagerfanta: ['']
         composer-flags: ['--prefer-stable']
         can-fail: [false]
+        with-jms: [true]
         with-twig: [true]
         include:
           # Run "no Twig" build on latest PHP and Symfony LTS
@@ -21,11 +22,19 @@ jobs:
             symfony: '6.4.*'
             composer-flags: '--prefer-stable'
             can-fail: false
+            with-jms: true
             with-twig: false
           - php: '8.4'
             symfony: '6.4.*'
             composer-flags: '--prefer-stable --prefer-lowest'
             can-fail: false
+            with-jms: true
+            with-twig: true
+          - php: '8.5'
+            symfony: '8.0.*@rc'
+            composer-flags: '--prefer-stable'
+            can-fail: true
+            with-jms: false
             with-twig: true
 
     name: "PHP ${{ matrix.php }}${{ matrix.pagerfanta != '' && format(' - Pagerfanta {0}', matrix.pagerfanta) || '' }}${{ matrix.with-twig == false && ' - Without Twig' || '' }} - Symfony ${{ matrix.symfony }}${{ matrix.composer-flags != '' && format(' - Composer {0}', matrix.composer-flags) || '' }}"
@@ -53,6 +62,10 @@ jobs:
         run: |
           composer require --no-update pagerfanta/core:${{ matrix.pagerfanta }}
           composer require --dev --no-update pagerfanta/twig:${{ matrix.pagerfanta }}
+
+      - name: Remove JMS Serializer
+        if: matrix.with-jms == false
+        run: composer remove --dev --no-update jms/serializer jms/serializer-bundle
 
       - name: Remove Twig
         if: matrix.with-twig == false

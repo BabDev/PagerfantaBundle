@@ -88,6 +88,8 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
             ],
         );
 
+        $this->container->setParameter('kernel.build_dir', __DIR__);
+        $this->container->setParameter('kernel.cache_dir', __DIR__);
         $this->container->setParameter('kernel.debug', false);
         $this->container->setParameter('kernel.build_dir', __DIR__);
         $this->container->setParameter('kernel.cache_dir', __DIR__);
@@ -141,6 +143,10 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
 
     public function testContainerIsLoadedWithDefaultConfigurationWhenJMSSerializerBundleIsInstalled(): void
     {
+        if (!class_exists(JMSSerializerBundle::class)) {
+            self::markTestSkipped('Test requires JMSSerializerBundle');
+        }
+
         $this->container->setParameter(
             'kernel.bundles',
             [
