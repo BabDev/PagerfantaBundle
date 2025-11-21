@@ -155,6 +155,10 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
 
     public function testContainerIsLoadedWithDefaultConfigurationWhenJMSSerializerBundleIsInstalled(): void
     {
+        if (!class_exists(JMSSerializerBundle::class)) {
+            self::markTestSkipped('Test requires JMSSerializerBundle');
+        }
+
         $this->container->setParameter(
             'kernel.bundles',
             [

@@ -16,6 +16,13 @@ use PHPUnit\Framework\TestCase;
 
 final class PagerfantaHandlerTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        if (!class_exists(SerializerBuilder::class)) {
+            self::markTestSkipped('Test requires JMS Serializer');
+        }
+    }
+
     public function testSerializeToJson(): void
     {
         $pager = new Pagerfanta(new FixedAdapter(100, range(1, 5)));
