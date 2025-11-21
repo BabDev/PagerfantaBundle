@@ -22,9 +22,6 @@ final class TwigUndefinedCallableHandlerTest extends TestCase
         yield '"pagerfanta_page_url" function' => ['pagerfanta_page_url'];
     }
 
-    /**
-     * @dataProvider dataSupportedFunctions
-     */
     #[DataProvider('dataSupportedFunctions')]
     public function testThrowsASyntaxErrorForSupportedTwigFunctionsWhenNotDefined(string $function): void
     {

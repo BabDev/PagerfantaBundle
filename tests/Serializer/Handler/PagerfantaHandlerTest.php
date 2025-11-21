@@ -49,9 +49,6 @@ final class PagerfantaHandlerTest extends TestCase
         yield 'Context with preserve keys enabled' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], ['pagerfanta_preserve_keys' => true], '{"items":{"0":"item1","2":"item2","4":"item3"},"pagination":{"current_page":1,"has_previous_page":false,"has_next_page":false,"per_page":10,"total_items":3,"total_pages":1}}'];
     }
 
-    /**
-     * @dataProvider dataSerializeWithPreserveKeysContext
-     */
     #[DataProvider('dataSerializeWithPreserveKeysContext')]
     public function testSerializeToJsonWithPreserveKeysContext(array $data, array $context, string $expectedJson): void
     {

@@ -375,8 +375,6 @@ final class TwigViewIntegrationTest extends TestCase
 
     /**
      * @phpstan-param positive-int $page
-     *
-     * @dataProvider dataPagerfantaRenderer
      */
     #[DataProvider('dataPagerfantaRenderer')]
     public function testPagerfantaRendering(int $page, array $options, string $testOutput): void

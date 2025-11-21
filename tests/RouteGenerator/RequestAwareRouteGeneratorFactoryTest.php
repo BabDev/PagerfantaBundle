@@ -49,9 +49,6 @@ final class RequestAwareRouteGeneratorFactoryTest extends TestCase
         $this->createFactory()->create();
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     #[DoesNotPerformAssertions]
     public function testTheGeneratorIsCreatedWhenGivenARouteNameDuringASubrequest(): void
     {
