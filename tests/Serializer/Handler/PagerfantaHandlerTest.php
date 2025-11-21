@@ -14,6 +14,9 @@ use Pagerfanta\Pagerfanta;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @note The {@see PagerfantaHandler::PRESERVE_KEYS_KEY} constant value is inlined to avoid autoloader issues when the JMS packages are not installed
+ */
 final class PagerfantaHandlerTest extends TestCase
 {
     public static function setUpBeforeClass(): void
@@ -41,9 +44,9 @@ final class PagerfantaHandlerTest extends TestCase
     {
         yield 'Context not set' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], [], '{"items":{"0":"item1","2":"item2","4":"item3"},"pagination":{"current_page":1,"has_previous_page":false,"has_next_page":false,"per_page":10,"total_items":3,"total_pages":1}}'];
 
-        yield 'Context with preserve keys disabled' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], [PagerfantaHandler::PRESERVE_KEYS_KEY => false], '{"items":["item1","item2","item3"],"pagination":{"current_page":1,"has_previous_page":false,"has_next_page":false,"per_page":10,"total_items":3,"total_pages":1}}'];
+        yield 'Context with preserve keys disabled' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], ['pagerfanta_preserve_keys' => false], '{"items":["item1","item2","item3"],"pagination":{"current_page":1,"has_previous_page":false,"has_next_page":false,"per_page":10,"total_items":3,"total_pages":1}}'];
 
-        yield 'Context with preserve keys enabled' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], [PagerfantaHandler::PRESERVE_KEYS_KEY => true], '{"items":{"0":"item1","2":"item2","4":"item3"},"pagination":{"current_page":1,"has_previous_page":false,"has_next_page":false,"per_page":10,"total_items":3,"total_pages":1}}'];
+        yield 'Context with preserve keys enabled' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], ['pagerfanta_preserve_keys' => true], '{"items":{"0":"item1","2":"item2","4":"item3"},"pagination":{"current_page":1,"has_previous_page":false,"has_next_page":false,"per_page":10,"total_items":3,"total_pages":1}}'];
     }
 
     /**
@@ -75,7 +78,7 @@ final class PagerfantaHandlerTest extends TestCase
         $pager->setMaxPerPage(5);
 
         $serializationContext = new SerializationContext();
-        $serializationContext->setAttribute(PagerfantaHandler::PRESERVE_KEYS_KEY, 'invalid');
+        $serializationContext->setAttribute('pagerfanta_preserve_keys', 'invalid');
 
         $this->createSerializer()->serialize($pager, 'json', $serializationContext);
     }
