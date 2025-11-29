@@ -21,11 +21,11 @@ Want to see a real-world example of this in a screencast? Check out: https://sym
 
 The below table shows the supported PHP and Symfony versions for this bundle. Note that there is not a 1.x version of this bundle, the previous `WhiteOctoberPagerfantaBundle` should be considered the 1.x version.
 
-| Version | Status                  | PHP Versions | Symfony Versions  |
-|---------|-------------------------|--------------|-------------------|
-| 2.x     | **No Longer Supported** | 7.2-8.0      | 3.4, 4.4, 5.3-5.4 |
-| 3.x     | Actively Supported      | 7.4-8.2      | 4.4, 5.4, 6.0-6.4 |
-| 4.x     | Actively Supported      | 8.1+         | 5.4, 6.4, 7.1-7.4 |
-| 5.x     | In Development          | 8.4+         | 6.4, 7.3          |
+| Version | Status                  | PHP Versions | Symfony Versions       |
+|---------|-------------------------|--------------|------------------------|
+| 2.x     | **No Longer Supported** | 7.2-8.0      | 3.4, 4.4, 5.3-5.4      |
+| 3.x     | **No Longer Supported** | 7.4-8.2      | 4.4, 5.4, 6.0-6.4      |
+| 4.x     | Actively Supported      | 8.1+         | 5.4, 6.4, 7.3-7.4, 8.0 |
+| 5.x     | In Development          | 8.4+         | 6.4, 7.4, 8.0          |
 
 <div class="docs-note">When a maximum PHP version is listed, that is the highest version that is tested for support. The bundle may work on newer PHP versions, but support is not guaranteed.</div>
