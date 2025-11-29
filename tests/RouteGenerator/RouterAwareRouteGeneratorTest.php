@@ -90,7 +90,7 @@ final class RouterAwareRouteGeneratorTest extends TestCase
         $generator = new RouterAwareRouteGenerator(
             $this->createRouter(),
             $this->createPropertyAccessor(),
-            ['routeParams' => ['hello' => 'world']], /** @phpstan-ignore-line argument.type */
+            ['routeParams' => ['hello' => 'world']], // @phpstan-ignore-line argument.type
         );
 
         $generator(1);
