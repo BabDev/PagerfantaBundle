@@ -4,7 +4,7 @@ The below guide will assist in upgrading from the 4.x versions to 5.0.
 
 ## Bundle Requirements
 
-- Symfony 6.4 or 7.3+
+- Symfony 6.4, 7.4, or 8.0+
 - PHP 8.4 or later
 - Pagerfanta 4.7 or later
 
