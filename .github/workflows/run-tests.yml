@@ -19,7 +19,7 @@ jobs:
         include:
           # Run "no Twig" build on latest PHP and Symfony LTS
           - php: '8.4'
-            symfony: '6.4.*'
+            symfony: '7.4.*'
             composer-flags: '--prefer-stable'
             can-fail: false
             with-jms: true

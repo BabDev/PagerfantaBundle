@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.6.0 (2025-11-29)
+
+- Add support for Symfony 7.4 and 8.0
+- Drop support for Symfony 7.0 through 7.2
+
 ## 4.5.0 (2024-11-03)
 
 - Add support for Symfony 7.1 and 7.2
