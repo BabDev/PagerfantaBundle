@@ -10,12 +10,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           tools: composer:v2,flex
           extensions: curl, iconv, mbstring, pdo, pdo_sqlite, sqlite, zip
           coverage: none
@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist
         env:
-          SYMFONY_REQUIRE: '7.3.*'
+          SYMFONY_REQUIRE: '8.0.*'
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze --error-format=github

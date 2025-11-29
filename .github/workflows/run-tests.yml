@@ -10,7 +10,7 @@ jobs:
       fail-fast: true
       matrix:
         php: ['8.4', '8.5']
-        symfony: ['6.4.*', '7.3.*', '7.4.*@rc']
+        symfony: ['6.4.*', '7.3.*', '7.4.*', '8.0.*']
         pagerfanta: ['']
         composer-flags: ['--prefer-stable']
         can-fail: [false]
@@ -30,18 +30,12 @@ jobs:
             can-fail: false
             with-jms: true
             with-twig: true
-          - php: '8.5'
-            symfony: '8.0.*@rc'
-            composer-flags: '--prefer-stable'
-            can-fail: true
-            with-jms: false
-            with-twig: true
 
     name: "PHP ${{ matrix.php }}${{ matrix.pagerfanta != '' && format(' - Pagerfanta {0}', matrix.pagerfanta) || '' }}${{ matrix.with-twig == false && ' - Without Twig' || '' }} - Symfony ${{ matrix.symfony }}${{ matrix.composer-flags != '' && format(' - Composer {0}', matrix.composer-flags) || '' }}"
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Cache dependencies
         uses: actions/cache@v4
