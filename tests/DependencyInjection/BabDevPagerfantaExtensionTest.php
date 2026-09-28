@@ -206,6 +206,9 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasService('pagerfanta.serializer.handler');
         $this->assertContainerBuilderHasService('pagerfanta.serializer.normalizer');
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.serializer.cursor_handler', 0, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasServiceDefinitionWithTag('pagerfanta.serializer.cursor_handler', 'jms_serializer.subscribing_handler');
     }
 
     public function testContainerIsLoadedWhenBundleIsConfiguredWithCustomExceptionStrategies(): void
@@ -272,6 +275,9 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.cursor_encoder.signed', 1, '%kernel.secret%');
         $this->assertContainerBuilderHasAlias('pagerfanta.cursor_encoder', 'pagerfanta.cursor_encoder.signed');
         $this->assertContainerBuilderHasAlias(CursorEncoderInterface::class, 'pagerfanta.cursor_encoder');
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.serializer.cursor_normalizer', 0, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasServiceDefinitionWithTag('pagerfanta.serializer.cursor_normalizer', 'serializer.normalizer');
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.position_resolver', 1, new Reference('pagerfanta.cursor_encoder'));
         $this->assertContainerBuilderHasAlias(PositionResolver::class, 'pagerfanta.position_resolver');
