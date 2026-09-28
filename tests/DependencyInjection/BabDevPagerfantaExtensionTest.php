@@ -140,6 +140,10 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
 
         $twigConfig = $this->container->getExtensionConfig('twig');
 
+        self::assertArrayHasKey(0, $twigConfig);
+        self::assertArrayHasKey('paths', $twigConfig[0]);
+        self::assertIsArray($twigConfig[0]['paths']);
+
         $refl = new \ReflectionClass(PagerfantaExtension::class);
 
         if (false === $refl->getFileName()) {

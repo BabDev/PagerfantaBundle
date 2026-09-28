@@ -52,6 +52,8 @@ final class PagerfantaNormalizerTest extends TestCase
     }
 
     /**
+     * @param array<string, mixed> $context
+     *
      * @dataProvider dataNormalizeWithPreserveKeysContext
      */
     #[DataProvider('dataNormalizeWithPreserveKeysContext')]

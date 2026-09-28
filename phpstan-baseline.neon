@@ -61,12 +61,6 @@ parameters:
 			path: src/View/ContainerBackedImmutableViewFactory.php
 
 		-
-			message: '#^Parameter \#2 \$array of static method PHPUnit\\Framework\\Assert\:\:assertArrayHasKey\(\) expects array\<mixed\>\|ArrayAccess\<\(int\|string\), mixed\>, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/DependencyInjection/BabDevPagerfantaExtensionTest.php
-
-		-
 			message: '#^Method BabDev\\PagerfantaBundle\\Tests\\View\\TwigViewIntegrationTest\:\:removeWhitespacesBetweenTags\(\) should return string but returns string\|null\.$#'
 			identifier: return.type
 			count: 1
