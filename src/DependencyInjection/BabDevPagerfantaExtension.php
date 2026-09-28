@@ -37,7 +37,8 @@ final class BabDevPagerfantaExtension extends ConfigurableExtension implements P
 
             if (ContainerBuilder::willBeAvailable('pagerfanta/twig', PagerfantaExtension::class, ['babdev/pagerfanta-bundle'])) {
                 $container->getDefinition('pagerfanta.twig_runtime')
-                    ->replaceArgument(0, $mergedConfig['default_view']);
+                    ->replaceArgument(0, $mergedConfig['default_view'])
+                    ->replaceArgument(3, $mergedConfig['default_sequential_view']);
 
                 $container->getDefinition('pagerfanta.view.twig')
                     ->replaceArgument(1, $mergedConfig['default_twig_template']);

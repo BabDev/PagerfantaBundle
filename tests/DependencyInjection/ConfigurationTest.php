@@ -29,6 +29,20 @@ final class ConfigurationTest extends TestCase
         );
     }
 
+    public function testConfigWithCustomDefaultSequentialView(): void
+    {
+        $extraConfig = [
+            'default_sequential_view' => 'twitter_bootstrap5_sequential',
+        ];
+
+        $config = (new Processor())->processConfiguration(new Configuration(), [$extraConfig]);
+
+        self::assertEquals(
+            array_merge(self::getBundleDefaultConfig(), $extraConfig),
+            $config,
+        );
+    }
+
     public function testConfigWithCustomDefaultTwigTemplate(): void
     {
         $extraConfig = [
@@ -64,6 +78,7 @@ final class ConfigurationTest extends TestCase
     {
         return [
             'default_view' => 'default',
+            'default_sequential_view' => null,
             'default_twig_template' => '@BabDevPagerfanta/default.html.twig',
             'exceptions_strategy' => [
                 'out_of_range_page' => Configuration::EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND,

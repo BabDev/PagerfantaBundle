@@ -9,8 +9,12 @@ use Composer\InstalledVersions;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\DefinitionDecoratesConstraint;
+use Pagerfanta\Cursor\CursorEncoderInterface;
+use Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface;
+use Pagerfanta\RouteGenerator\RouteGeneratorFactoryInterface;
 use Pagerfanta\Twig\Extension\PagerfantaExtension;
 use Pagerfanta\View\ViewFactoryInterface;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -29,6 +33,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $this->load();
 
         $this->assertContainerBuilderHasAlias(ViewFactoryInterface::class, 'pagerfanta.view_factory');
+        $this->assertCursorAndRouteGenerationServicesAreRegistered();
 
         $listeners = [
             'pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found',
@@ -138,6 +143,9 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
             $this->assertContainerBuilderHasService($twigService);
         }
 
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 0, 'default');
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 3, null);
+
         $twigConfig = $this->container->getExtensionConfig('twig');
 
         self::assertArrayHasKey(0, $twigConfig);
@@ -231,5 +239,41 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         return [
             new BabDevPagerfantaExtension(),
         ];
+    }
+
+    public function testTheDefaultSequentialViewIsGivenToTheTwigRuntime(): void
+    {
+        if (!class_exists(PagerfantaExtension::class)) {
+            self::markTestSkipped('Test requires Twig');
+        }
+
+        $this->container->setParameter(
+            'kernel.bundles',
+            [
+                'BabDevPagerfantaBundle' => BabDevPagerfantaBundle::class,
+                'TwigBundle' => TwigBundle::class,
+            ],
+        );
+
+        $this->load(['default_sequential_view' => 'twitter_bootstrap5_sequential']);
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 3, 'twitter_bootstrap5_sequential');
+    }
+
+    private function assertCursorAndRouteGenerationServicesAreRegistered(): void
+    {
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.cursor_encoder.signed', 0, new Reference('pagerfanta.cursor_encoder.base64_json'));
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.cursor_encoder.signed', 1, '%kernel.secret%');
+        $this->assertContainerBuilderHasAlias('pagerfanta.cursor_encoder', 'pagerfanta.cursor_encoder.signed');
+        $this->assertContainerBuilderHasAlias(CursorEncoderInterface::class, 'pagerfanta.cursor_encoder');
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.route_generator_factory', 3, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasAlias(RouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory');
+        $this->assertContainerBuilderHasAlias(PositionRouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory');
+
+        foreach (['default', 'foundation6', 'semantic_ui', 'twitter_bootstrap', 'twitter_bootstrap3', 'twitter_bootstrap4', 'twitter_bootstrap5'] as $name) {
+            $this->assertContainerBuilderHasServiceDefinitionWithArgument(\sprintf('pagerfanta.view.%s_sequential', $name), 1, \sprintf('%s_sequential', $name));
+            $this->assertContainerBuilderHasServiceDefinitionWithTag(\sprintf('pagerfanta.view.%s_sequential', $name), 'pagerfanta.view', ['alias' => \sprintf('%s_sequential', $name)]);
+        }
     }
 }

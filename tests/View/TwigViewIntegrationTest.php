@@ -2,9 +2,17 @@
 
 namespace BabDev\PagerfantaBundle\Tests\View;
 
+use BabDev\PagerfantaBundle\Cursor\SignedCursorEncoder;
 use BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory;
+use Pagerfanta\Adapter\CallbackCursorAdapter;
+use Pagerfanta\Adapter\CursorSlice;
 use Pagerfanta\Adapter\FixedAdapter;
+use Pagerfanta\Cursor\Base64JsonCursorEncoder;
+use Pagerfanta\Cursor\Cursor;
+use Pagerfanta\Cursor\Direction;
+use Pagerfanta\CursorPagerfanta;
 use Pagerfanta\Pagerfanta;
+use Pagerfanta\Position\CursorPosition;
 use Pagerfanta\Twig\Extension\PagerfantaExtension;
 use Pagerfanta\Twig\Extension\PagerfantaRuntime;
 use Pagerfanta\Twig\View\TwigView;
@@ -43,6 +51,8 @@ final class TwigViewIntegrationTest extends TestCase
 
     public PropertyAccessorInterface $propertyAccessor;
 
+    public SignedCursorEncoder $cursorEncoder;
+
     public Environment $twig;
 
     public static function setUpBeforeClass(): void
@@ -72,6 +82,7 @@ final class TwigViewIntegrationTest extends TestCase
         $this->router = $this->createRouter();
         $this->requestStack = new RequestStack();
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->cursorEncoder = new SignedCursorEncoder(new Base64JsonCursorEncoder(), 'secret');
     }
 
     protected function tearDown(): void
@@ -415,6 +426,37 @@ final class TwigViewIntegrationTest extends TestCase
         );
     }
 
+    public function testACursorPagerIsRenderedWithSignedCursors(): void
+    {
+        $request = Request::create('/', 'GET', ['cursor' => 'current', 'hello' => 'world']);
+        $request->attributes->set('_route', 'pagerfanta_view');
+        $request->attributes->set('_route_params', []);
+
+        $this->requestStack->push($request);
+
+        $previous = new Cursor(['id' => 11], Direction::Previous);
+        $next = new Cursor(['id' => 20]);
+
+        $pager = new CursorPagerfanta(
+            new CallbackCursorAdapter(static fn (?Cursor $cursor, int $limit): CursorSlice => new CursorSlice(range(11, 20), $previous, $next), true),
+            10,
+            new CursorPosition(new Cursor(['id' => 10])),
+        );
+
+        $output = $this->twig->render('integration.html.twig', ['pager' => $pager, 'options' => ['template' => '@BabDevPagerfanta/twitter_bootstrap5.html.twig']]);
+
+        $this->assertViewOutputMatches(
+            $output,
+            \sprintf(
+                '<ul class="pagination"><li class="page-item"><a class="page-link" href="/pagerfanta-view?cursor=%s&amp;hello=world" rel="prev">Previous</a></li><li class="page-item"><a class="page-link" href="/pagerfanta-view?cursor=%s&amp;hello=world" rel="next">Next</a></li></ul>',
+                $this->cursorEncoder->encode($previous),
+                $this->cursorEncoder->encode($next),
+            ),
+        );
+
+        self::assertMatchesRegularExpression('/cursor=[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}&/', $output, 'The cursors are signed');
+    }
+
     private function createRouter(): UrlGeneratorInterface
     {
         $routeCollection = new RouteCollection();
@@ -445,7 +487,8 @@ final class TwigViewIntegrationTest extends TestCase
                         $routeGeneratorFactory = new RequestAwareRouteGeneratorFactory(
                             $this->testCase->router,
                             $this->testCase->requestStack,
-                            $this->testCase->propertyAccessor
+                            $this->testCase->propertyAccessor,
+                            $this->testCase->cursorEncoder,
                         );
 
                         return new PagerfantaRuntime(

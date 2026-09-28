@@ -19,6 +19,7 @@ return static function (ContainerConfigurator $container): void {
             abstract_arg('default view'),
             service('pagerfanta.view_factory'),
             service('pagerfanta.route_generator_factory'),
+            abstract_arg('default sequential view'),
         ])
         ->tag('twig.runtime')
     ;
