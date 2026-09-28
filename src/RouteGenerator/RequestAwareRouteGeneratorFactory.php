@@ -2,62 +2,48 @@
 
 namespace BabDev\PagerfantaBundle\RouteGenerator;
 
-use Pagerfanta\Exception\RuntimeException;
+use Pagerfanta\Cursor\Base64JsonCursorEncoder;
+use Pagerfanta\Cursor\CursorEncoderInterface;
+use Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface;
+use Pagerfanta\RouteGenerator\PositionRouteGeneratorInterface;
 use Pagerfanta\RouteGenerator\RouteGeneratorFactoryInterface;
 use Pagerfanta\RouteGenerator\RouteGeneratorInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class RequestAwareRouteGeneratorFactory implements RouteGeneratorFactoryInterface
+/**
+ * Creates route generators for the current route, unless another route is set in the options.
+ *
+ * @deprecated since PagerfantaBundle 4.7, use the {@see RequestAwarePositionRouteGeneratorFactory} instead
+ */
+final class RequestAwareRouteGeneratorFactory implements RouteGeneratorFactoryInterface, PositionRouteGeneratorFactoryInterface
 {
+    use ResolvesRouteGeneratorOptions;
+
+    /**
+     * @param CursorEncoderInterface $cursorEncoder The encoder for the cursors in the generated URLs, the bundle configures an encoder which signs the cursors
+     */
     public function __construct(
         private readonly UrlGeneratorInterface $router,
         private readonly RequestStack $requestStack,
-        private readonly PropertyAccessorInterface $propertyAccessor
-    ) {}
+        private readonly PropertyAccessorInterface $propertyAccessor,
+        private readonly CursorEncoderInterface $cursorEncoder = new Base64JsonCursorEncoder(),
+    ) {
+        trigger_deprecation('babdev/pagerfanta-bundle', '4.7', 'The "%s" class is deprecated, use the "%s" class instead.', self::class, RequestAwarePositionRouteGeneratorFactory::class);
+    }
 
     public function create(array $options = []): RouteGeneratorInterface
     {
-        $options = array_replace(
-            [
-                'routeName' => null,
-                'routeParams' => [],
-                'pageParameter' => '[page]',
-                'omitFirstPage' => false,
-            ],
-            $options
-        );
-
-        if (null === $options['routeName']) {
-            $request = $this->getRequest();
-
-            if (null === $request) {
-                throw new RuntimeException('The request aware route generator can not be used when there is not an active request.');
-            }
-
-            if (null !== $this->requestStack->getParentRequest()) {
-                throw new RuntimeException('The request aware route generator can not guess the route when used in a sub-request, pass the "routeName" option to use this generator.');
-            }
-
-            $options['routeName'] = $request->attributes->get('_route');
-
-            // Make sure we read the route parameters from the passed option array
-            $defaultRouteParams = array_merge($request->query->all(), $request->attributes->get('_route_params', []));
-
-            $options['routeParams'] = array_merge($defaultRouteParams, $options['routeParams']);
-        }
-
         return new RouterAwareRouteGenerator(
             $this->router,
             $this->propertyAccessor,
-            $options,
+            $this->resolveOptions($options),
         );
     }
 
-    private function getRequest(): ?Request
+    public function createPositionRouteGenerator(array $options = []): PositionRouteGeneratorInterface
     {
-        return $this->requestStack->getCurrentRequest();
+        return (new RequestAwarePositionRouteGeneratorFactory($this->router, $this->requestStack, $this->propertyAccessor, $this->cursorEncoder))->createPositionRouteGenerator($options);
     }
 }

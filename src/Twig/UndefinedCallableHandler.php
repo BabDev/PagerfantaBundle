@@ -12,6 +12,7 @@ final class UndefinedCallableHandler
     private const SUPPORTED_FUNCTIONS = [
         'pagerfanta',
         'pagerfanta_page_url',
+        'pagerfanta_position_url',
     ];
 
     /**
