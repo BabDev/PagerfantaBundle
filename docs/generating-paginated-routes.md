@@ -2,6 +2,8 @@
 
 When rendering a Pagerfanta view, a route generator callable is required to generate the URLs for each item in the pagination list. The route generator can be customized for use within your application if you need to adjust the routing logic.
 
+<div class="docs-note docs-note--deprecated-feature">The page number based route generators (the <code>RouteGeneratorInterface</code> and <code>RouteGeneratorFactoryInterface</code>, and the <code>RouterAwareRouteGenerator</code>) are deprecated since Pagerfanta 4.10, use the <a href="#position-route-generators">position route generators</a> instead. The bundle's route generator factory supports both, so no changes are needed when using the bundle's services.</div>
+
 The route generators are defined by two interfaces, with their default implementations noted below:
 
 - `Pagerfanta\RouteGenerator\RouteGeneratorInterface` - The class type that is used to generate routes
@@ -22,3 +24,26 @@ The following options may be passed through a route generator factory when using
 - `omitFirstPage` - Defaults to `false`, a boolean value indicating whether the first page should omit the pagination parameter (if true, `?page=1` will not be part of the paginated URL for page 1 of your list)
 - `routeParams` - Defaults to an empty array, an array of additional parameters to pass to the router for generating the URL
 - `referenceType` - Defaults to `Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH`, allows specifying the `$referenceType` parameter when calling `Symfony\Component\Routing\Generator\UrlGeneratorInterface::generate()`
+
+## Position Route Generators
+
+<div class="docs-note docs-note--new-feature">Position route generators were introduced in PagerfantaBundle 4.7.</div>
+
+Pagerfanta describes the pages a pager links to with [positions](/open-source/packages/pagerfanta/docs/4.x/route-generator#position-route-generators), which support both offset and [cursor](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination) pagination.
+
+The `BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory` also implements the `Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface`, and creates a `BabDev\PagerfantaBundle\RouteGenerator\RouterAwarePositionRouteGenerator` which uses the Symfony Routing component to generate the URLs for positions:
+
+- For a page position, the page number is set to the page parameter and the cursor parameter is removed
+- For a cursor position, the [signed cursor](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination#signed-cursors) is set to the cursor parameter and the page parameter is removed
+
+The factory is also available with the `Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface` alias.
+
+### Position Route Generator Options
+
+The `RouterAwarePositionRouteGenerator` supports all of the [`RouterAwareRouteGenerator` options](#routerawareroutegenerator-options), and the following option:
+
+- `cursorParameter` - Defaults to "`[cursor]`", specifies the name of the routing parameter to use for the cursor, note that the cursor parameter *MUST* be wrapped in brackets (i.e. `[after]`) for the route generator to correctly function
+
+```twig
+{{ pagerfanta(pager, {'cursorParameter': '[after]'}) }}
+```

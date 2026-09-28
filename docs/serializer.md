@@ -56,6 +56,40 @@ Below is an example of how a `Pagerfanta\Pagerfanta` instance is serialized into
 }
 ```
 
+## Cursor Pagers
+
+<div class="docs-note docs-note--new-feature">Serializing cursor pagers was introduced in PagerfantaBundle 4.7.</div>
+
+[Cursor pagers](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination) are serialized with the [signed cursors](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination#signed-cursors) for the previous and next pages, which are null when there is no page in that direction. Clients pass these cursors back in the `cursor` parameter to request the other pages.
+
+The total number of items is only included for pagers which can count their results (implementing `Pagerfanta\CountablePagerInterface`), as counting the results is often expensive and cursor pagers do not need the total.
+
+```json
+{
+    "items": [
+        {
+            "id": 4
+        },
+        {
+            "id": 5
+        },
+        {
+            "id": 6
+        }
+    ],
+    "pagination": {
+        "per_page": 3,
+        "has_previous_page": true,
+        "has_next_page": true,
+        "previous_cursor": "eyJmIjp7ImlkIjo0fSwiZCI6InAifQ.3TwY0stlypgZh7JF3MaG4-U73b75wQ5vAjc7czLn25M",
+        "next_cursor": "eyJmIjp7ImlkIjo2fSwiZCI6Im4ifQ.FQMxPOBSKzLVFP20bHe62gJloQtIqkt4pQdnUc0Xk1s",
+        "total_items": 35
+    }
+}
+```
+
+<div class="docs-note">The JMS Serializer omits null values unless the serialization context enables serializing them, so the <code>previous_cursor</code> and <code>next_cursor</code> keys are omitted when there is no page in that direction unless <code>SerializationContext::setSerializeNull(true)</code> is used.</div>
+
 ## Serialization Context Configuration
 
 ### Preserving Array Keys
