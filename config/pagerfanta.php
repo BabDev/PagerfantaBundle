@@ -3,6 +3,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use BabDev\PagerfantaBundle\Cursor\SignedCursorEncoder;
+use BabDev\PagerfantaBundle\Position\PositionResolver;
 use BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory;
 use BabDev\PagerfantaBundle\View\ContainerBackedImmutableViewFactory;
 use Pagerfanta\Cursor\Base64JsonCursorEncoder;
@@ -40,6 +41,14 @@ return static function (ContainerConfigurator $container): void {
 
     $services->alias('pagerfanta.cursor_encoder', 'pagerfanta.cursor_encoder.signed');
     $services->alias(CursorEncoderInterface::class, 'pagerfanta.cursor_encoder');
+
+    $services->set('pagerfanta.position_resolver', PositionResolver::class)
+        ->args([
+            service('property_accessor'),
+            service('pagerfanta.cursor_encoder'),
+        ])
+    ;
+    $services->alias(PositionResolver::class, 'pagerfanta.position_resolver');
 
     $services->set('pagerfanta.route_generator_factory', RequestAwareRouteGeneratorFactory::class)
         ->args([

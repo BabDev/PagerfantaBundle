@@ -63,6 +63,7 @@ final class ConfigurationTest extends TestCase
             'exceptions_strategy' => [
                 'out_of_range_page' => Configuration::EXCEPTION_STRATEGY_CUSTOM,
                 'not_valid_current_page' => Configuration::EXCEPTION_STRATEGY_CUSTOM,
+                'invalid_cursor' => Configuration::EXCEPTION_STRATEGY_CUSTOM,
             ],
         ];
 
@@ -83,6 +84,7 @@ final class ConfigurationTest extends TestCase
             'exceptions_strategy' => [
                 'out_of_range_page' => Configuration::EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND,
                 'not_valid_current_page' => Configuration::EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND,
+                'invalid_cursor' => Configuration::EXCEPTION_STRATEGY_TO_HTTP_BAD_REQUEST,
             ],
         ];
     }

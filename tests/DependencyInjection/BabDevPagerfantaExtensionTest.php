@@ -5,6 +5,7 @@ namespace BabDev\PagerfantaBundle\Tests\DependencyInjection;
 use BabDev\PagerfantaBundle\BabDevPagerfantaBundle;
 use BabDev\PagerfantaBundle\DependencyInjection\BabDevPagerfantaExtension;
 use BabDev\PagerfantaBundle\DependencyInjection\Configuration;
+use BabDev\PagerfantaBundle\Position\PositionResolver;
 use Composer\InstalledVersions;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
@@ -38,6 +39,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $listeners = [
             'pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found',
             'pagerfanta.event_listener.convert_not_valid_current_page_to_not_found',
+            'pagerfanta.event_listener.convert_invalid_cursor_to_bad_request',
         ];
 
         foreach ($listeners as $listener) {
@@ -119,6 +121,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $listeners = [
             'pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found',
             'pagerfanta.event_listener.convert_not_valid_current_page_to_not_found',
+            'pagerfanta.event_listener.convert_invalid_cursor_to_bad_request',
         ];
 
         foreach ($listeners as $listener) {
@@ -186,6 +189,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $listeners = [
             'pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found',
             'pagerfanta.event_listener.convert_not_valid_current_page_to_not_found',
+            'pagerfanta.event_listener.convert_invalid_cursor_to_bad_request',
         ];
 
         foreach ($listeners as $listener) {
@@ -217,6 +221,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
             'exceptions_strategy' => [
                 'out_of_range_page' => Configuration::EXCEPTION_STRATEGY_CUSTOM,
                 'not_valid_current_page' => Configuration::EXCEPTION_STRATEGY_CUSTOM,
+                'invalid_cursor' => Configuration::EXCEPTION_STRATEGY_CUSTOM,
             ],
         ];
 
@@ -227,6 +232,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $listeners = [
             'pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found',
             'pagerfanta.event_listener.convert_not_valid_current_page_to_not_found',
+            'pagerfanta.event_listener.convert_invalid_cursor_to_bad_request',
         ];
 
         foreach ($listeners as $listener) {
@@ -266,6 +272,9 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.cursor_encoder.signed', 1, '%kernel.secret%');
         $this->assertContainerBuilderHasAlias('pagerfanta.cursor_encoder', 'pagerfanta.cursor_encoder.signed');
         $this->assertContainerBuilderHasAlias(CursorEncoderInterface::class, 'pagerfanta.cursor_encoder');
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.position_resolver', 1, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasAlias(PositionResolver::class, 'pagerfanta.position_resolver');
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.route_generator_factory', 3, new Reference('pagerfanta.cursor_encoder'));
         $this->assertContainerBuilderHasAlias(RouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory');

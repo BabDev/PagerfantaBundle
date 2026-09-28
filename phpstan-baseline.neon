@@ -1,6 +1,12 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Cannot access offset ''invalid_cursor'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/DependencyInjection/BabDevPagerfantaExtension.php
+
+		-
 			message: '#^Cannot access offset ''not_valid_current_page'' on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1

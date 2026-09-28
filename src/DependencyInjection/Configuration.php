@@ -8,6 +8,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 final class Configuration implements ConfigurationInterface
 {
     public const EXCEPTION_STRATEGY_CUSTOM = 'custom';
+    public const EXCEPTION_STRATEGY_TO_HTTP_BAD_REQUEST = 'to_http_bad_request';
     public const EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND = 'to_http_not_found';
 
     /**
@@ -36,6 +37,10 @@ final class Configuration implements ConfigurationInterface
                         ->enumNode('not_valid_current_page')
                             ->defaultValue(self::EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND)
                             ->values([self::EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND, self::EXCEPTION_STRATEGY_CUSTOM])
+                        ->end()
+                        ->enumNode('invalid_cursor')
+                            ->defaultValue(self::EXCEPTION_STRATEGY_TO_HTTP_BAD_REQUEST)
+                            ->values([self::EXCEPTION_STRATEGY_TO_HTTP_BAD_REQUEST, self::EXCEPTION_STRATEGY_CUSTOM])
                         ->end()
                     ->end()
                 ->end()
