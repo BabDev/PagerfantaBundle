@@ -3,12 +3,13 @@
 namespace BabDev\PagerfantaBundle\Tests\RouteGenerator;
 
 use BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory;
+use BabDev\PagerfantaBundle\RouteGenerator\RouterAwarePositionRouteGenerator;
+use BabDev\PagerfantaBundle\Tests\CapturesDeprecations;
 use Pagerfanta\Cursor\Base64JsonCursorEncoder;
-use Pagerfanta\Cursor\Cursor;
 use Pagerfanta\Exception\RuntimeException;
-use Pagerfanta\Position\CursorPosition;
 use Pagerfanta\Position\PagePosition;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +22,14 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
+/**
+ * @group legacy
+ */
+#[Group('legacy')]
 final class RequestAwareRouteGeneratorFactoryTest extends TestCase
 {
+    use CapturesDeprecations;
+
     private MockObject&UrlGeneratorInterface $router;
 
     private RequestStack $requestStack;
@@ -110,30 +117,21 @@ final class RequestAwareRouteGeneratorFactoryTest extends TestCase
         );
     }
 
-    public function testAPositionRouteGeneratorIsCreatedForTheCurrentRequest(): void
+    public function testTheFactoryIsDeprecated(): void
+    {
+        $deprecations = $this->captureDeprecations(fn () => $this->createFactory());
+
+        self::assertSame(['Since babdev/pagerfanta-bundle 4.7: The "BabDev\\PagerfantaBundle\\RouteGenerator\\RequestAwareRouteGeneratorFactory" class is deprecated, use the "BabDev\\PagerfantaBundle\\RouteGenerator\\RequestAwarePositionRouteGeneratorFactory" class instead.'], $deprecations);
+    }
+
+    public function testThePositionRouteGeneratorIsCreatedByTheReplacementFactory(): void
     {
         $routeCollection = new RouteCollection();
         $routeCollection->add('pagerfanta_view', new Route('/pagerfanta-view'));
 
-        $request = Request::create('/pagerfanta-view', 'GET', ['page' => '3', 'cursor' => 'stale', 'hello' => 'world']);
-        $request->attributes->set('_route', 'pagerfanta_view');
-        $request->attributes->set('_route_params', []);
+        $generator = (new RequestAwareRouteGeneratorFactory(new UrlGenerator($routeCollection, new RequestContext()), $this->requestStack, PropertyAccess::createPropertyAccessor(), new Base64JsonCursorEncoder()))->createPositionRouteGenerator(['routeName' => 'pagerfanta_view']);
 
-        $this->requestStack->push($request);
-
-        $generator = (new RequestAwareRouteGeneratorFactory(new UrlGenerator($routeCollection, new RequestContext()), $this->requestStack, PropertyAccess::createPropertyAccessor(), new Base64JsonCursorEncoder()))->createPositionRouteGenerator();
-
-        $cursor = new Cursor(['p.id' => 42]);
-
-        // The parameters from the request keep their position
-        self::assertSame('/pagerfanta-view?page=4&hello=world', $generator(new PagePosition(4)));
-        self::assertSame('/pagerfanta-view?cursor='.(new Base64JsonCursorEncoder())->encode($cursor).'&hello=world', $generator(new CursorPosition($cursor)));
-    }
-
-    public function testAPositionRouteGeneratorIsNotCreatedWhenARequestIsNotActive(): void
-    {
-        $this->expectException(RuntimeException::class);
-
-        $this->createFactory()->createPositionRouteGenerator();
+        self::assertInstanceOf(RouterAwarePositionRouteGenerator::class, $generator);
+        self::assertSame('/pagerfanta-view?page=2', $generator(new PagePosition(2)));
     }
 }

@@ -31,12 +31,6 @@ parameters:
 			path: src/DependencyInjection/CompilerPass/RegisterPagerfantaViewsPass.php
 
 		-
-			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/RouteGenerator/RequestAwareRouteGeneratorFactory.php
-
-		-
 			message: '#^Parameter \#3 \$options of class BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwareRouteGenerator constructor expects array\{routeName\: non\-empty\-string, pageParameter\?\: non\-empty\-string, omitFirstPage\?\: bool, routeParams\?\: array\<string, mixed\>, referenceType\?\: 0\|1\|2\|3\}, array\<string, mixed\> given\.$#'
 			identifier: argument.type
 			count: 1
@@ -46,7 +40,7 @@ parameters:
 			message: '#^Parameter \#4 \$options of class BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwarePositionRouteGenerator constructor expects array\{routeName\: non\-empty\-string, pageParameter\?\: non\-empty\-string, cursorParameter\?\: non\-empty\-string, omitFirstPage\?\: bool, routeParams\?\: array\<string, mixed\>, referenceType\?\: 0\|1\|2\|3\}, array\<string, mixed\> given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/RouteGenerator/RequestAwareRouteGeneratorFactory.php
+			path: src/RouteGenerator/RequestAwarePositionRouteGeneratorFactory.php
 
 		-
 			message: '#^Default value of the parameter \#3 \$options \(array\{\}\) of method BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwareRouteGenerator\:\:__construct\(\) is incompatible with type array\{routeName\: non\-empty\-string, pageParameter\?\: non\-empty\-string, omitFirstPage\?\: bool, routeParams\?\: array\<string, mixed\>, referenceType\?\: 0\|1\|2\|3\}\.$#'

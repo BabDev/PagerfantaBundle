@@ -3,6 +3,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use BabDev\PagerfantaBundle\Twig\UndefinedCallableHandler;
+use Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface;
 use Pagerfanta\Twig\Extension\PagerfantaExtension;
 use Pagerfanta\Twig\Extension\PagerfantaRuntime;
 use Pagerfanta\Twig\View\TwigView;
@@ -18,7 +19,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             abstract_arg('default view'),
             service('pagerfanta.view_factory'),
-            service('pagerfanta.route_generator_factory'),
+            service(PositionRouteGeneratorFactoryInterface::class),
             abstract_arg('default sequential view'),
         ])
         ->tag('twig.runtime')

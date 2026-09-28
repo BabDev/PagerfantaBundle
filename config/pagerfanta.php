@@ -4,6 +4,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use BabDev\PagerfantaBundle\Cursor\SignedCursorEncoder;
 use BabDev\PagerfantaBundle\Position\PositionResolver;
+use BabDev\PagerfantaBundle\RouteGenerator\RequestAwarePositionRouteGeneratorFactory;
 use BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory;
 use BabDev\PagerfantaBundle\View\ContainerBackedImmutableViewFactory;
 use Pagerfanta\Cursor\Base64JsonCursorEncoder;
@@ -57,9 +58,21 @@ return static function (ContainerConfigurator $container): void {
             service('property_accessor'),
             service('pagerfanta.cursor_encoder'),
         ])
+        ->deprecate('babdev/pagerfanta-bundle', '4.7', 'The "%service_id%" service is deprecated, use the "pagerfanta.position_route_generator_factory" service instead.')
     ;
-    $services->alias(RouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory');
-    $services->alias(PositionRouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory');
+    $services->alias(RouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory')
+        ->deprecate('babdev/pagerfanta-bundle', '4.7', \sprintf('The "%%alias_id%%" alias is deprecated, use the "%s" alias instead.', PositionRouteGeneratorFactoryInterface::class))
+    ;
+
+    $services->set('pagerfanta.position_route_generator_factory', RequestAwarePositionRouteGeneratorFactory::class)
+        ->args([
+            service('router'),
+            service('request_stack'),
+            service('property_accessor'),
+            service('pagerfanta.cursor_encoder'),
+        ])
+    ;
+    $services->alias(PositionRouteGeneratorFactoryInterface::class, 'pagerfanta.position_route_generator_factory');
 
     $services->set('pagerfanta.view.default', DefaultView::class)
         ->tag('pagerfanta.view', ['alias' => 'default'])

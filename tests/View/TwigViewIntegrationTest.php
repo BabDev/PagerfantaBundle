@@ -3,7 +3,7 @@
 namespace BabDev\PagerfantaBundle\Tests\View;
 
 use BabDev\PagerfantaBundle\Cursor\SignedCursorEncoder;
-use BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory;
+use BabDev\PagerfantaBundle\RouteGenerator\RequestAwarePositionRouteGeneratorFactory;
 use Pagerfanta\Adapter\CallbackCursorAdapter;
 use Pagerfanta\Adapter\CursorSlice;
 use Pagerfanta\Adapter\FixedAdapter;
@@ -421,7 +421,7 @@ final class TwigViewIntegrationTest extends TestCase
         self::assertNotEmpty(
             (new TwigView($this->twig))->render(
                 $this->createPagerfanta(),
-                (new RequestAwareRouteGeneratorFactory($this->router, $this->requestStack, $this->propertyAccessor))->create(),
+                (new RequestAwarePositionRouteGeneratorFactory($this->router, $this->requestStack, $this->propertyAccessor))->createPositionRouteGenerator(),
             )
         );
     }
@@ -484,7 +484,7 @@ final class TwigViewIntegrationTest extends TestCase
                         $viewFactory = new ViewFactory();
                         $viewFactory->set('twig', new TwigView($this->testCase->twig));
 
-                        $routeGeneratorFactory = new RequestAwareRouteGeneratorFactory(
+                        $routeGeneratorFactory = new RequestAwarePositionRouteGeneratorFactory(
                             $this->testCase->router,
                             $this->testCase->requestStack,
                             $this->testCase->propertyAccessor,

@@ -147,6 +147,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         }
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 0, 'default');
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 2, new Reference(PositionRouteGeneratorFactoryInterface::class));
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 3, null);
 
         $twigConfig = $this->container->getExtensionConfig('twig');
@@ -282,9 +283,13 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.position_resolver', 1, new Reference('pagerfanta.cursor_encoder'));
         $this->assertContainerBuilderHasAlias(PositionResolver::class, 'pagerfanta.position_resolver');
 
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.position_route_generator_factory', 3, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasAlias(PositionRouteGeneratorFactoryInterface::class, 'pagerfanta.position_route_generator_factory');
+
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.route_generator_factory', 3, new Reference('pagerfanta.cursor_encoder'));
+        self::assertTrue($this->container->getDefinition('pagerfanta.route_generator_factory')->isDeprecated());
         $this->assertContainerBuilderHasAlias(RouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory');
-        $this->assertContainerBuilderHasAlias(PositionRouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory');
+        self::assertTrue($this->container->getAlias(RouteGeneratorFactoryInterface::class)->isDeprecated());
 
         foreach (['default', 'foundation6', 'semantic_ui', 'twitter_bootstrap', 'twitter_bootstrap3', 'twitter_bootstrap4', 'twitter_bootstrap5'] as $name) {
             $this->assertContainerBuilderHasServiceDefinitionWithArgument(\sprintf('pagerfanta.view.%s_sequential', $name), 1, \sprintf('%s_sequential', $name));
