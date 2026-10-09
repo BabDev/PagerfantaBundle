@@ -9,6 +9,8 @@ use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
+ * @deprecated since PagerfantaBundle 4.7, use the {@see RouterAwarePositionRouteGenerator} instead
+ *
  * @phpstan-type RouteGeneratorOptions array{routeName: non-empty-string, pageParameter?: non-empty-string, omitFirstPage?: bool, routeParams?: array<string, mixed>, referenceType?: UrlGeneratorInterface::*}
  */
 final readonly class RouterAwareRouteGenerator implements RouteGeneratorInterface
@@ -21,6 +23,8 @@ final readonly class RouterAwareRouteGenerator implements RouteGeneratorInterfac
         private PropertyAccessorInterface $propertyAccessor,
         private array $options = [],
     ) {
+        trigger_deprecation('babdev/pagerfanta-bundle', '4.7', 'The "%s" class is deprecated, use the "%s" class instead.', self::class, RouterAwarePositionRouteGenerator::class);
+
         // Check missing options
         if (!isset($options['routeName'])) {
             throw new InvalidArgumentException(\sprintf('The "%s" class options requires a "routeName" parameter to be set.', self::class));

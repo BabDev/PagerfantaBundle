@@ -62,3 +62,9 @@ If you are using a parameter other than `page` for pagination, you can set the p
 Note that the page parameter *MUST* be wrapped in brackets (i.e. `[other_page]`) for the route generator to correctly function.
 
 See the [Pagerfanta documentation](/open-source/packages/pagerfanta/docs) for the list of supported options.
+
+## Cursor Pagers
+
+<div class="docs-note docs-note--new-feature">Rendering cursor pagers was introduced in PagerfantaBundle 4.7.</div>
+
+Cursor pagers are rendered with the `pagerfanta()` function in the same way, and are linked with signed cursors in the `cursor` parameter. See the [cursor pagination documentation](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination) for details.

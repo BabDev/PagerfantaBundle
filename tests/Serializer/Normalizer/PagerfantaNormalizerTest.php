@@ -48,6 +48,9 @@ final class PagerfantaNormalizerTest extends TestCase
         yield 'Context with preserve keys enabled' => [[0 => 'item1', 2 => 'item2', 4 => 'item3'], [PagerfantaNormalizer::PRESERVE_KEYS_KEY => true], [0 => 'item1', 2 => 'item2', 4 => 'item3']];
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     #[DataProvider('dataNormalizeWithPreserveKeysContext')]
     public function testNormalizeWithPreserveKeysContext(array $data, array $context, array $expectedItems): void
     {

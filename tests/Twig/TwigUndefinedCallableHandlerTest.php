@@ -20,6 +20,7 @@ final class TwigUndefinedCallableHandlerTest extends TestCase
     {
         yield '"pagerfanta" function' => ['pagerfanta'];
         yield '"pagerfanta_page_url" function' => ['pagerfanta_page_url'];
+        yield '"pagerfanta_position_url" function' => ['pagerfanta_position_url'];
     }
 
     #[DataProvider('dataSupportedFunctions')]

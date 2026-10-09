@@ -1,6 +1,12 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Cannot access offset ''invalid_cursor'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/DependencyInjection/BabDevPagerfantaExtension.php
+
+		-
 			message: '#^Cannot access offset ''not_valid_current_page'' on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -25,16 +31,16 @@ parameters:
 			path: src/DependencyInjection/CompilerPass/RegisterPagerfantaViewsPass.php
 
 		-
-			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/RouteGenerator/RequestAwareRouteGeneratorFactory.php
-
-		-
-			message: '#^Parameter \#3 \$options of class BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwareRouteGenerator constructor expects array\{routeName\: non\-empty\-string, pageParameter\?\: non\-empty\-string, omitFirstPage\?\: bool, routeParams\?\: array\<string, mixed\>, referenceType\?\: 0\|1\|2\|3\}, non\-empty\-array\<string, mixed\> given\.$#'
+			message: '#^Parameter \#3 \$options of class BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwareRouteGenerator constructor expects array\{routeName\: non\-empty\-string, pageParameter\?\: non\-empty\-string, omitFirstPage\?\: bool, routeParams\?\: array\<string, mixed\>, referenceType\?\: 0\|1\|2\|3\}, array\<string, mixed\> given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/RouteGenerator/RequestAwareRouteGeneratorFactory.php
+
+		-
+			message: '#^Parameter \#4 \$options of class BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwarePositionRouteGenerator constructor expects array\{routeName\: non\-empty\-string, pageParameter\?\: non\-empty\-string, cursorParameter\?\: non\-empty\-string, omitFirstPage\?\: bool, routeParams\?\: array\<string, mixed\>, referenceType\?\: 0\|1\|2\|3\}, array\<string, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/RouteGenerator/RequestAwarePositionRouteGeneratorFactory.php
 
 		-
 			message: '#^Default value of the parameter \#3 \$options \(array\{\}\) of method BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwareRouteGenerator\:\:__construct\(\) is incompatible with type array\{routeName\: non\-empty\-string, pageParameter\?\: non\-empty\-string, omitFirstPage\?\: bool, routeParams\?\: array\<string, mixed\>, referenceType\?\: 0\|1\|2\|3\}\.$#'
@@ -59,12 +65,6 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: src/View/ContainerBackedImmutableViewFactory.php
-
-		-
-			message: '#^Parameter \#2 \$array of static method PHPUnit\\Framework\\Assert\:\:assertArrayHasKey\(\) expects array\<mixed\>\|ArrayAccess\<\(int\|string\), mixed\>, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/DependencyInjection/BabDevPagerfantaExtensionTest.php
 
 		-
 			message: '#^Method BabDev\\PagerfantaBundle\\Tests\\View\\TwigViewIntegrationTest\:\:removeWhitespacesBetweenTags\(\) should return string but returns string\|null\.$#'

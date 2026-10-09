@@ -3,7 +3,9 @@
 namespace BabDev\PagerfantaBundle\Tests\RouteGenerator;
 
 use BabDev\PagerfantaBundle\RouteGenerator\RouterAwareRouteGenerator;
+use BabDev\PagerfantaBundle\Tests\CapturesDeprecations;
 use Pagerfanta\Exception\InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -13,8 +15,14 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
+/**
+ * @group legacy
+ */
+#[Group('legacy')]
 final class RouterAwareRouteGeneratorTest extends TestCase
 {
+    use CapturesDeprecations;
+
     private function createRouter(): UrlGeneratorInterface
     {
         $routeCollection = new RouteCollection();
@@ -90,9 +98,16 @@ final class RouterAwareRouteGeneratorTest extends TestCase
         $generator = new RouterAwareRouteGenerator(
             $this->createRouter(),
             $this->createPropertyAccessor(),
-            ['routeParams' => ['hello' => 'world']], /** @phpstan-ignore-line argument.type */
+            ['routeParams' => ['hello' => 'world']], // @phpstan-ignore-line argument.type
         );
 
         $generator(1);
+    }
+
+    public function testTheGeneratorIsDeprecated(): void
+    {
+        $deprecations = $this->captureDeprecations(fn () => new RouterAwareRouteGenerator($this->createRouter(), $this->createPropertyAccessor(), ['routeName' => 'pagerfanta_view']));
+
+        self::assertSame(['Since babdev/pagerfanta-bundle 4.7: The "BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwareRouteGenerator" class is deprecated, use the "BabDev\\PagerfantaBundle\\RouteGenerator\\RouterAwarePositionRouteGenerator" class instead.'], $deprecations);
     }
 }

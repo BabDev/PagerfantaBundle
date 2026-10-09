@@ -19,6 +19,8 @@ final class RegisterPagerfantaViewsPass implements CompilerPassInterface
             return;
         }
 
+        $this->configureDefaultSequentialView($container);
+
         $definition = $container->getDefinition('pagerfanta.view_factory');
 
         if (ContainerBackedImmutableViewFactory::class === $definition->getClass()) {
@@ -45,6 +47,40 @@ final class RegisterPagerfantaViewsPass implements CompilerPassInterface
             $alias = $arguments[0]['alias'] ?? $serviceId;
 
             $definition->addMethodCall('set', [$alias, new Reference($serviceId)]);
+        }
+    }
+
+    /**
+     * Defaults the sequential view of the Twig runtime to the sequential variant of the default view, when one exists.
+     */
+    private function configureDefaultSequentialView(ContainerBuilder $container): void
+    {
+        if (!$container->hasDefinition('pagerfanta.twig_runtime')) {
+            return;
+        }
+
+        $runtime = $container->getDefinition('pagerfanta.twig_runtime');
+
+        if (null !== $runtime->getArgument(3)) {
+            return;
+        }
+
+        $defaultView = $runtime->getArgument(0);
+
+        if (!\is_string($defaultView)) {
+            return;
+        }
+
+        $sequentialView = \sprintf('%s_sequential', $defaultView);
+
+        foreach ($container->findTaggedServiceIds('pagerfanta.view') as $serviceId => $arguments) {
+            $attributes = $arguments[0] ?? [];
+
+            if ($sequentialView === (\is_array($attributes) && isset($attributes['alias']) ? $attributes['alias'] : $serviceId)) {
+                $runtime->replaceArgument(3, $sequentialView);
+
+                return;
+            }
         }
     }
 }
