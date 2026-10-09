@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @phpstan-type RouteGeneratorOptions array{routeName: non-empty-string, pageParameter?: non-empty-string, cursorParameter?: non-empty-string, omitFirstPage?: bool, routeParams?: array<string, mixed>, referenceType?: UrlGeneratorInterface::*}
  */
-final class RouterAwarePositionRouteGenerator implements PositionRouteGeneratorInterface
+final readonly class RouterAwarePositionRouteGenerator implements PositionRouteGeneratorInterface
 {
     /**
      * @phpstan-param RouteGeneratorOptions $options
@@ -28,10 +28,10 @@ final class RouterAwarePositionRouteGenerator implements PositionRouteGeneratorI
      * @throws InvalidArgumentException if the route name is not set in the options
      */
     public function __construct(
-        private readonly UrlGeneratorInterface $router,
-        private readonly PropertyAccessorInterface $propertyAccessor,
-        private readonly CursorEncoderInterface $cursorEncoder,
-        private readonly array $options,
+        private UrlGeneratorInterface $router,
+        private PropertyAccessorInterface $propertyAccessor,
+        private CursorEncoderInterface $cursorEncoder,
+        private array $options,
     ) {
         if (!isset($options['routeName'])) {
             throw new InvalidArgumentException(\sprintf('The "%s" class options requires a "routeName" parameter to be set.', self::class));
