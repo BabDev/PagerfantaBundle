@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.7.0 (2026-10-09)
+
+- Add cursor pagination support
+- Add support for rendering sequential pagination views (previous/next links only)
+- [#66](https://github.com/BabDev/PagerfantaBundle/pull/66) Added Lithuanian locale
+- Deprecate `BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory` and `BabDev\PagerfantaBundle\RouteGenerator\RouterAwareRouteGenerator` in favor of the position based route generator factory and generator
+- Deprecate the `pagerfanta.route_generator_factory` service and the `Pagerfanta\RouteGenerator\RouteGeneratorFactoryInterface` alias, use the `pagerfanta.position_route_generator_factory` service and the `Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface` alias instead
+- Fix the `out_of_range_page` and `not_valid_current_page` exception strategies registering each other's exception listeners
+- Drop support for Pagerfanta 3.x
+- Drop support for Symfony 7.3 and 8.0
+
 ## 4.6.0 (2025-11-29)
 
 - Add support for Symfony 7.4 and 8.0
