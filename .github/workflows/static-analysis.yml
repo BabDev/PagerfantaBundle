@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist
         env:
-          SYMFONY_REQUIRE: '8.0.*'
+          SYMFONY_REQUIRE: '8.1.*'
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze --error-format=github
