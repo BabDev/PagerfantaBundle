@@ -3,7 +3,6 @@
 namespace BabDev\PagerfantaBundle\Tests\RouteGenerator;
 
 use BabDev\PagerfantaBundle\RouteGenerator\RequestAwarePositionRouteGeneratorFactory;
-use BabDev\PagerfantaBundle\Tests\CapturesDeprecations;
 use Pagerfanta\Cursor\Base64JsonCursorEncoder;
 use Pagerfanta\Cursor\Cursor;
 use Pagerfanta\Exception\InvalidArgumentException;
@@ -21,8 +20,6 @@ use Symfony\Component\Routing\RouteCollection;
 
 final class RequestAwarePositionRouteGeneratorFactoryTest extends TestCase
 {
-    use CapturesDeprecations;
-
     private RequestStack $requestStack;
 
     protected function setUp(): void
@@ -53,11 +50,6 @@ final class RequestAwarePositionRouteGeneratorFactoryTest extends TestCase
         $request->attributes->set('_route_params', []);
 
         $this->requestStack->push($request);
-    }
-
-    public function testTheFactoryIsNotDeprecated(): void
-    {
-        self::assertSame([], $this->captureDeprecations(fn () => $this->createFactory()));
     }
 
     public function testAGeneratorIsCreatedForTheCurrentRequest(): void

@@ -6,11 +6,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "pagerfanta/core": "^4.10 || ^5.0",
+        "pagerfanta/core": "^5.0",
         "psr/container": "^1.0 || ^2.0",
         "symfony/config": "^6.4 || ^7.4 || ^8.0",
         "symfony/dependency-injection": "^6.4 || ^7.4 || ^8.0",
-        "symfony/deprecation-contracts": "^2.5 || ^3.0",
         "symfony/http-foundation": "^6.4 || ^7.4 || ^8.0",
         "symfony/http-kernel": "^6.4 || ^7.4 || ^8.0",
         "symfony/property-access": "^6.4 || ^7.4 || ^8.0",
@@ -20,7 +19,7 @@
         "jms/serializer": "^3.32",
         "jms/serializer-bundle": "^5.4",
         "matthiasnoback/symfony-dependency-injection-test": "^6.2",
-        "pagerfanta/twig": "^4.10 || ^5.0",
+        "pagerfanta/twig": "^5.0",
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan": "2.3.0",
         "phpstan/phpstan-phpunit": "2.1.1",
@@ -31,17 +30,17 @@
         "symfony/twig-bridge": "^6.4 || ^7.4 || ^8.0",
         "symfony/twig-bundle": "^6.4 || ^7.4 || ^8.0",
         "symfony/translation": "^6.4 || ^7.4 || ^8.0",
-        "twig/twig": "^3.12"
+        "twig/twig": "^3.29"
     },
     "conflict": {
         "jms/serializer": "<3.32",
         "jms/serializer-bundle": "<5.4",
-        "pagerfanta/twig": "<4.7",
+        "pagerfanta/twig": "<5.0",
         "symfony/serializer": "<6.4 || >=7.0,<7.4",
         "symfony/translation": "<6.4 || >=7.0,<7.4",
         "symfony/twig-bridge": "<6.4 || >=7.0,<7.4",
         "symfony/twig-bundle": "<6.4 || >=7.0,<7.4",
-        "twig/twig": "<3.12",
+        "twig/twig": "<3.29",
         "white-october/pagerfanta-bundle": "*"
     },
     "suggest": {

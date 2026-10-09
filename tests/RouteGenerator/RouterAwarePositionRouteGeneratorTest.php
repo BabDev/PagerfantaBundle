@@ -53,6 +53,11 @@ final class RouterAwarePositionRouteGeneratorTest extends TestCase
         self::assertSame('/pagerfanta-view?page=2', $generator(new PagePosition(2)));
     }
 
+    public function testARouteIsGeneratedForAPageWithACustomPageParameter(): void
+    {
+        self::assertSame('/pagerfanta-view?custom_page=2', $this->createGenerator(['pageParameter' => '[custom_page]'])(new PagePosition(2)));
+    }
+
     public function testARouteIsGeneratedForACursor(): void
     {
         $cursor = new Cursor(['p.id' => 42]);

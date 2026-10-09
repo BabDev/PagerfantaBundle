@@ -62,7 +62,7 @@ final class RegisterPagerfantaViewsPassTest extends AbstractCompilerPassTestCase
         $this->registerService('pagerfanta.view.twitter_bootstrap5_sequential', SequentialView::class)
             ->addTag('pagerfanta.view', ['alias' => 'twitter_bootstrap5_sequential']);
         $this->registerService('pagerfanta.twig_runtime', PagerfantaRuntime::class)
-            ->setArguments(['twitter_bootstrap5', new Reference('pagerfanta.view_factory'), new Reference('pagerfanta.route_generator_factory'), null]);
+            ->setArguments(['twitter_bootstrap5', new Reference('pagerfanta.view_factory'), new Reference('pagerfanta.position_route_generator_factory'), null]);
 
         $this->compile();
 
@@ -73,7 +73,7 @@ final class RegisterPagerfantaViewsPassTest extends AbstractCompilerPassTestCase
     {
         $this->registerService('pagerfanta.view_factory', ViewFactory::class);
         $this->registerService('pagerfanta.twig_runtime', PagerfantaRuntime::class)
-            ->setArguments(['twig', new Reference('pagerfanta.view_factory'), new Reference('pagerfanta.route_generator_factory'), null]);
+            ->setArguments(['twig', new Reference('pagerfanta.view_factory'), new Reference('pagerfanta.position_route_generator_factory'), null]);
 
         $this->compile();
 
@@ -86,7 +86,7 @@ final class RegisterPagerfantaViewsPassTest extends AbstractCompilerPassTestCase
         $this->registerService('pagerfanta.view.default_sequential', SequentialView::class)
             ->addTag('pagerfanta.view', ['alias' => 'default_sequential']);
         $this->registerService('pagerfanta.twig_runtime', PagerfantaRuntime::class)
-            ->setArguments(['default', new Reference('pagerfanta.view_factory'), new Reference('pagerfanta.route_generator_factory'), 'custom_sequential']);
+            ->setArguments(['default', new Reference('pagerfanta.view_factory'), new Reference('pagerfanta.position_route_generator_factory'), 'custom_sequential']);
 
         $this->compile();
 
