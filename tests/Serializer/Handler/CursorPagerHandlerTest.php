@@ -53,7 +53,7 @@ final class CursorPagerHandlerTest extends TestCase
     {
         $pager = new CountableCursorPagerfanta($this->createAdapter(), 3, new CursorPosition(new Cursor(['id' => 3])));
 
-        self::assertJsonStringEqualsJsonString(
+        $this->assertJsonStringEqualsJsonString(
             json_encode([
                 'items' => [4, 5, 6],
                 'pagination' => [
@@ -74,7 +74,7 @@ final class CursorPagerHandlerTest extends TestCase
         $pager = new CursorPagerfanta($this->createAdapter(), 3, new CursorPosition(new Cursor(['id' => 6])));
 
         // The JMS Serializer omits null values unless the context enables serializing them
-        self::assertJsonStringEqualsJsonString(
+        $this->assertJsonStringEqualsJsonString(
             json_encode([
                 'items' => [7],
                 'pagination' => [
@@ -92,7 +92,7 @@ final class CursorPagerHandlerTest extends TestCase
     {
         $pager = new CursorPagerfanta($this->createAdapter(), 3);
 
-        self::assertJsonStringEqualsJsonString(
+        $this->assertJsonStringEqualsJsonString(
             json_encode([
                 'items' => [1, 2, 3],
                 'pagination' => [
@@ -111,7 +111,7 @@ final class CursorPagerHandlerTest extends TestCase
     {
         $adapter = new CallbackCursorAdapter(static fn (?Cursor $cursor, int $limit): CursorSlice => new CursorSlice([4], new Cursor(['id' => 4], Direction::Previous), new Cursor(['id' => 4])));
 
-        self::assertJsonStringEqualsJsonString(
+        $this->assertJsonStringEqualsJsonString(
             json_encode([
                 'items' => [4],
                 'pagination' => [
@@ -156,7 +156,7 @@ final class CursorPagerHandlerTest extends TestCase
             $serializationContext->setAttribute($key, $value);
         }
 
-        self::assertJsonStringEqualsJsonString(
+        $this->assertJsonStringEqualsJsonString(
             $expectedJson,
             $this->createSerializer()->serialize($pager, 'json', $serializationContext),
         );

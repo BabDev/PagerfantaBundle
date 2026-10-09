@@ -413,7 +413,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         $this->requestStack->push($request);
 
-        self::assertNotEmpty(
+        $this->assertNotEmpty(
             new TwigView($this->twig)->render(
                 $this->createPagerfanta(),
                 new RequestAwarePositionRouteGeneratorFactory($this->router, $this->requestStack, $this->propertyAccessor, $this->cursorEncoder)->createPositionRouteGenerator(),
@@ -449,7 +449,7 @@ final class TwigViewIntegrationTest extends TestCase
             ),
         );
 
-        self::assertMatchesRegularExpression('/cursor=[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}&/', $output, 'The cursors are signed');
+        $this->assertMatchesRegularExpression('/cursor=[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}&/', $output, 'The cursors are signed');
     }
 
     private function createRouter(): UrlGeneratorInterface
@@ -510,7 +510,7 @@ final class TwigViewIntegrationTest extends TestCase
 
     private function assertViewOutputMatches(string $view, string $expected): void
     {
-        self::assertSame($this->removeWhitespacesBetweenTags($expected), $view);
+        $this->assertSame($this->removeWhitespacesBetweenTags($expected), $view);
     }
 
     private function removeWhitespacesBetweenTags(string $string): string

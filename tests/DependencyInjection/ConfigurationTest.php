@@ -12,7 +12,7 @@ final class ConfigurationTest extends TestCase
     {
         $config = new Processor()->processConfiguration(new Configuration(), []);
 
-        self::assertEquals(self::getBundleDefaultConfig(), $config);
+        $this->assertEquals(self::getBundleDefaultConfig(), $config);
     }
 
     public function testConfigWithCustomDefaultView(): void
@@ -23,10 +23,7 @@ final class ConfigurationTest extends TestCase
 
         $config = new Processor()->processConfiguration(new Configuration(), [$extraConfig]);
 
-        self::assertEquals(
-            array_merge(self::getBundleDefaultConfig(), $extraConfig),
-            $config,
-        );
+        $this->assertEquals(array_merge(self::getBundleDefaultConfig(), $extraConfig), $config);
     }
 
     public function testConfigWithCustomDefaultSequentialView(): void
@@ -37,10 +34,7 @@ final class ConfigurationTest extends TestCase
 
         $config = new Processor()->processConfiguration(new Configuration(), [$extraConfig]);
 
-        self::assertEquals(
-            array_merge(self::getBundleDefaultConfig(), $extraConfig),
-            $config,
-        );
+        $this->assertEquals(array_merge(self::getBundleDefaultConfig(), $extraConfig), $config);
     }
 
     public function testConfigWithCustomDefaultTwigTemplate(): void
@@ -51,10 +45,7 @@ final class ConfigurationTest extends TestCase
 
         $config = new Processor()->processConfiguration(new Configuration(), [$extraConfig]);
 
-        self::assertEquals(
-            array_merge(self::getBundleDefaultConfig(), $extraConfig),
-            $config,
-        );
+        $this->assertEquals(array_merge(self::getBundleDefaultConfig(), $extraConfig), $config);
     }
 
     public function testConfigWithCustomExceptionsStrategy(): void
@@ -69,10 +60,7 @@ final class ConfigurationTest extends TestCase
 
         $config = new Processor()->processConfiguration(new Configuration(), [$extraConfig]);
 
-        self::assertEquals(
-            array_merge(self::getBundleDefaultConfig(), $extraConfig),
-            $config,
-        );
+        $this->assertEquals(array_merge(self::getBundleDefaultConfig(), $extraConfig), $config);
     }
 
     protected static function getBundleDefaultConfig(): array

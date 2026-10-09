@@ -48,7 +48,7 @@ final class CursorPagerNormalizerTest extends TestCase
     {
         $pager = new CountableCursorPagerfanta($this->createAdapter(), 3, new CursorPosition(new Cursor(['id' => 3])));
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'items' => [['id' => 4], ['id' => 5], ['id' => 6]],
                 'pagination' => [
@@ -68,7 +68,7 @@ final class CursorPagerNormalizerTest extends TestCase
     {
         $pager = new CursorPagerfanta($this->createAdapter(), 3);
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'items' => [['id' => 1], ['id' => 2], ['id' => 3]],
                 'pagination' => [
@@ -85,7 +85,7 @@ final class CursorPagerNormalizerTest extends TestCase
 
     public function testTheLastPageHasNoNextCursor(): void
     {
-        self::assertSame(
+        $this->assertSame(
             [
                 'items' => [['id' => 7]],
                 'pagination' => [
@@ -104,7 +104,7 @@ final class CursorPagerNormalizerTest extends TestCase
     {
         $adapter = new CallbackCursorAdapter(static fn (?Cursor $cursor, int $limit): CursorSlice => new CursorSlice([4], new Cursor(['id' => 4], Direction::Previous), new Cursor(['id' => 4])));
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'items' => [4],
                 'pagination' => [
@@ -123,14 +123,14 @@ final class CursorPagerNormalizerTest extends TestCase
     {
         $normalized = $this->createSerializer()->normalize(new CursorPagerfanta($this->createAdapter(), 3));
 
-        self::assertIsArray($normalized);
-        self::assertIsArray($normalized['pagination']);
+        $this->assertIsArray($normalized);
+        $this->assertIsArray($normalized['pagination']);
 
         $nextCursor = $normalized['pagination']['next_cursor'];
 
-        self::assertIsString($nextCursor);
-        self::assertMatchesRegularExpression('/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}$/', $nextCursor);
-        self::assertEquals(new Cursor(['id' => 3]), $this->cursorEncoder->decode($nextCursor));
+        $this->assertIsString($nextCursor);
+        $this->assertMatchesRegularExpression('/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}$/', $nextCursor);
+        $this->assertEquals(new Cursor(['id' => 3]), $this->cursorEncoder->decode($nextCursor));
     }
 
     /**
@@ -170,7 +170,7 @@ final class CursorPagerNormalizerTest extends TestCase
     #[DataProvider('dataNormalizeWithPreserveKeysContext')]
     public function testNormalizeWithPreserveKeysContext(array $data, array $context, array $expectedItems): void
     {
-        self::assertSame(
+        $this->assertSame(
             [
                 'items' => $expectedItems,
                 'pagination' => [
@@ -197,9 +197,9 @@ final class CursorPagerNormalizerTest extends TestCase
     {
         $normalizer = new CursorPagerNormalizer($this->cursorEncoder);
 
-        self::assertTrue($normalizer->supportsNormalization(new CursorPagerfanta($this->createAdapter())));
-        self::assertFalse($normalizer->supportsNormalization(new Pagerfanta(new NullAdapter(5))));
-        self::assertArrayHasKey(CursorPagerInterface::class, $normalizer->getSupportedTypes(null));
+        $this->assertTrue($normalizer->supportsNormalization(new CursorPagerfanta($this->createAdapter())));
+        $this->assertFalse($normalizer->supportsNormalization(new Pagerfanta(new NullAdapter(5))));
+        $this->assertArrayHasKey(CursorPagerInterface::class, $normalizer->getSupportedTypes(null));
     }
 
     public function testNormalizeOnlyAcceptsCursorPagers(): void

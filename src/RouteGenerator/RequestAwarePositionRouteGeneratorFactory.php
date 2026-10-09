@@ -7,6 +7,7 @@ use Pagerfanta\Exception\InvalidArgumentException;
 use Pagerfanta\Exception\RuntimeException;
 use Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface;
 use Pagerfanta\RouteGenerator\PositionRouteGeneratorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -63,11 +64,11 @@ final readonly class RequestAwarePositionRouteGeneratorFactory implements Positi
         if (null === $options['routeName']) {
             $request = $this->requestStack->getCurrentRequest();
 
-            if (null === $request) {
+            if (!$request instanceof Request) {
                 throw new RuntimeException('The request aware route generator can not be used when there is not an active request.');
             }
 
-            if (null !== $this->requestStack->getParentRequest()) {
+            if ($this->requestStack->getParentRequest() instanceof Request) {
                 throw new RuntimeException('The request aware route generator can not guess the route when used in a sub-request, pass the "routeName" option to use this generator.');
             }
 

@@ -13,7 +13,7 @@ return new PhpCsFixer\Config()
         'linebreak_after_opening_tag' => false,
         'no_superfluous_phpdoc_tags' => ['remove_inheritdoc' => true],
         'nullable_type_declaration_for_default_null_value' => true,
-        'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
+        'php_unit_test_case_static_method_calls' => ['call_type' => 'this'],
         'single_line_empty_body' => true,
     ])
     ->setRiskyAllowed(true)

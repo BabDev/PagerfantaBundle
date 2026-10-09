@@ -33,12 +33,12 @@ final class PagerfantaNormalizerTest extends TestCase
 
         $serializer = new Serializer([new PagerfantaNormalizer()]);
 
-        self::assertEquals($expectedResultArray, $serializer->normalize($pager));
+        $this->assertEquals($expectedResultArray, $serializer->normalize($pager));
     }
 
     public function testNormalizeAnOffsetPagerWhichIsNotAPagerfantaInstance(): void
     {
-        $pager = self::createStub(OffsetPagerInterface::class);
+        $pager = $this->createStub(OffsetPagerInterface::class);
         $pager->method('getIterator')->willReturn(new \ArrayIterator(['item1', 'item2']));
         $pager->method('getCurrentPage')->willReturn(2);
         $pager->method('hasPreviousPage')->willReturn(true);
@@ -49,8 +49,8 @@ final class PagerfantaNormalizerTest extends TestCase
 
         $normalizer = new PagerfantaNormalizer();
 
-        self::assertTrue($normalizer->supportsNormalization($pager));
-        self::assertSame(
+        $this->assertTrue($normalizer->supportsNormalization($pager));
+        $this->assertSame(
             [
                 'items' => ['item1', 'item2'],
                 'pagination' => [
@@ -100,7 +100,7 @@ final class PagerfantaNormalizerTest extends TestCase
 
         $serializer = new Serializer([new PagerfantaNormalizer()]);
 
-        self::assertEquals($expectedResultArray, $serializer->normalize($pager, null, $context));
+        $this->assertEquals($expectedResultArray, $serializer->normalize($pager, null, $context));
     }
 
     public function testNormalizeRejectsInvalidPreserveKeysContext(): void
@@ -128,7 +128,7 @@ final class PagerfantaNormalizerTest extends TestCase
     #[DataProvider('dataSupportsNormalization')]
     public function testSupportsNormalization(mixed $data, bool $supported): void
     {
-        self::assertSame($supported, new PagerfantaNormalizer()->supportsNormalization($data));
+        $this->assertSame($supported, new PagerfantaNormalizer()->supportsNormalization($data));
     }
 
     public function testItSerializesIterableData(): void
@@ -149,6 +149,6 @@ final class PagerfantaNormalizerTest extends TestCase
             ],
         ];
 
-        self::assertSame($expectedResultArray, $serializer->normalize($pager));
+        $this->assertSame($expectedResultArray, $serializer->normalize($pager));
     }
 }

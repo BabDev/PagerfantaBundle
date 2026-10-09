@@ -17,7 +17,7 @@ final class ConvertInvalidCursorToBadRequestListenerTest extends TestCase
         $exception = new InvalidCursorException('The cursor signature is not valid.');
 
         $event = new ExceptionEvent(
-            self::createStub(HttpKernelInterface::class),
+            $this->createStub(HttpKernelInterface::class),
             Request::create('/'),
             HttpKernelInterface::MAIN_REQUEST,
             $exception
@@ -25,8 +25,8 @@ final class ConvertInvalidCursorToBadRequestListenerTest extends TestCase
 
         new ConvertInvalidCursorToBadRequestListener()->onKernelException($event);
 
-        self::assertInstanceOf(BadRequestHttpException::class, $event->getThrowable());
-        self::assertSame($exception, $event->getThrowable()->getPrevious());
+        $this->assertInstanceOf(BadRequestHttpException::class, $event->getThrowable());
+        $this->assertSame($exception, $event->getThrowable()->getPrevious());
     }
 
     public function testListenerDoesNotConvertUnknownExceptionForEvent(): void
@@ -34,7 +34,7 @@ final class ConvertInvalidCursorToBadRequestListenerTest extends TestCase
         $exception = new \RuntimeException();
 
         $event = new ExceptionEvent(
-            self::createStub(HttpKernelInterface::class),
+            $this->createStub(HttpKernelInterface::class),
             Request::create('/'),
             HttpKernelInterface::MAIN_REQUEST,
             $exception
@@ -42,6 +42,6 @@ final class ConvertInvalidCursorToBadRequestListenerTest extends TestCase
 
         new ConvertInvalidCursorToBadRequestListener()->onKernelException($event);
 
-        self::assertSame($exception, $event->getThrowable());
+        $this->assertSame($exception, $event->getThrowable());
     }
 }

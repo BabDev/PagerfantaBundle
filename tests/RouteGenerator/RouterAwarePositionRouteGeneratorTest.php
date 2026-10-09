@@ -42,34 +42,34 @@ final class RouterAwarePositionRouteGeneratorTest extends TestCase
 
     public function testARouteIsGeneratedForAPage(): void
     {
-        self::assertSame('/pagerfanta-view?page=1', $this->createGenerator()(new PagePosition(1)));
+        $this->assertSame('/pagerfanta-view?page=1', $this->createGenerator()(new PagePosition(1)));
     }
 
     public function testARouteIsGeneratedForTheFirstPageWithTheFirstPageOmitted(): void
     {
         $generator = $this->createGenerator(['omitFirstPage' => true]);
 
-        self::assertSame('/pagerfanta-view', $generator(new PagePosition(1)));
-        self::assertSame('/pagerfanta-view?page=2', $generator(new PagePosition(2)));
+        $this->assertSame('/pagerfanta-view', $generator(new PagePosition(1)));
+        $this->assertSame('/pagerfanta-view?page=2', $generator(new PagePosition(2)));
     }
 
     public function testARouteIsGeneratedForAPageWithACustomPageParameter(): void
     {
-        self::assertSame('/pagerfanta-view?custom_page=2', $this->createGenerator(['pageParameter' => '[custom_page]'])(new PagePosition(2)));
+        $this->assertSame('/pagerfanta-view?custom_page=2', $this->createGenerator(['pageParameter' => '[custom_page]'])(new PagePosition(2)));
     }
 
     public function testARouteIsGeneratedForACursor(): void
     {
         $cursor = new Cursor(['p.id' => 42]);
 
-        self::assertSame('/pagerfanta-view?cursor='.$this->encode($cursor), $this->createGenerator()(new CursorPosition($cursor)));
+        $this->assertSame('/pagerfanta-view?cursor='.$this->encode($cursor), $this->createGenerator()(new CursorPosition($cursor)));
     }
 
     public function testARouteIsGeneratedForACursorWithACustomCursorParameter(): void
     {
         $cursor = new Cursor(['p.id' => 42]);
 
-        self::assertSame('/pagerfanta-view?after='.$this->encode($cursor), $this->createGenerator(['cursorParameter' => '[after]'])(new CursorPosition($cursor)));
+        $this->assertSame('/pagerfanta-view?after='.$this->encode($cursor), $this->createGenerator(['cursorParameter' => '[after]'])(new CursorPosition($cursor)));
     }
 
     public function testTheCursorParameterIsRemovedForAPageAndThePageParameterIsRemovedForACursor(): void
@@ -78,13 +78,13 @@ final class RouterAwarePositionRouteGeneratorTest extends TestCase
 
         $generator = $this->createGenerator(['routeParams' => ['page' => 3, 'cursor' => 'stale', 'hello' => 'world']]);
 
-        self::assertSame('/pagerfanta-view?page=2&hello=world', $generator(new PagePosition(2)));
-        self::assertSame('/pagerfanta-view?cursor='.$this->encode($cursor).'&hello=world', $generator(new CursorPosition($cursor)));
+        $this->assertSame('/pagerfanta-view?page=2&hello=world', $generator(new PagePosition(2)));
+        $this->assertSame('/pagerfanta-view?cursor='.$this->encode($cursor).'&hello=world', $generator(new CursorPosition($cursor)));
     }
 
     public function testARouteIsGeneratedWithAnAbsoluteUrl(): void
     {
-        self::assertSame('http://localhost/pagerfanta-view?page=2', $this->createGenerator(['referenceType' => UrlGeneratorInterface::ABSOLUTE_URL])(new PagePosition(2)));
+        $this->assertSame('http://localhost/pagerfanta-view?page=2', $this->createGenerator(['referenceType' => UrlGeneratorInterface::ABSOLUTE_URL])(new PagePosition(2)));
     }
 
     public function testAnUnsupportedPositionIsRejected(): void

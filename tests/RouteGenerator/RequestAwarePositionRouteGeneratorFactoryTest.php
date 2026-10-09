@@ -31,7 +31,7 @@ final class RequestAwarePositionRouteGeneratorFactoryTest extends TestCase
     {
         do {
             $request = $this->requestStack->pop();
-        } while (null !== $request);
+        } while ($request instanceof Request);
     }
 
     private function createFactory(): RequestAwarePositionRouteGeneratorFactory
@@ -61,15 +61,15 @@ final class RequestAwarePositionRouteGeneratorFactoryTest extends TestCase
         $cursor = new Cursor(['p.id' => 42]);
 
         // The parameters from the request keep their position
-        self::assertSame('/pagerfanta-view?page=4&hello=world', $generator(new PagePosition(4)));
-        self::assertSame('/pagerfanta-view?cursor='.new Base64JsonCursorEncoder()->encode($cursor).'&hello=world', $generator(new CursorPosition($cursor)));
+        $this->assertSame('/pagerfanta-view?page=4&hello=world', $generator(new PagePosition(4)));
+        $this->assertSame('/pagerfanta-view?cursor='.new Base64JsonCursorEncoder()->encode($cursor).'&hello=world', $generator(new CursorPosition($cursor)));
     }
 
     public function testTheRouteParametersFromTheOptionsOverrideTheRequestParameters(): void
     {
         $this->pushRequest();
 
-        self::assertSame('/pagerfanta-view?page=2&hello=there', $this->createFactory()->createPositionRouteGenerator(['routeParams' => ['hello' => 'there']])(new PagePosition(2)));
+        $this->assertSame('/pagerfanta-view?page=2&hello=there', $this->createFactory()->createPositionRouteGenerator(['routeParams' => ['hello' => 'there']])(new PagePosition(2)));
     }
 
     public function testAGeneratorIsCreatedForAGivenRouteDuringASubrequest(): void
@@ -77,7 +77,7 @@ final class RequestAwarePositionRouteGeneratorFactoryTest extends TestCase
         $this->pushRequest();
         $this->requestStack->push(Request::create('/_internal'));
 
-        self::assertSame('/other-view?page=2', $this->createFactory()->createPositionRouteGenerator(['routeName' => 'other_view'])(new PagePosition(2)));
+        $this->assertSame('/other-view?page=2', $this->createFactory()->createPositionRouteGenerator(['routeName' => 'other_view'])(new PagePosition(2)));
     }
 
     public function testAGeneratorIsNotCreatedWhenARouteNameIsNotGivenDuringASubrequest(): void

@@ -33,22 +33,22 @@ final class PositionResolverTest extends TestCase
     {
         $request = Request::create('/');
 
-        self::assertNull($this->resolver->resolve($request));
-        self::assertNull($this->resolver->resolvePagePosition($request));
-        self::assertNull($this->resolver->resolveCursorPosition($request));
+        $this->assertNull($this->resolver->resolve($request));
+        $this->assertNull($this->resolver->resolvePagePosition($request));
+        $this->assertNull($this->resolver->resolveCursorPosition($request));
     }
 
     public function testNoPositionIsResolvedForEmptyParameters(): void
     {
-        self::assertNull($this->resolver->resolve(Request::create('/', 'GET', ['page' => '', 'cursor' => ''])));
+        $this->assertNull($this->resolver->resolve(Request::create('/', 'GET', ['page' => '', 'cursor' => ''])));
     }
 
     public function testAPagePositionIsResolvedFromTheQuery(): void
     {
         $request = Request::create('/', 'GET', ['page' => '3']);
 
-        self::assertEquals(new PagePosition(3), $this->resolver->resolvePagePosition($request));
-        self::assertEquals(new PagePosition(3), $this->resolver->resolve($request));
+        $this->assertEquals(new PagePosition(3), $this->resolver->resolvePagePosition($request));
+        $this->assertEquals(new PagePosition(3), $this->resolver->resolve($request));
     }
 
     public function testAPagePositionIsResolvedFromTheRouteParameters(): void
@@ -56,14 +56,14 @@ final class PositionResolverTest extends TestCase
         $request = Request::create('/posts/3');
         $request->attributes->set('_route_params', ['page' => 3]);
 
-        self::assertEquals(new PagePosition(3), $this->resolver->resolvePagePosition($request));
+        $this->assertEquals(new PagePosition(3), $this->resolver->resolvePagePosition($request));
     }
 
     public function testAPagePositionIsResolvedFromACustomParameter(): void
     {
         $request = Request::create('/', 'GET', ['filters' => ['page' => '2']]);
 
-        self::assertEquals(new PagePosition(2), $this->resolver->resolvePagePosition($request, ['pageParameter' => '[filters][page]']));
+        $this->assertEquals(new PagePosition(2), $this->resolver->resolvePagePosition($request, ['pageParameter' => '[filters][page]']));
     }
 
     public static function dataInvalidPages(): \Generator
@@ -93,8 +93,8 @@ final class PositionResolverTest extends TestCase
         $cursor = new Cursor(['p.id' => 42], Direction::Previous);
         $request = Request::create('/', 'GET', ['cursor' => $this->cursorEncoder->encode($cursor)]);
 
-        self::assertEquals(new CursorPosition($cursor), $this->resolver->resolveCursorPosition($request));
-        self::assertEquals(new CursorPosition($cursor), $this->resolver->resolve($request));
+        $this->assertEquals(new CursorPosition($cursor), $this->resolver->resolveCursorPosition($request));
+        $this->assertEquals(new CursorPosition($cursor), $this->resolver->resolve($request));
     }
 
     public function testACursorPositionIsResolvedFromACustomParameter(): void
@@ -102,7 +102,7 @@ final class PositionResolverTest extends TestCase
         $cursor = new Cursor(['p.id' => 42]);
         $request = Request::create('/', 'GET', ['after' => $this->cursorEncoder->encode($cursor)]);
 
-        self::assertEquals(new CursorPosition($cursor), $this->resolver->resolveCursorPosition($request, ['cursorParameter' => '[after]']));
+        $this->assertEquals(new CursorPosition($cursor), $this->resolver->resolveCursorPosition($request, ['cursorParameter' => '[after]']));
     }
 
     public static function dataInvalidCursors(): \Generator
@@ -131,12 +131,12 @@ final class PositionResolverTest extends TestCase
         $cursor = new Cursor(['p.id' => 42]);
         $request = Request::create('/', 'GET', ['page' => '3', 'cursor' => $this->cursorEncoder->encode($cursor)]);
 
-        self::assertEquals(new CursorPosition($cursor), $this->resolver->resolve($request));
+        $this->assertEquals(new CursorPosition($cursor), $this->resolver->resolve($request));
     }
 
     public function testTheOtherParameterIsIgnoredWhenResolvingASpecificPosition(): void
     {
-        self::assertEquals(new PagePosition(3), $this->resolver->resolvePagePosition(Request::create('/', 'GET', ['page' => '3', 'cursor' => 'tampered'])));
-        self::assertNull($this->resolver->resolveCursorPosition(Request::create('/', 'GET', ['page' => 'abc'])));
+        $this->assertEquals(new PagePosition(3), $this->resolver->resolvePagePosition(Request::create('/', 'GET', ['page' => '3', 'cursor' => 'tampered'])));
+        $this->assertNull($this->resolver->resolveCursorPosition(Request::create('/', 'GET', ['page' => 'abc'])));
     }
 }

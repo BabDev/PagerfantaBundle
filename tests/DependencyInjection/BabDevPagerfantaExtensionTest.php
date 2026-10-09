@@ -70,7 +70,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
     public function testContainerIsLoadedWithDefaultConfigurationWhenTwigBundleIsInstalled(): void
     {
         if (!class_exists(PagerfantaExtension::class)) {
-            self::markTestSkipped('Test requires Twig');
+            $this->markTestSkipped('Test requires Twig');
         }
 
         $this->container->registerExtension(new TwigExtension());
@@ -142,19 +142,19 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
 
         $twigConfig = $this->container->getExtensionConfig('twig');
 
-        self::assertArrayHasKey(0, $twigConfig);
-        self::assertArrayHasKey('paths', $twigConfig[0]);
-        self::assertIsArray($twigConfig[0]['paths']);
+        $this->assertArrayHasKey(0, $twigConfig);
+        $this->assertArrayHasKey('paths', $twigConfig[0]);
+        $this->assertIsArray($twigConfig[0]['paths']);
 
         $refl = new \ReflectionClass(PagerfantaExtension::class);
 
         if (false === $refl->getFileName()) {
-            self::fail(\sprintf('Could not reflect "%s"', PagerfantaExtension::class));
+            $this->fail(\sprintf('Could not reflect "%s"', PagerfantaExtension::class));
         }
 
         $path = \dirname($refl->getFileName(), 2).'/templates/';
 
-        self::assertArrayHasKey($path, $twigConfig[0]['paths']);
+        $this->assertArrayHasKey($path, $twigConfig[0]['paths']);
 
         $this->assertContainerBuilderHasService('pagerfanta.serializer.normalizer');
     }
@@ -162,7 +162,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
     public function testContainerIsLoadedWithDefaultConfigurationWhenJMSSerializerBundleIsInstalled(): void
     {
         if (!class_exists(JMSSerializerBundle::class)) {
-            self::markTestSkipped('Test requires JMSSerializerBundle');
+            $this->markTestSkipped('Test requires JMSSerializerBundle');
         }
 
         $this->container->setParameter(
@@ -292,7 +292,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
     public function testTheDefaultSequentialViewIsGivenToTheTwigRuntime(): void
     {
         if (!class_exists(PagerfantaExtension::class)) {
-            self::markTestSkipped('Test requires Twig');
+            $this->markTestSkipped('Test requires Twig');
         }
 
         $this->container->setParameter(

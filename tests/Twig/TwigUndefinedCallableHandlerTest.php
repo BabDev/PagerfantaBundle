@@ -34,6 +34,6 @@ final class TwigUndefinedCallableHandlerTest extends TestCase
 
     public function testReportsAFunctionAsNotSupported(): void
     {
-        self::assertFalse(new UndefinedCallableHandler()->onUndefinedFunction('asset'));
+        $this->assertFalse(new UndefinedCallableHandler()->onUndefinedFunction('asset'));
     }
 }

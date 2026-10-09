@@ -25,7 +25,7 @@ final class SignedCursorEncoderTest extends TestCase
 
         $encoder = $this->createEncoder();
 
-        self::assertEquals($cursor, $encoder->decode($encoder->encode($cursor)));
+        $this->assertEquals($cursor, $encoder->decode($encoder->encode($cursor)));
     }
 
     public function testTheEncodedCursorIsTheDecoratedEncodingWithASignature(): void
@@ -34,8 +34,8 @@ final class SignedCursorEncoderTest extends TestCase
 
         $encoded = $this->createEncoder()->encode($cursor);
 
-        self::assertStringStartsWith(new Base64JsonCursorEncoder()->encode($cursor).'.', $encoded);
-        self::assertMatchesRegularExpression('/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}$/', $encoded, 'The encoded cursor is URL-safe');
+        $this->assertStringStartsWith(new Base64JsonCursorEncoder()->encode($cursor).'.', $encoded);
+        $this->assertMatchesRegularExpression('/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}$/', $encoded, 'The encoded cursor is URL-safe');
     }
 
     public function testThePayloadMayContainTheSeparator(): void
@@ -54,7 +54,7 @@ final class SignedCursorEncoderTest extends TestCase
 
         $encoder = new SignedCursorEncoder($decorated, 'secret');
 
-        self::assertEquals(new Cursor(['id' => 42]), $encoder->decode($encoder->encode(new Cursor(['id' => 42]))));
+        $this->assertEquals(new Cursor(['id' => 42]), $encoder->decode($encoder->encode(new Cursor(['id' => 42]))));
     }
 
     public static function dataTamperedCursors(): \Generator
@@ -82,7 +82,7 @@ final class SignedCursorEncoderTest extends TestCase
     {
         $decorated = $this->createMock(CursorEncoderInterface::class);
         $decorated->method('encode')->willReturnCallback(static fn (Cursor $cursor): string => new Base64JsonCursorEncoder()->encode($cursor));
-        $decorated->expects(self::never())->method('decode');
+        $decorated->expects($this->never())->method('decode');
 
         $this->expectException(InvalidCursorException::class);
 
