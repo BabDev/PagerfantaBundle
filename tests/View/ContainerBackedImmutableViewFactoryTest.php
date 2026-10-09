@@ -16,7 +16,7 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
     {
         $this->expectException(ImmutableViewFactoryException::class);
 
-        new ContainerBackedImmutableViewFactory($this->createMock(ContainerInterface::class), [])
+        new ContainerBackedImmutableViewFactory($this->createStub(ContainerInterface::class), [])
             ->add(['default' => new DefaultView()]);
     }
 
@@ -24,7 +24,7 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
     {
         $this->expectException(ImmutableViewFactoryException::class);
 
-        new ContainerBackedImmutableViewFactory($this->createMock(ContainerInterface::class), [])
+        new ContainerBackedImmutableViewFactory($this->createStub(ContainerInterface::class), [])
             ->remove('default');
     }
 
@@ -32,7 +32,7 @@ final class ContainerBackedImmutableViewFactoryTest extends TestCase
     {
         $this->expectException(ImmutableViewFactoryException::class);
 
-        new ContainerBackedImmutableViewFactory($this->createMock(ContainerInterface::class), [])
+        new ContainerBackedImmutableViewFactory($this->createStub(ContainerInterface::class), [])
             ->set('default', new DefaultView());
     }
 

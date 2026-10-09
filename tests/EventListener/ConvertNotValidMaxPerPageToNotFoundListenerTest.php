@@ -17,8 +17,8 @@ final class ConvertNotValidMaxPerPageToNotFoundListenerTest extends TestCase
         $exception = new NotValidMaxPerPageException();
 
         $event = new ExceptionEvent(
-            $this->createMock(HttpKernelInterface::class),
-            $this->createMock(Request::class),
+            $this->createStub(HttpKernelInterface::class),
+            Request::create('/'),
             HttpKernelInterface::MAIN_REQUEST,
             $exception
         );
@@ -34,8 +34,8 @@ final class ConvertNotValidMaxPerPageToNotFoundListenerTest extends TestCase
         $exception = new \RuntimeException();
 
         $event = new ExceptionEvent(
-            $this->createMock(HttpKernelInterface::class),
-            $this->createMock(Request::class),
+            $this->createStub(HttpKernelInterface::class),
+            Request::create('/'),
             HttpKernelInterface::MAIN_REQUEST,
             $exception
         );
