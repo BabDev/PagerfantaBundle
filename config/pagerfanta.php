@@ -2,12 +2,26 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use BabDev\PagerfantaBundle\Cursor\SignedCursorEncoder;
+use BabDev\PagerfantaBundle\Position\PositionResolver;
+use BabDev\PagerfantaBundle\RouteGenerator\RequestAwarePositionRouteGeneratorFactory;
 use BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory;
 use BabDev\PagerfantaBundle\View\ContainerBackedImmutableViewFactory;
+use Pagerfanta\Cursor\Base64JsonCursorEncoder;
+use Pagerfanta\Cursor\CursorEncoderInterface;
+use Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface;
 use Pagerfanta\RouteGenerator\RouteGeneratorFactoryInterface;
 use Pagerfanta\View\DefaultView;
 use Pagerfanta\View\Foundation6View;
 use Pagerfanta\View\SemanticUiView;
+use Pagerfanta\View\SequentialView;
+use Pagerfanta\View\Template\DefaultTemplate;
+use Pagerfanta\View\Template\Foundation6Template;
+use Pagerfanta\View\Template\SemanticUiTemplate;
+use Pagerfanta\View\Template\TwitterBootstrap3Template;
+use Pagerfanta\View\Template\TwitterBootstrap4Template;
+use Pagerfanta\View\Template\TwitterBootstrap5Template;
+use Pagerfanta\View\Template\TwitterBootstrapTemplate;
 use Pagerfanta\View\TwitterBootstrap3View;
 use Pagerfanta\View\TwitterBootstrap4View;
 use Pagerfanta\View\TwitterBootstrap5View;
@@ -17,14 +31,48 @@ use Pagerfanta\View\ViewFactoryInterface;
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
+    $services->set('pagerfanta.cursor_encoder.base64_json', Base64JsonCursorEncoder::class);
+
+    $services->set('pagerfanta.cursor_encoder.signed', SignedCursorEncoder::class)
+        ->args([
+            service('pagerfanta.cursor_encoder.base64_json'),
+            param('kernel.secret'),
+        ])
+    ;
+
+    $services->alias('pagerfanta.cursor_encoder', 'pagerfanta.cursor_encoder.signed');
+    $services->alias(CursorEncoderInterface::class, 'pagerfanta.cursor_encoder');
+
+    $services->set('pagerfanta.position_resolver', PositionResolver::class)
+        ->args([
+            service('property_accessor'),
+            service('pagerfanta.cursor_encoder'),
+        ])
+    ;
+    $services->alias(PositionResolver::class, 'pagerfanta.position_resolver');
+
     $services->set('pagerfanta.route_generator_factory', RequestAwareRouteGeneratorFactory::class)
         ->args([
             service('router'),
             service('request_stack'),
             service('property_accessor'),
+            service('pagerfanta.cursor_encoder'),
+        ])
+        ->deprecate('babdev/pagerfanta-bundle', '4.7', 'The "%service_id%" service is deprecated, use the "pagerfanta.position_route_generator_factory" service instead.')
+    ;
+    $services->alias(RouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory')
+        ->deprecate('babdev/pagerfanta-bundle', '4.7', \sprintf('The "%%alias_id%%" alias is deprecated, use the "%s" alias instead.', PositionRouteGeneratorFactoryInterface::class))
+    ;
+
+    $services->set('pagerfanta.position_route_generator_factory', RequestAwarePositionRouteGeneratorFactory::class)
+        ->args([
+            service('router'),
+            service('request_stack'),
+            service('property_accessor'),
+            service('pagerfanta.cursor_encoder'),
         ])
     ;
-    $services->alias(RouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory');
+    $services->alias(PositionRouteGeneratorFactoryInterface::class, 'pagerfanta.position_route_generator_factory');
 
     $services->set('pagerfanta.view.default', DefaultView::class)
         ->tag('pagerfanta.view', ['alias' => 'default'])
@@ -53,6 +101,24 @@ return static function (ContainerConfigurator $container): void {
     $services->set('pagerfanta.view.twitter_bootstrap5', TwitterBootstrap5View::class)
         ->tag('pagerfanta.view', ['alias' => 'twitter_bootstrap5'])
     ;
+
+    foreach ([
+        'default' => DefaultTemplate::class,
+        'foundation6' => Foundation6Template::class,
+        'semantic_ui' => SemanticUiTemplate::class,
+        'twitter_bootstrap' => TwitterBootstrapTemplate::class,
+        'twitter_bootstrap3' => TwitterBootstrap3Template::class,
+        'twitter_bootstrap4' => TwitterBootstrap4Template::class,
+        'twitter_bootstrap5' => TwitterBootstrap5Template::class,
+    ] as $name => $templateClass) {
+        $services->set(\sprintf('pagerfanta.view.%s_sequential', $name), SequentialView::class)
+            ->args([
+                inline_service($templateClass),
+                \sprintf('%s_sequential', $name),
+            ])
+            ->tag('pagerfanta.view', ['alias' => \sprintf('%s_sequential', $name)])
+        ;
+    }
 
     $services->set('pagerfanta.view_factory', ContainerBackedImmutableViewFactory::class)
         ->args([

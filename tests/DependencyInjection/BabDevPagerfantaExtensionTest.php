@@ -5,12 +5,17 @@ namespace BabDev\PagerfantaBundle\Tests\DependencyInjection;
 use BabDev\PagerfantaBundle\BabDevPagerfantaBundle;
 use BabDev\PagerfantaBundle\DependencyInjection\BabDevPagerfantaExtension;
 use BabDev\PagerfantaBundle\DependencyInjection\Configuration;
+use BabDev\PagerfantaBundle\Position\PositionResolver;
 use Composer\InstalledVersions;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\DefinitionDecoratesConstraint;
+use Pagerfanta\Cursor\CursorEncoderInterface;
+use Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface;
+use Pagerfanta\RouteGenerator\RouteGeneratorFactoryInterface;
 use Pagerfanta\Twig\Extension\PagerfantaExtension;
 use Pagerfanta\View\ViewFactoryInterface;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -29,10 +34,12 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $this->load();
 
         $this->assertContainerBuilderHasAlias(ViewFactoryInterface::class, 'pagerfanta.view_factory');
+        $this->assertCursorAndRouteGenerationServicesAreRegistered();
 
         $listeners = [
             'pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found',
             'pagerfanta.event_listener.convert_not_valid_current_page_to_not_found',
+            'pagerfanta.event_listener.convert_invalid_cursor_to_bad_request',
         ];
 
         foreach ($listeners as $listener) {
@@ -114,6 +121,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $listeners = [
             'pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found',
             'pagerfanta.event_listener.convert_not_valid_current_page_to_not_found',
+            'pagerfanta.event_listener.convert_invalid_cursor_to_bad_request',
         ];
 
         foreach ($listeners as $listener) {
@@ -137,6 +145,10 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         foreach ($twigServices as $twigService) {
             $this->assertContainerBuilderHasService($twigService);
         }
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 0, 'default');
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 2, new Reference(PositionRouteGeneratorFactoryInterface::class));
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 3, null);
 
         $twigConfig = $this->container->getExtensionConfig('twig');
 
@@ -178,6 +190,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $listeners = [
             'pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found',
             'pagerfanta.event_listener.convert_not_valid_current_page_to_not_found',
+            'pagerfanta.event_listener.convert_invalid_cursor_to_bad_request',
         ];
 
         foreach ($listeners as $listener) {
@@ -194,6 +207,9 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasService('pagerfanta.serializer.handler');
         $this->assertContainerBuilderHasService('pagerfanta.serializer.normalizer');
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.serializer.cursor_handler', 0, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasServiceDefinitionWithTag('pagerfanta.serializer.cursor_handler', 'jms_serializer.subscribing_handler');
     }
 
     public function testContainerIsLoadedWhenBundleIsConfiguredWithCustomExceptionStrategies(): void
@@ -209,6 +225,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
             'exceptions_strategy' => [
                 'out_of_range_page' => Configuration::EXCEPTION_STRATEGY_CUSTOM,
                 'not_valid_current_page' => Configuration::EXCEPTION_STRATEGY_CUSTOM,
+                'invalid_cursor' => Configuration::EXCEPTION_STRATEGY_CUSTOM,
             ],
         ];
 
@@ -219,6 +236,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $listeners = [
             'pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found',
             'pagerfanta.event_listener.convert_not_valid_current_page_to_not_found',
+            'pagerfanta.event_listener.convert_invalid_cursor_to_bad_request',
         ];
 
         foreach ($listeners as $listener) {
@@ -231,5 +249,51 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         return [
             new BabDevPagerfantaExtension(),
         ];
+    }
+
+    public function testTheDefaultSequentialViewIsGivenToTheTwigRuntime(): void
+    {
+        if (!class_exists(PagerfantaExtension::class)) {
+            self::markTestSkipped('Test requires Twig');
+        }
+
+        $this->container->setParameter(
+            'kernel.bundles',
+            [
+                'BabDevPagerfantaBundle' => BabDevPagerfantaBundle::class,
+                'TwigBundle' => TwigBundle::class,
+            ],
+        );
+
+        $this->load(['default_sequential_view' => 'twitter_bootstrap5_sequential']);
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 3, 'twitter_bootstrap5_sequential');
+    }
+
+    private function assertCursorAndRouteGenerationServicesAreRegistered(): void
+    {
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.cursor_encoder.signed', 0, new Reference('pagerfanta.cursor_encoder.base64_json'));
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.cursor_encoder.signed', 1, '%kernel.secret%');
+        $this->assertContainerBuilderHasAlias('pagerfanta.cursor_encoder', 'pagerfanta.cursor_encoder.signed');
+        $this->assertContainerBuilderHasAlias(CursorEncoderInterface::class, 'pagerfanta.cursor_encoder');
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.serializer.cursor_normalizer', 0, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasServiceDefinitionWithTag('pagerfanta.serializer.cursor_normalizer', 'serializer.normalizer');
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.position_resolver', 1, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasAlias(PositionResolver::class, 'pagerfanta.position_resolver');
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.position_route_generator_factory', 3, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasAlias(PositionRouteGeneratorFactoryInterface::class, 'pagerfanta.position_route_generator_factory');
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.route_generator_factory', 3, new Reference('pagerfanta.cursor_encoder'));
+        self::assertTrue($this->container->getDefinition('pagerfanta.route_generator_factory')->isDeprecated());
+        $this->assertContainerBuilderHasAlias(RouteGeneratorFactoryInterface::class, 'pagerfanta.route_generator_factory');
+        self::assertTrue($this->container->getAlias(RouteGeneratorFactoryInterface::class)->isDeprecated());
+
+        foreach (['default', 'foundation6', 'semantic_ui', 'twitter_bootstrap', 'twitter_bootstrap3', 'twitter_bootstrap4', 'twitter_bootstrap5'] as $name) {
+            $this->assertContainerBuilderHasServiceDefinitionWithArgument(\sprintf('pagerfanta.view.%s_sequential', $name), 1, \sprintf('%s_sequential', $name));
+            $this->assertContainerBuilderHasServiceDefinitionWithTag(\sprintf('pagerfanta.view.%s_sequential', $name), 'pagerfanta.view', ['alias' => \sprintf('%s_sequential', $name)]);
+        }
     }
 }

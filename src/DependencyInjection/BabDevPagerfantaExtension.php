@@ -2,6 +2,7 @@
 
 namespace BabDev\PagerfantaBundle\DependencyInjection;
 
+use BabDev\PagerfantaBundle\EventListener\ConvertInvalidCursorToBadRequestListener;
 use BabDev\PagerfantaBundle\EventListener\ConvertNotValidCurrentPageToNotFoundListener;
 use BabDev\PagerfantaBundle\EventListener\ConvertNotValidMaxPerPageToNotFoundListener;
 use BabDev\PagerfantaBundle\Serializer\Normalizer\LegacyPagerfantaNormalizer;
@@ -37,7 +38,8 @@ final class BabDevPagerfantaExtension extends ConfigurableExtension implements P
 
             if (ContainerBuilder::willBeAvailable('pagerfanta/twig', PagerfantaExtension::class, ['babdev/pagerfanta-bundle'])) {
                 $container->getDefinition('pagerfanta.twig_runtime')
-                    ->replaceArgument(0, $mergedConfig['default_view']);
+                    ->replaceArgument(0, $mergedConfig['default_view'])
+                    ->replaceArgument(3, $mergedConfig['default_sequential_view']);
 
                 $container->getDefinition('pagerfanta.view.twig')
                     ->replaceArgument(1, $mergedConfig['default_twig_template']);
@@ -80,6 +82,18 @@ final class BabDevPagerfantaExtension extends ConfigurableExtension implements P
 
         if (Configuration::EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND === $mergedConfig['exceptions_strategy']['not_valid_current_page']) {
             $container->register('pagerfanta.event_listener.convert_not_valid_current_page_to_not_found', ConvertNotValidMaxPerPageToNotFoundListener::class)
+                ->addTag(
+                    'kernel.event_listener',
+                    [
+                        'event' => KernelEvents::EXCEPTION,
+                        'method' => 'onKernelException',
+                        'priority' => 512,
+                    ],
+                );
+        }
+
+        if (Configuration::EXCEPTION_STRATEGY_TO_HTTP_BAD_REQUEST === $mergedConfig['exceptions_strategy']['invalid_cursor']) {
+            $container->register('pagerfanta.event_listener.convert_invalid_cursor_to_bad_request', ConvertInvalidCursorToBadRequestListener::class)
                 ->addTag(
                     'kernel.event_listener',
                     [
