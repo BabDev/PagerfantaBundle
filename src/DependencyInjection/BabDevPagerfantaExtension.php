@@ -69,7 +69,7 @@ final class BabDevPagerfantaExtension extends ConfigurableExtension implements P
         }
 
         if (Configuration::EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND === $mergedConfig['exceptions_strategy']['out_of_range_page']) {
-            $container->register('pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found', ConvertNotValidCurrentPageToNotFoundListener::class)
+            $container->register('pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found', ConvertNotValidMaxPerPageToNotFoundListener::class)
                 ->addTag(
                     'kernel.event_listener',
                     [
@@ -81,7 +81,7 @@ final class BabDevPagerfantaExtension extends ConfigurableExtension implements P
         }
 
         if (Configuration::EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND === $mergedConfig['exceptions_strategy']['not_valid_current_page']) {
-            $container->register('pagerfanta.event_listener.convert_not_valid_current_page_to_not_found', ConvertNotValidMaxPerPageToNotFoundListener::class)
+            $container->register('pagerfanta.event_listener.convert_not_valid_current_page_to_not_found', ConvertNotValidCurrentPageToNotFoundListener::class)
                 ->addTag(
                     'kernel.event_listener',
                     [
