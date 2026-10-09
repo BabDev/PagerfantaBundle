@@ -20,9 +20,13 @@ final class BabDevPagerfantaBundle extends Bundle
     }
 
     #[\Override]
-    public function getContainerExtension(): ?ExtensionInterface
+    public function getContainerExtension(): ExtensionInterface
     {
-        return $this->extension ??= new BabDevPagerfantaExtension();
+        if (!$this->extension instanceof ExtensionInterface) {
+            $this->extension = new BabDevPagerfantaExtension();
+        }
+
+        return $this->extension;
     }
 
     #[\Override]
