@@ -15,6 +15,7 @@ PagerfantaBundle 5.0 requires Pagerfanta 5.0 and removes the page number based r
 - Dropped support for versions of `jms/serializer` before 3.32
 - Dropped support for versions of JMSSerializerBundle before 5.4
 - Dropped support for versions of Twig before 3.29
+- Made the cursor encoder a required argument in the `BabDev\PagerfantaBundle\RouteGenerator\RequestAwarePositionRouteGeneratorFactory` constructor
 
 ## Removed Features
 

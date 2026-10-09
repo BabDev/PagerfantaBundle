@@ -416,7 +416,7 @@ final class TwigViewIntegrationTest extends TestCase
         self::assertNotEmpty(
             new TwigView($this->twig)->render(
                 $this->createPagerfanta(),
-                new RequestAwarePositionRouteGeneratorFactory($this->router, $this->requestStack, $this->propertyAccessor)->createPositionRouteGenerator(),
+                new RequestAwarePositionRouteGeneratorFactory($this->router, $this->requestStack, $this->propertyAccessor, $this->cursorEncoder)->createPositionRouteGenerator(),
             ),
         );
     }

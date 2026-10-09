@@ -2,7 +2,6 @@
 
 namespace BabDev\PagerfantaBundle\RouteGenerator;
 
-use Pagerfanta\Cursor\Base64JsonCursorEncoder;
 use Pagerfanta\Cursor\CursorEncoderInterface;
 use Pagerfanta\Exception\InvalidArgumentException;
 use Pagerfanta\Exception\RuntimeException;
@@ -21,7 +20,7 @@ final readonly class RequestAwarePositionRouteGeneratorFactory implements Positi
         private UrlGeneratorInterface $router,
         private RequestStack $requestStack,
         private PropertyAccessorInterface $propertyAccessor,
-        private CursorEncoderInterface $cursorEncoder = new Base64JsonCursorEncoder(),
+        private CursorEncoderInterface $cursorEncoder,
     ) {}
 
     /**
