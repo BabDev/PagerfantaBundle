@@ -20,11 +20,11 @@ use Symfony\Component\PropertyAccess\PropertyPath;
  *
  * @phpstan-type PositionResolverOptions array{pageParameter?: non-empty-string, cursorParameter?: non-empty-string}
  */
-final class PositionResolver
+final readonly class PositionResolver
 {
     public function __construct(
-        private readonly PropertyAccessorInterface $propertyAccessor,
-        private readonly CursorEncoderInterface $cursorEncoder,
+        private PropertyAccessorInterface $propertyAccessor,
+        private CursorEncoderInterface $cursorEncoder,
     ) {}
 
     /**

@@ -18,12 +18,12 @@ use Pagerfanta\CursorPagerInterface;
  *
  * The total number of items is only included for pagers which can count their results.
  */
-final class CursorPagerHandler implements SubscribingHandlerInterface
+final readonly class CursorPagerHandler implements SubscribingHandlerInterface
 {
-    public const PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
+    public const string PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
 
     public function __construct(
-        private readonly CursorEncoderInterface $cursorEncoder,
+        private CursorEncoderInterface $cursorEncoder,
     ) {}
 
     public static function getSubscribingMethods(): array
@@ -62,11 +62,6 @@ final class CursorPagerHandler implements SubscribingHandlerInterface
             }
 
             if (null !== $preserveKeys) {
-                // When requiring PHP 8.2, this `is_array()` check can be removed
-                if (\is_array($items)) {
-                    $items = new \ArrayIterator($items);
-                }
-
                 $items = iterator_to_array($items, $preserveKeys);
             }
         }

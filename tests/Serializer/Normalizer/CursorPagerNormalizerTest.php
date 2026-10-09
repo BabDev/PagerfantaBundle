@@ -190,7 +190,7 @@ final class CursorPagerNormalizerTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The "pagerfanta_preserve_keys" context key must be a boolean value or null, "string" given.');
 
-        (new CursorPagerNormalizer($this->cursorEncoder))->normalize(new CursorPagerfanta($this->createAdapter()), null, [CursorPagerNormalizer::PRESERVE_KEYS_KEY => 'invalid']);
+        new CursorPagerNormalizer($this->cursorEncoder)->normalize(new CursorPagerfanta($this->createAdapter()), null, [CursorPagerNormalizer::PRESERVE_KEYS_KEY => 'invalid']);
     }
 
     public function testOnlyCursorPagersAreSupported(): void
@@ -207,6 +207,6 @@ final class CursorPagerNormalizerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(\sprintf('The object must be an instance of "%s".', CursorPagerInterface::class));
 
-        (new CursorPagerNormalizer($this->cursorEncoder))->normalize(new \stdClass());
+        new CursorPagerNormalizer($this->cursorEncoder)->normalize(new \stdClass());
     }
 }

@@ -35,7 +35,7 @@ final class ConfigurationTest extends TestCase
             'default_sequential_view' => 'twitter_bootstrap5_sequential',
         ];
 
-        $config = (new Processor())->processConfiguration(new Configuration(), [$extraConfig]);
+        $config = new Processor()->processConfiguration(new Configuration(), [$extraConfig]);
 
         self::assertEquals(
             array_merge(self::getBundleDefaultConfig(), $extraConfig),

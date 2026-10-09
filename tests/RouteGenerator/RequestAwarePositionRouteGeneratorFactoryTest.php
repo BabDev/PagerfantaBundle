@@ -62,7 +62,7 @@ final class RequestAwarePositionRouteGeneratorFactoryTest extends TestCase
 
         // The parameters from the request keep their position
         self::assertSame('/pagerfanta-view?page=4&hello=world', $generator(new PagePosition(4)));
-        self::assertSame('/pagerfanta-view?cursor='.(new Base64JsonCursorEncoder())->encode($cursor).'&hello=world', $generator(new CursorPosition($cursor)));
+        self::assertSame('/pagerfanta-view?cursor='.new Base64JsonCursorEncoder()->encode($cursor).'&hello=world', $generator(new CursorPosition($cursor)));
     }
 
     public function testTheRouteParametersFromTheOptionsOverrideTheRequestParameters(): void

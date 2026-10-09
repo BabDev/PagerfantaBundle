@@ -49,11 +49,6 @@ final class PagerfantaHandler implements SubscribingHandlerInterface
             }
 
             if (null !== $preserveKeys) {
-                // When requiring PHP 8.2, this `is_array()` check can be removed
-                if (\is_array($items)) {
-                    $items = new \ArrayIterator($items);
-                }
-
                 $items = iterator_to_array($items, $preserveKeys);
             }
         }

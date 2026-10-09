@@ -22,7 +22,7 @@ final class CursorPagerNormalizer implements NormalizerInterface, NormalizerAwar
 {
     use NormalizerAwareTrait;
 
-    public const PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
+    public const string PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
 
     public function __construct(
         private readonly CursorEncoderInterface $cursorEncoder,
@@ -32,13 +32,13 @@ final class CursorPagerNormalizer implements NormalizerInterface, NormalizerAwar
      * @throws InvalidArgumentException when the object given is not a supported type for the normalizer
      * @throws LogicException           when the normalizer is not called in an expected context
      */
-    public function normalize(mixed $object, ?string $format = null, array $context = []): array
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
-        if (!$object instanceof CursorPagerInterface) {
+        if (!$data instanceof CursorPagerInterface) {
             throw new InvalidArgumentException(\sprintf('The object must be an instance of "%s".', CursorPagerInterface::class));
         }
 
-        $items = $object->getCurrentPageResults();
+        $items = $data->getCurrentPageResults();
 
         if (\array_key_exists(self::PRESERVE_KEYS_KEY, $context)) {
             $preserveKeys = $context[self::PRESERVE_KEYS_KEY];
@@ -48,25 +48,20 @@ final class CursorPagerNormalizer implements NormalizerInterface, NormalizerAwar
             }
 
             if (null !== $preserveKeys) {
-                // When requiring PHP 8.2, this `is_array()` check can be removed
-                if (\is_array($items)) {
-                    $items = new \ArrayIterator($items);
-                }
-
                 $items = iterator_to_array($items, $preserveKeys);
             }
         }
 
         $pagination = [
-            'per_page' => $object->getMaxPerPage(),
-            'has_previous_page' => $object->hasPreviousPage(),
-            'has_next_page' => $object->hasNextPage(),
-            'previous_cursor' => $object->hasPreviousPage() ? $this->cursorEncoder->encode($object->getPreviousPosition()->cursor) : null,
-            'next_cursor' => $object->hasNextPage() ? $this->cursorEncoder->encode($object->getNextPosition()->cursor) : null,
+            'per_page' => $data->getMaxPerPage(),
+            'has_previous_page' => $data->hasPreviousPage(),
+            'has_next_page' => $data->hasNextPage(),
+            'previous_cursor' => $data->hasPreviousPage() ? $this->cursorEncoder->encode($data->getPreviousPosition()->cursor) : null,
+            'next_cursor' => $data->hasNextPage() ? $this->cursorEncoder->encode($data->getNextPosition()->cursor) : null,
         ];
 
-        if ($object instanceof CountablePagerInterface) {
-            $pagination['total_items'] = $object->getNbResults();
+        if ($data instanceof CountablePagerInterface) {
+            $pagination['total_items'] = $data->getNbResults();
         }
 
         return [

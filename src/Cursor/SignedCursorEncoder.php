@@ -13,22 +13,22 @@ use Pagerfanta\Exception\InvalidCursorException;
  * The signature is a HMAC-SHA256 hash of the encoded cursor, appended to it after a ".". The signature is verified
  * before the cursor is decoded, so a tampered cursor never reaches the decorated encoder.
  */
-final class SignedCursorEncoder implements CursorEncoderInterface
+final readonly class SignedCursorEncoder implements CursorEncoderInterface
 {
-    private const SEPARATOR = '.';
+    private const string SEPARATOR = '.';
 
     /**
      * Separates the signatures of cursors from other signatures made with the same secret.
      */
-    private const CONTEXT = 'babdev_pagerfanta.cursor';
+    private const string CONTEXT = 'babdev_pagerfanta.cursor';
 
     /**
      * @throws InvalidArgumentException if the secret is empty
      */
     public function __construct(
-        private readonly CursorEncoderInterface $encoder,
+        private CursorEncoderInterface $encoder,
         #[\SensitiveParameter]
-        private readonly string $secret,
+        private string $secret,
     ) {
         if ('' === $secret) {
             throw new InvalidArgumentException('The secret for signing cursors must not be empty.');

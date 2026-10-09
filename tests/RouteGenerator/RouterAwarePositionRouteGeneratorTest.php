@@ -37,7 +37,7 @@ final class RouterAwarePositionRouteGeneratorTest extends TestCase
 
     private function encode(Cursor $cursor): string
     {
-        return (new Base64JsonCursorEncoder())->encode($cursor);
+        return new Base64JsonCursorEncoder()->encode($cursor);
     }
 
     public function testARouteIsGeneratedForAPage(): void

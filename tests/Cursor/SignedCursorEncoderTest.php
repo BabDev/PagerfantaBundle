@@ -34,7 +34,7 @@ final class SignedCursorEncoderTest extends TestCase
 
         $encoded = $this->createEncoder()->encode($cursor);
 
-        self::assertStringStartsWith((new Base64JsonCursorEncoder())->encode($cursor).'.', $encoded);
+        self::assertStringStartsWith(new Base64JsonCursorEncoder()->encode($cursor).'.', $encoded);
         self::assertMatchesRegularExpression('/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}$/', $encoded, 'The encoded cursor is URL-safe');
     }
 
@@ -63,14 +63,14 @@ final class SignedCursorEncoderTest extends TestCase
         $encoded = $encoder->encode(new Cursor(['p.id' => 42]));
         [$payload, $signature] = explode('.', $encoded);
 
-        $tamperedPayload = (new Base64JsonCursorEncoder())->encode(new Cursor(['p.id' => 43]));
+        $tamperedPayload = new Base64JsonCursorEncoder()->encode(new Cursor(['p.id' => 43]));
 
         yield 'unsigned cursor' => [$payload];
         yield 'empty signature' => [$payload.'.'];
         yield 'altered payload' => [$tamperedPayload.'.'.$signature];
         yield 'altered signature' => [$payload.'.'.strrev($signature)];
         yield 'truncated signature' => [substr($encoded, 0, -1)];
-        yield 'signed with another secret' => [(new SignedCursorEncoder(new Base64JsonCursorEncoder(), 'another secret'))->encode(new Cursor(['p.id' => 42]))];
+        yield 'signed with another secret' => [new SignedCursorEncoder(new Base64JsonCursorEncoder(), 'another secret')->encode(new Cursor(['p.id' => 42]))];
         yield 'empty string' => [''];
     }
 
@@ -81,12 +81,12 @@ final class SignedCursorEncoderTest extends TestCase
     public function testATamperedCursorIsRejectedBeforeItIsDecoded(string $encoded): void
     {
         $decorated = $this->createMock(CursorEncoderInterface::class);
-        $decorated->method('encode')->willReturnCallback(static fn (Cursor $cursor): string => (new Base64JsonCursorEncoder())->encode($cursor));
+        $decorated->method('encode')->willReturnCallback(static fn (Cursor $cursor): string => new Base64JsonCursorEncoder()->encode($cursor));
         $decorated->expects(self::never())->method('decode');
 
         $this->expectException(InvalidCursorException::class);
 
-        (new SignedCursorEncoder($decorated, 'secret'))->decode($encoded);
+        new SignedCursorEncoder($decorated, 'secret')->decode($encoded);
     }
 
     public function testAnInvalidCursorWithAValidSignatureIsRejectedByTheDecoratedEncoder(): void
@@ -100,7 +100,7 @@ final class SignedCursorEncoderTest extends TestCase
 
             public function decode(string $encoded): Cursor
             {
-                return (new Base64JsonCursorEncoder())->decode($encoded);
+                return new Base64JsonCursorEncoder()->decode($encoded);
             }
         };
 

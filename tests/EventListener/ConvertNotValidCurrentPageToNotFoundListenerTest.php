@@ -17,7 +17,7 @@ final class ConvertNotValidCurrentPageToNotFoundListenerTest extends TestCase
         $exception = new NotValidCurrentPageException();
 
         $event = new ExceptionEvent(
-            $this->createStub(HttpKernelInterface::class),
+            self::createStub(HttpKernelInterface::class),
             Request::create('/'),
             HttpKernelInterface::MAIN_REQUEST,
             $exception
@@ -34,7 +34,7 @@ final class ConvertNotValidCurrentPageToNotFoundListenerTest extends TestCase
         $exception = new \RuntimeException();
 
         $event = new ExceptionEvent(
-            $this->createStub(HttpKernelInterface::class),
+            self::createStub(HttpKernelInterface::class),
             Request::create('/'),
             HttpKernelInterface::MAIN_REQUEST,
             $exception

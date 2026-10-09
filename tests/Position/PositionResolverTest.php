@@ -107,9 +107,9 @@ final class PositionResolverTest extends TestCase
 
     public static function dataInvalidCursors(): \Generator
     {
-        $encoded = (new SignedCursorEncoder(new Base64JsonCursorEncoder(), 'secret'))->encode(new Cursor(['p.id' => 42]));
+        $encoded = new SignedCursorEncoder(new Base64JsonCursorEncoder(), 'secret')->encode(new Cursor(['p.id' => 42]));
 
-        yield 'unsigned' => [(new Base64JsonCursorEncoder())->encode(new Cursor(['p.id' => 42]))];
+        yield 'unsigned' => [new Base64JsonCursorEncoder()->encode(new Cursor(['p.id' => 42]))];
         yield 'tampered' => [substr($encoded, 0, -2).'xx'];
         yield 'garbage' => ['not a cursor'];
         yield 'array' => [[$encoded]];
