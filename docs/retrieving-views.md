@@ -7,21 +7,21 @@ You can access the Pagerfanta views through the `pagerfanta.view_factory` servic
 
 namespace App\Service;
 
-use Pagerfanta\PagerfantaInterface;
-use Pagerfanta\RouteGenerator\RouteGeneratorFactoryInterface;
+use Pagerfanta\PagerInterface;
+use Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface;
 use Pagerfanta\View\ViewFactoryInterface;
 
 final class PagerfantaService
 {
     public function __construct(
         private readonly ViewFactoryInterface $viewFactory,
-        private readonly RouteGeneratorFactoryInterface $routeGeneratorFactory,
+        private readonly PositionRouteGeneratorFactoryInterface $routeGeneratorFactory,
     ) {
     }
 
-    public function render(PagerfantaInterface $pagerfanta, string $view, array $options = []): string
+    public function render(PagerInterface $pager, string $view, array $options = []): string
     {
-        return $this->viewFactory->get($view)->render($pagerfanta, $this->routeGeneratorFactory->create($options), $options);
+        return $this->viewFactory->get($view)->render($pager, $this->routeGeneratorFactory->createPositionRouteGenerator($options), $options);
     }
 }
 ```

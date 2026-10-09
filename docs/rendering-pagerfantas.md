@@ -12,7 +12,7 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class BlogController extends AbstractController
 {
@@ -65,6 +65,4 @@ See the [Pagerfanta documentation](/open-source/packages/pagerfanta/docs) for th
 
 ## Cursor Pagers
 
-<div class="docs-note docs-note--new-feature">Rendering cursor pagers was introduced in PagerfantaBundle 4.7.</div>
-
-Cursor pagers are rendered with the `pagerfanta()` function in the same way, and are linked with signed cursors in the `cursor` parameter. See the [cursor pagination documentation](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination) for details.
+Cursor pagers are rendered with the `pagerfanta()` function in the same way, and are linked with signed cursors in the `cursor` parameter. See the [cursor pagination documentation](/open-source/packages/pagerfantabundle/docs/5.x/cursor-pagination) for details.

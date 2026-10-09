@@ -1,6 +1,6 @@
 # PagerfantaBundle
 
-[![Latest Stable Version](https://poser.pugx.org/babdev/pagerfanta-bundle/v)](https://packagist.org/packages/babdev/pagerfanta-bundle) [![Latest Unstable Version](https://poser.pugx.org/babdev/pagerfanta-bundle/v/unstable)](https://packagist.org/packages/babdev/pagerfanta-bundle) [![Total Downloads](https://poser.pugx.org/babdev/pagerfanta-bundle/downloads)](https://packagist.org/packages/babdev/pagerfanta-bundle) [![License](https://poser.pugx.org/babdev/pagerfanta-bundle/license)](https://packagist.org/packages/babdev/pagerfanta-bundle) ![Run Tests](https://github.com/BabDev/PagerfantaBundle/workflows/Run%20Tests/badge.svg?branch=3.x)
+[![Latest Stable Version](https://poser.pugx.org/babdev/pagerfanta-bundle/v)](https://packagist.org/packages/babdev/pagerfanta-bundle) [![Latest Unstable Version](https://poser.pugx.org/babdev/pagerfanta-bundle/v/unstable)](https://packagist.org/packages/babdev/pagerfanta-bundle) [![Total Downloads](https://poser.pugx.org/babdev/pagerfanta-bundle/downloads)](https://packagist.org/packages/babdev/pagerfanta-bundle) [![License](https://poser.pugx.org/babdev/pagerfanta-bundle/license)](https://packagist.org/packages/babdev/pagerfanta-bundle) ![Run Tests](https://github.com/BabDev/PagerfantaBundle/workflows/Run%20Tests/badge.svg?branch=5.x)
 
 Bundle to use [Pagerfanta](https://github.com/whiteoctober/Pagerfanta) with [Symfony](https://github.com/symfony/symfony).
 
@@ -8,7 +8,7 @@ This bundle is a continuation of the [WhiteOctoberPagerfantaBundle](https://gith
 
 ## Documentation
 
-Please see the [BabDev website](https://www.babdev.com/open-source/packages/pagerfantabundle/docs/3.x/intro) for detailed information on how to use this bundle.
+Please see the [BabDev website](https://www.babdev.com/open-source/packages/pagerfantabundle/docs/5.x/intro) for detailed information on how to use this bundle.
 
 ## Security
 

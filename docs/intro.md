@@ -9,7 +9,7 @@ The bundle includes:
 - A [Twig](https://twig.symfony.com/) function to render Pagerfanta objects with views and options
 - Pagerfanta view which supports Twig templates
 - Services to easily use Pagerfanta views anywhere in your application
-- Serialization of `Pagerfanta\PagerfantaInterface` objects using the [Symfony Serializer component](https://symfony.com/doc/current/components/serializer.html) or the [JMS Serializer](https://jmsyst.com/libs/serializer)
+- Serialization of offset and cursor pagers using the [Symfony Serializer component](https://symfony.com/doc/current/components/serializer.html) or the [JMS Serializer](https://jmsyst.com/libs/serializer)
 - A flexible API to customize paginated routing
 - Default CSS for the `Pagerfanta\View\DefaultView` class
 

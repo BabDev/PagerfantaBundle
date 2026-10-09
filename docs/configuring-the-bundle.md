@@ -12,9 +12,7 @@ babdev_pagerfanta:
 
 ## Default Sequential View
 
-<div class="docs-note docs-note--new-feature">The default sequential view was introduced in PagerfantaBundle 4.7.</div>
-
-Views with numbered page links can only render offset pagers. When the default view (or the view given to the `pagerfanta()` Twig function) cannot render a pager, such as a [cursor pager](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination), the Twig function renders it with the default sequential view instead.
+Views with numbered page links can only render offset pagers. When the default view (or the view given to the `pagerfanta()` Twig function) cannot render a pager, such as a [cursor pager](/open-source/packages/pagerfantabundle/docs/5.x/cursor-pagination), the Twig function renders it with the default sequential view instead.
 
 The default sequential view can be set with the `default_sequential_view` configuration node. When not set, the sequential variant of the default view is used if one exists (i.e. `twitter_bootstrap5_sequential` for the `twitter_bootstrap5` view). The Twig view can render any pager, so it does not need a default sequential view.
 
@@ -48,5 +46,3 @@ babdev_pagerfanta:
         not_valid_current_page: to_http_not_found # Default behavior converting `Pagerfanta\Exception\NotValidCurrentPageException` to a 404 response
         invalid_cursor: to_http_bad_request # Default behavior converting `Pagerfanta\Exception\InvalidCursorException` to a 400 response
 ```
-
-<div class="docs-note docs-note--new-feature">The <code>invalid_cursor</code> exception strategy was introduced in PagerfantaBundle 4.7.</div>

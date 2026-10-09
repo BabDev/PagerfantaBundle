@@ -18,9 +18,7 @@ The below table lists the view names and the corresponding class.
 
 ## Sequential Views
 
-<div class="docs-note docs-note--new-feature">The sequential views were introduced in PagerfantaBundle 4.7.</div>
-
-The views above render numbered page links, so they can only render offset pagers. The [sequential views](/open-source/packages/pagerfanta/docs/4.x/views#sequential-views) render only the links to the previous and next pages, so they can render any pager, including [cursor pagers](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination).
+The views above render numbered page links, so they can only render offset pagers. The [sequential views](/open-source/packages/pagerfanta/docs/5.x/views#sequential-views) render only the links to the previous and next pages, so they can render any pager, including [cursor pagers](/open-source/packages/pagerfantabundle/docs/5.x/cursor-pagination).
 
 A sequential view is available for each of the default views, all using the `Pagerfanta\View\SequentialView` class.
 
@@ -34,7 +32,7 @@ A sequential view is available for each of the default views, all using the `Pag
 | `twitter_bootstrap4_sequential` | `Pagerfanta\View\Template\TwitterBootstrap4Template` |
 | `twitter_bootstrap5_sequential` | `Pagerfanta\View\Template\TwitterBootstrap5Template` |
 
-When the `pagerfanta()` Twig function is given a pager which its view cannot render, the pager is rendered with the [default sequential view](/open-source/packages/pagerfantabundle/docs/4.x/configuring-the-bundle#default-sequential-view).
+When the `pagerfanta()` Twig function is given a pager which its view cannot render, the pager is rendered with the [default sequential view](/open-source/packages/pagerfantabundle/docs/5.x/configuring-the-bundle#default-sequential-view).
 
 ## Twig View
 
@@ -50,7 +48,7 @@ The below table lists the available templates and the CSS framework they corresp
 | `@BabDevPagerfanta/tailwind.html.twig`           | [Tailwind CSS](https://tailwindcss.com/)                      |
 | `@BabDevPagerfanta/twitter_bootstrap.html.twig`  | [Bootstrap](https://getbootstrap.com) (version 2.x)           |
 | `@BabDevPagerfanta/twitter_bootstrap3.html.twig` | [Bootstrap](https://getbootstrap.com) (version 3.x)           |
-| `@BabDevPagerfanta/twitter_bootstrap4.html.twig` | [Bootstrap](https://getbootstrap.com) (version 5.x)           |
+| `@BabDevPagerfanta/twitter_bootstrap4.html.twig` | [Bootstrap](https://getbootstrap.com) (version 4.x)           |
 | `@BabDevPagerfanta/twitter_bootstrap5.html.twig` | [Bootstrap](https://getbootstrap.com) (version 5.x)           |
 
 The labels of the "Previous" and "Next" buttons are localizable in the Twig templates.

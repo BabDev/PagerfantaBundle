@@ -1,12 +1,8 @@
 # Generating Paginated Routes
 
-When rendering a Pagerfanta view, a route generator callable is required to generate the URLs for each item in the pagination list. The route generator can be customized for use within your application if you need to adjust the routing logic.
+When rendering a Pagerfanta view, a route generator is required to generate the URLs for each item in the pagination list. The route generator can be customized for use within your application if you need to adjust the routing logic.
 
-## Position Route Generators
-
-<div class="docs-note docs-note--new-feature">Position route generators were introduced in PagerfantaBundle 4.7.</div>
-
-Pagerfanta describes the pages a pager links to with [positions](/open-source/packages/pagerfanta/docs/4.x/route-generator#position-route-generators), which support both offset and [cursor](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination) pagination.
+Pagerfanta describes the pages a pager links to with [positions](/open-source/packages/pagerfanta/docs/5.x/route-generator), which support both offset and [cursor](/open-source/packages/pagerfantabundle/docs/5.x/cursor-pagination) pagination.
 
 The route generators are defined by two interfaces, with their default implementations noted below:
 
@@ -18,7 +14,7 @@ The route generators are defined by two interfaces, with their default implement
 The `RouterAwarePositionRouteGenerator` generates the URLs as follows:
 
 - For a page position, the page number is set to the page parameter and the cursor parameter is removed
-- For a cursor position, the [signed cursor](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination#signed-cursors) is set to the cursor parameter and the page parameter is removed
+- For a cursor position, the [signed cursor](/open-source/packages/pagerfantabundle/docs/5.x/cursor-pagination#signed-cursors) is set to the cursor parameter and the page parameter is removed
 
 The Twig integration uses the `Pagerfanta\RouteGenerator\PositionRouteGeneratorFactoryInterface` service to create the route generator used when rendering a Pagerfanta view.
 
@@ -31,7 +27,7 @@ services:
         alias: App\Pagination\RouteGeneratorFactory
 ```
 
-### Position Route Generator Options
+## Route Generator Options
 
 The following options may be passed through a route generator factory when using the `BabDev\PagerfantaBundle\RouteGenerator\RouterAwarePositionRouteGenerator` in order to customize the generated URLs:
 
@@ -45,9 +41,3 @@ The following options may be passed through a route generator factory when using
 ```twig
 {{ pagerfanta(pager, {'cursorParameter': '[after]'}) }}
 ```
-
-## Page Number Based Route Generators
-
-<div class="docs-note docs-note--deprecated-feature">The page number based route generators are deprecated since PagerfantaBundle 4.7 (following their deprecation in Pagerfanta 4.10), and will be removed in PagerfantaBundle 5.0. This includes the <code>BabDev\PagerfantaBundle\RouteGenerator\RouterAwareRouteGenerator</code> and <code>BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory</code> classes, the <code>pagerfanta.route_generator_factory</code> service, and the <code>Pagerfanta\RouteGenerator\RouteGeneratorFactoryInterface</code> alias. Use the <a href="#position-route-generators">position route generators</a> instead, which accept the same options.</div>
-
-Before PagerfantaBundle 4.7, the route generators were defined by the `Pagerfanta\RouteGenerator\RouteGeneratorInterface` and `Pagerfanta\RouteGenerator\RouteGeneratorFactoryInterface` interfaces, which generate routes using page numbers. The `pagerfanta.route_generator_factory` service (a `RequestAwareRouteGeneratorFactory` creating `RouterAwareRouteGenerator` instances) remains available until PagerfantaBundle 5.0, and supports all of the position route generator options except the `cursorParameter` option.

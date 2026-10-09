@@ -1,6 +1,6 @@
 # Serializer
 
-The PagerfantaBundle provides support for serializing `Pagerfanta/Pagerfanta` instances using either the [Symfony Serializer component](https://symfony.com/doc/current/components/serializer.html) or the [JMS Serializer](https://jmsyst.com/libs/serializer) (note, the `JMSSerializerBundle` must be installed to enable the serialization handler for the JMS serializer).
+The PagerfantaBundle provides support for serializing offset pagers (any `Pagerfanta\OffsetPagerInterface`, such as a `Pagerfanta\Pagerfanta` instance) and [cursor pagers](#cursor-pagers) using either the [Symfony Serializer component](https://symfony.com/doc/current/components/serializer.html) or the [JMS Serializer](https://jmsyst.com/libs/serializer) (note, the `JMSSerializerBundle` must be installed to enable the serialization handler for the JMS serializer).
 
 Below is an example of building a JSON response in a controller using the Symfony Serializer:
 
@@ -14,7 +14,7 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class PostController extends AbstractController
 {
@@ -58,9 +58,7 @@ Below is an example of how a `Pagerfanta\Pagerfanta` instance is serialized into
 
 ## Cursor Pagers
 
-<div class="docs-note docs-note--new-feature">Serializing cursor pagers was introduced in PagerfantaBundle 4.7.</div>
-
-[Cursor pagers](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination) are serialized with the [signed cursors](/open-source/packages/pagerfantabundle/docs/4.x/cursor-pagination#signed-cursors) for the previous and next pages, which are null when there is no page in that direction. Clients pass these cursors back in the `cursor` parameter to request the other pages.
+[Cursor pagers](/open-source/packages/pagerfantabundle/docs/5.x/cursor-pagination) are serialized with the [signed cursors](/open-source/packages/pagerfantabundle/docs/5.x/cursor-pagination#signed-cursors) for the previous and next pages, which are null when there is no page in that direction. Clients pass these cursors back in the `cursor` parameter to request the other pages.
 
 The total number of items is only included for pagers which can count their results (implementing `Pagerfanta\CountablePagerInterface`), as counting the results is often expensive and cursor pagers do not need the total.
 

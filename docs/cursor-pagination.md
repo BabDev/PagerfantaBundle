@@ -1,13 +1,11 @@
 # Cursor Pagination
 
-<div class="docs-note docs-note--new-feature">Cursor pagination support was introduced in PagerfantaBundle 4.7.</div>
-
-The bundle integrates the [cursor pagination](/open-source/packages/pagerfanta/docs/4.x/cursor-pagination) support from Pagerfanta with your Symfony application:
+The bundle integrates the [cursor pagination](/open-source/packages/pagerfanta/docs/5.x/cursor-pagination) support from Pagerfanta with your Symfony application:
 
 - Cursors in URLs are signed, so they cannot be tampered with
 - The position of the current page is resolved from the request with the `BabDev\PagerfantaBundle\Position\PositionResolver`
 - Invalid cursors are converted into 400 responses
-- Cursor pagers are rendered with the [sequential views](/open-source/packages/pagerfantabundle/docs/4.x/views#sequential-views) and serialized with their cursors
+- Cursor pagers are rendered with the [sequential views](/open-source/packages/pagerfantabundle/docs/5.x/views#sequential-views) and serialized with their cursors
 
 ## Resolving The Current Page
 
@@ -31,7 +29,7 @@ use Pagerfanta\Doctrine\ORM\CursorQueryAdapter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class BlogController extends AbstractController
 {
@@ -58,13 +56,13 @@ final class BlogController extends AbstractController
 }
 ```
 
-The parameters are read from the query string and the route parameters of the request. If your application uses different parameters, set the `cursorParameter` and `pageParameter` options, which use the same format as the [route generator options](/open-source/packages/pagerfantabundle/docs/4.x/generating-paginated-routes#position-route-generator-options).
+The parameters are read from the query string and the route parameters of the request. If your application uses different parameters, set the `cursorParameter` and `pageParameter` options, which use the same format as the [route generator options](/open-source/packages/pagerfantabundle/docs/5.x/generating-paginated-routes#route-generator-options).
 
 ```php
 $position = $positionResolver->resolveCursorPosition($request, ['cursorParameter' => '[after]']);
 ```
 
-When the page parameter is not a positive integer, a `Pagerfanta\Exception\NotValidCurrentPageException` is thrown, which is handled by the `not_valid_current_page` [exception strategy](/open-source/packages/pagerfantabundle/docs/4.x/configuring-the-bundle#exception-strategies).
+When the page parameter is not a positive integer, a `Pagerfanta\Exception\NotValidCurrentPageException` is thrown, which is handled by the `not_valid_current_page` [exception strategy](/open-source/packages/pagerfantabundle/docs/5.x/configuring-the-bundle#exception-strategies).
 
 ## Signed Cursors
 
@@ -85,11 +83,11 @@ services:
 
 ## Invalid Cursors
 
-By default, the bundle converts a `Pagerfanta\Exception\InvalidCursorException` into a 400 response. This exception is thrown for cursors which cannot be decoded, fail signature verification, or do not match the sort fields of the adapter. See the [exception strategies](/open-source/packages/pagerfantabundle/docs/4.x/configuring-the-bundle#exception-strategies) to change this behavior.
+By default, the bundle converts a `Pagerfanta\Exception\InvalidCursorException` into a 400 response. This exception is thrown for cursors which cannot be decoded, fail signature verification, or do not match the sort fields of the adapter. See the [exception strategies](/open-source/packages/pagerfantabundle/docs/5.x/configuring-the-bundle#exception-strategies) to change this behavior.
 
 ## Rendering Cursor Pagers
 
-Cursor pagers are rendered with the `pagerfanta()` Twig function, the same as offset pagers. As cursor pagers can only link to the previous and next pages, they are rendered with a [sequential view](/open-source/packages/pagerfantabundle/docs/4.x/views#sequential-views).
+Cursor pagers are rendered with the `pagerfanta()` Twig function, the same as offset pagers. As cursor pagers can only link to the previous and next pages, they are rendered with a [sequential view](/open-source/packages/pagerfantabundle/docs/5.x/views#sequential-views).
 
 ```twig
 {{ pagerfanta(pager) }}
@@ -105,4 +103,4 @@ The URLs are generated for the current route, setting the signed cursor to the `
 
 ## APIs
 
-Cursor pagers are [serialized](/open-source/packages/pagerfantabundle/docs/4.x/serializer#cursor-pagers) with the signed cursors for the previous and next pages, which clients pass back in the `cursor` parameter to request those pages.
+Cursor pagers are [serialized](/open-source/packages/pagerfantabundle/docs/5.x/serializer#cursor-pagers) with the signed cursors for the previous and next pages, which clients pass back in the `cursor` parameter to request those pages.
