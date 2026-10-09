@@ -5,8 +5,8 @@ namespace BabDev\PagerfantaBundle\Tests\Serializer\Normalizer;
 use BabDev\PagerfantaBundle\Serializer\Normalizer\PagerfantaNormalizer;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Adapter\NullAdapter;
+use Pagerfanta\OffsetPagerInterface;
 use Pagerfanta\Pagerfanta;
-use Pagerfanta\PagerfantaInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
@@ -34,6 +34,36 @@ final class PagerfantaNormalizerTest extends TestCase
         $serializer = new Serializer([new PagerfantaNormalizer()]);
 
         self::assertEquals($expectedResultArray, $serializer->normalize($pager));
+    }
+
+    public function testNormalizeAnOffsetPagerWhichIsNotAPagerfantaInstance(): void
+    {
+        $pager = self::createStub(OffsetPagerInterface::class);
+        $pager->method('getIterator')->willReturn(new \ArrayIterator(['item1', 'item2']));
+        $pager->method('getCurrentPage')->willReturn(2);
+        $pager->method('hasPreviousPage')->willReturn(true);
+        $pager->method('hasNextPage')->willReturn(false);
+        $pager->method('getMaxPerPage')->willReturn(2);
+        $pager->method('getNbResults')->willReturn(4);
+        $pager->method('getNbPages')->willReturn(2);
+
+        $normalizer = new PagerfantaNormalizer();
+
+        self::assertTrue($normalizer->supportsNormalization($pager));
+        self::assertSame(
+            [
+                'items' => ['item1', 'item2'],
+                'pagination' => [
+                    'current_page' => 2,
+                    'has_previous_page' => true,
+                    'has_next_page' => false,
+                    'per_page' => 2,
+                    'total_items' => 4,
+                    'total_pages' => 2,
+                ],
+            ],
+            new Serializer([$normalizer])->normalize($pager),
+        );
     }
 
     /**
@@ -81,10 +111,10 @@ final class PagerfantaNormalizerTest extends TestCase
         new PagerfantaNormalizer()->normalize(new Pagerfanta(new NullAdapter(25)), null, [PagerfantaNormalizer::PRESERVE_KEYS_KEY => 'invalid']);
     }
 
-    public function testNormalizeOnlyAcceptsPagerfantaInstances(): void
+    public function testNormalizeOnlyAcceptsOffsetPagers(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(\sprintf('The object must be an instance of "%s".', PagerfantaInterface::class));
+        $this->expectExceptionMessage(\sprintf('The object must be an instance of "%s".', OffsetPagerInterface::class));
 
         new PagerfantaNormalizer()->normalize(new \stdClass());
     }

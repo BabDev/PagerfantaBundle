@@ -2,6 +2,7 @@
 
 namespace BabDev\PagerfantaBundle\Serializer\Normalizer;
 
+use Pagerfanta\OffsetPagerInterface;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
@@ -10,6 +11,9 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+/**
+ * Normalizes offset pagers.
+ */
 final class PagerfantaNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
@@ -22,8 +26,8 @@ final class PagerfantaNormalizer implements NormalizerInterface, NormalizerAware
      */
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
-        if (!$data instanceof PagerfantaInterface) {
-            throw new InvalidArgumentException(\sprintf('The object must be an instance of "%s".', PagerfantaInterface::class));
+        if (!$data instanceof OffsetPagerInterface) {
+            throw new InvalidArgumentException(\sprintf('The object must be an instance of "%s".', OffsetPagerInterface::class));
         }
 
         $items = $data->getIterator();
@@ -55,7 +59,7 @@ final class PagerfantaNormalizer implements NormalizerInterface, NormalizerAware
 
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return $data instanceof PagerfantaInterface;
+        return $data instanceof OffsetPagerInterface;
     }
 
     /**
@@ -64,6 +68,7 @@ final class PagerfantaNormalizer implements NormalizerInterface, NormalizerAware
     public function getSupportedTypes(?string $format): array
     {
         return [
+            OffsetPagerInterface::class => true,
             PagerfantaInterface::class => true,
             Pagerfanta::class => true,
         ];

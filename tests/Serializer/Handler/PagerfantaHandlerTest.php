@@ -10,6 +10,7 @@ use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializerInterface;
 use Pagerfanta\Adapter\FixedAdapter;
+use Pagerfanta\OffsetPagerInterface;
 use Pagerfanta\Pagerfanta;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -34,6 +35,23 @@ final class PagerfantaHandlerTest extends TestCase
         self::assertJsonStringEqualsJsonString(
             '{"items":[1,2,3,4,5],"pagination":{"current_page":1,"has_previous_page":false,"has_next_page":true,"per_page":5,"total_items":100,"total_pages":20}}',
             $this->createSerializer()->serialize($pager, 'json'),
+        );
+    }
+
+    public function testSerializeAnOffsetPagerWhichIsNotAPagerfantaInstanceToJson(): void
+    {
+        $pager = self::createStub(OffsetPagerInterface::class);
+        $pager->method('getCurrentPageResults')->willReturn(['item1', 'item2']);
+        $pager->method('getCurrentPage')->willReturn(2);
+        $pager->method('hasPreviousPage')->willReturn(true);
+        $pager->method('hasNextPage')->willReturn(false);
+        $pager->method('getMaxPerPage')->willReturn(2);
+        $pager->method('getNbResults')->willReturn(4);
+        $pager->method('getNbPages')->willReturn(2);
+
+        self::assertJsonStringEqualsJsonString(
+            '{"items":["item1","item2"],"pagination":{"current_page":2,"has_previous_page":true,"has_next_page":false,"per_page":2,"total_items":4,"total_pages":2}}',
+            $this->createSerializer()->serialize($pager, 'json', null, OffsetPagerInterface::class),
         );
     }
 

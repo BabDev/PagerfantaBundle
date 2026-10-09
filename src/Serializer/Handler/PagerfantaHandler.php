@@ -7,9 +7,13 @@ use JMS\Serializer\GraphNavigatorInterface;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
 use JMS\Serializer\JsonSerializationVisitor;
 use JMS\Serializer\SerializationContext;
+use Pagerfanta\OffsetPagerInterface;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
 
+/**
+ * Serializes offset pagers.
+ */
 final class PagerfantaHandler implements SubscribingHandlerInterface
 {
     public const string PRESERVE_KEYS_KEY = 'pagerfanta_preserve_keys';
@@ -29,15 +33,21 @@ final class PagerfantaHandler implements SubscribingHandlerInterface
                 'type' => PagerfantaInterface::class,
                 'method' => 'serializeToJson',
             ],
+            [
+                'direction' => GraphNavigatorInterface::DIRECTION_SERIALIZATION,
+                'format' => 'json',
+                'type' => OffsetPagerInterface::class,
+                'method' => 'serializeToJson',
+            ],
         ];
     }
 
     /**
-     * @param PagerfantaInterface<mixed> $pagerfanta
+     * @param OffsetPagerInterface<mixed> $pagerfanta
      *
      * @return array<string, mixed>|\ArrayObject<string, mixed>
      */
-    public function serializeToJson(JsonSerializationVisitor $visitor, PagerfantaInterface $pagerfanta, array $type, SerializationContext $context)
+    public function serializeToJson(JsonSerializationVisitor $visitor, OffsetPagerInterface $pagerfanta, array $type, SerializationContext $context)
     {
         $items = $pagerfanta->getCurrentPageResults();
 
