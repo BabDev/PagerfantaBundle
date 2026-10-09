@@ -5,6 +5,9 @@ namespace BabDev\PagerfantaBundle\Tests\DependencyInjection;
 use BabDev\PagerfantaBundle\BabDevPagerfantaBundle;
 use BabDev\PagerfantaBundle\DependencyInjection\BabDevPagerfantaExtension;
 use BabDev\PagerfantaBundle\DependencyInjection\Configuration;
+use BabDev\PagerfantaBundle\EventListener\ConvertInvalidCursorToBadRequestListener;
+use BabDev\PagerfantaBundle\EventListener\ConvertNotValidCurrentPageToNotFoundListener;
+use BabDev\PagerfantaBundle\EventListener\ConvertNotValidMaxPerPageToNotFoundListener;
 use BabDev\PagerfantaBundle\Position\PositionResolver;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
@@ -229,6 +232,54 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         foreach ($listeners as $listener) {
             $this->assertContainerBuilderNotHasService($listener);
         }
+    }
+
+    public function testTheExceptionListenersAreRegisteredForTheirStrategies(): void
+    {
+        $this->container->setParameter(
+            'kernel.bundles',
+            [
+                'BabDevPagerfantaBundle' => BabDevPagerfantaBundle::class,
+            ],
+        );
+
+        $this->load();
+
+        $this->assertContainerBuilderHasService('pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found', ConvertNotValidMaxPerPageToNotFoundListener::class);
+        $this->assertContainerBuilderHasService('pagerfanta.event_listener.convert_not_valid_current_page_to_not_found', ConvertNotValidCurrentPageToNotFoundListener::class);
+        $this->assertContainerBuilderHasService('pagerfanta.event_listener.convert_invalid_cursor_to_bad_request', ConvertInvalidCursorToBadRequestListener::class);
+    }
+
+    public function testOnlyTheMaxPerPageListenerIsNotRegisteredWhenTheOutOfRangePageStrategyIsCustom(): void
+    {
+        $this->container->setParameter(
+            'kernel.bundles',
+            [
+                'BabDevPagerfantaBundle' => BabDevPagerfantaBundle::class,
+            ],
+        );
+
+        $this->load(['exceptions_strategy' => ['out_of_range_page' => Configuration::EXCEPTION_STRATEGY_CUSTOM]]);
+
+        $this->assertContainerBuilderNotHasService('pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found');
+        $this->assertContainerBuilderHasService('pagerfanta.event_listener.convert_not_valid_current_page_to_not_found', ConvertNotValidCurrentPageToNotFoundListener::class);
+        $this->assertContainerBuilderHasService('pagerfanta.event_listener.convert_invalid_cursor_to_bad_request', ConvertInvalidCursorToBadRequestListener::class);
+    }
+
+    public function testOnlyTheCurrentPageListenerIsNotRegisteredWhenTheNotValidCurrentPageStrategyIsCustom(): void
+    {
+        $this->container->setParameter(
+            'kernel.bundles',
+            [
+                'BabDevPagerfantaBundle' => BabDevPagerfantaBundle::class,
+            ],
+        );
+
+        $this->load(['exceptions_strategy' => ['not_valid_current_page' => Configuration::EXCEPTION_STRATEGY_CUSTOM]]);
+
+        $this->assertContainerBuilderHasService('pagerfanta.event_listener.convert_not_valid_max_per_page_to_not_found', ConvertNotValidMaxPerPageToNotFoundListener::class);
+        $this->assertContainerBuilderNotHasService('pagerfanta.event_listener.convert_not_valid_current_page_to_not_found');
+        $this->assertContainerBuilderHasService('pagerfanta.event_listener.convert_invalid_cursor_to_bad_request', ConvertInvalidCursorToBadRequestListener::class);
     }
 
     protected function getContainerExtensions(): array
