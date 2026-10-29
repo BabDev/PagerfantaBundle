@@ -8,6 +8,7 @@ use BabDev\PagerfantaBundle\Tests\LiveComponent\Fixtures\CustomCursorPagerCompon
 use BabDev\PagerfantaBundle\Tests\LiveComponent\Fixtures\LiveComponentKernel;
 use BabDev\PagerfantaBundle\Tests\LiveComponent\Fixtures\OffsetPagerComponent;
 use Pagerfanta\CursorPagerInterface;
+use Pagerfanta\Twig\Extension\PagerfantaExtension;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\UX\LiveComponent\LiveComponentBundle;
@@ -21,6 +22,11 @@ final class ComponentWithPagerfantaTraitTest extends WebTestCase
     {
         if (!class_exists(LiveComponentBundle::class)) {
             self::markTestSkipped('Test requires symfony/ux-live-component');
+        }
+
+        // The Twig packages are installed with symfony/ux-live-component, but the components are rendered with the Pagerfanta Twig integration
+        if (!class_exists(PagerfantaExtension::class)) {
+            self::markTestSkipped('Test requires pagerfanta/twig');
         }
 
         (new Filesystem())->remove(sys_get_temp_dir().'/babdev_pagerfanta_bundle/live_component');
