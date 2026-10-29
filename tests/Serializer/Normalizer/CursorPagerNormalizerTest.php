@@ -164,8 +164,6 @@ final class CursorPagerNormalizerTest extends TestCase
      * @param array<array-key, string> $data
      * @param array<string, mixed>     $context
      * @param array<array-key, string> $expectedItems
-     *
-     * @dataProvider dataNormalizeWithPreserveKeysContext
      */
     #[DataProvider('dataNormalizeWithPreserveKeysContext')]
     public function testNormalizeWithPreserveKeysContext(array $data, array $context, array $expectedItems): void

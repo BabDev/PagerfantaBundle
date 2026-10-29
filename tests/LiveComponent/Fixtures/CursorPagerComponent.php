@@ -30,7 +30,7 @@ final class CursorPagerComponent
             static function (?Cursor $cursor, int $limit): CursorSlice {
                 $items = range(1, 50);
 
-                if (null !== $cursor) {
+                if ($cursor instanceof Cursor) {
                     $id = $cursor->fields['id'];
 
                     $items = Direction::Previous === $cursor->direction

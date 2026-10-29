@@ -141,8 +141,6 @@ final class CursorPagerHandlerTest extends TestCase
     /**
      * @param array<array-key, string> $data
      * @param array<string, mixed>     $context
-     *
-     * @dataProvider dataSerializeWithPreserveKeysContext
      */
     #[DataProvider('dataSerializeWithPreserveKeysContext')]
     public function testSerializeToJsonWithPreserveKeysContext(array $data, array $context, string $expectedJson): void

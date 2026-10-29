@@ -20,7 +20,7 @@ final class OffsetPagerComponent
     use ComponentWithPagerfantaTrait;
     use DefaultActionTrait;
 
-    #[LiveProp(writable: true, url: true, onUpdated: 'onMinimumUpdated')]
+    #[LiveProp(writable: true, onUpdated: 'onMinimumUpdated', url: true)]
     public int $minimum = 1;
 
     public function onMinimumUpdated(): void

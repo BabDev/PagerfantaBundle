@@ -9,9 +9,11 @@ use Pagerfanta\Cursor\CursorEncoderInterface;
 use Pagerfanta\Cursor\Direction;
 use Pagerfanta\Exception\InvalidArgumentException;
 use Pagerfanta\Exception\InvalidCursorException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class SignedCursorEncoderTest extends TestCase
 {
     private function createEncoder(string $secret = 'secret'): SignedCursorEncoder
@@ -74,9 +76,6 @@ final class SignedCursorEncoderTest extends TestCase
         yield 'empty string' => [''];
     }
 
-    /**
-     * @dataProvider dataTamperedCursors
-     */
     #[DataProvider('dataTamperedCursors')]
     public function testATamperedCursorIsRejectedBeforeItIsDecoded(string $encoded): void
     {

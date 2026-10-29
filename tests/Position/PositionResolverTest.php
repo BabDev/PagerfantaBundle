@@ -77,8 +77,6 @@ final class PositionResolverTest extends TestCase
 
     /**
      * @param class-string<\Throwable> $exception
-     *
-     * @dataProvider dataInvalidPages
      */
     #[DataProvider('dataInvalidPages')]
     public function testAnInvalidPageIsRejected(mixed $page, string $exception): void
@@ -115,9 +113,6 @@ final class PositionResolverTest extends TestCase
         yield 'array' => [[$encoded]];
     }
 
-    /**
-     * @dataProvider dataInvalidCursors
-     */
     #[DataProvider('dataInvalidCursors')]
     public function testAnInvalidCursorIsRejected(mixed $cursor): void
     {
