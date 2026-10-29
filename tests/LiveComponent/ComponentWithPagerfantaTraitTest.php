@@ -12,11 +12,10 @@ use Pagerfanta\Twig\Extension\PagerfantaExtension;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\UX\LiveComponent\LiveComponentBundle;
-use Symfony\UX\LiveComponent\Test\InteractsWithLiveComponents;
 
 final class ComponentWithPagerfantaTraitTest extends WebTestCase
 {
-    use InteractsWithLiveComponents;
+    use InteractsWithLiveComponentsWhenInstalled;
 
     public static function setUpBeforeClass(): void
     {
