@@ -4,7 +4,7 @@
 
 The bundle integrates with [Symfony UX Live Components](https://symfony.com/bundles/ux-live-component/current/index.html), allowing a live component to change pages without reloading the whole page. The links of the pager keep their URLs, so they also work when the component is not connected, and the URL of the page is kept in sync with the current page.
 
-To use this integration, install the `symfony/ux-live-component` package (version 2.20 or later) and the `pagerfanta/twig` package.
+To use this integration, install the `symfony/ux-live-component` package (version 2.36 or later on the 2.x branch, or 3.1 or later) and the `pagerfanta/twig` package.
 
 ## Creating The Component
 

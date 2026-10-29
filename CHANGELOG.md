@@ -2,7 +2,7 @@
 
 ## 4.8.0 (Unreleased)
 
-- Add support for paginating live components with the `BabDev\PagerfantaBundle\LiveComponent\ComponentWithPagerfantaTrait` and the `@BabDevPagerfanta/live_component.html.twig` template (requires `symfony/ux-live-component` 2.20 or later)
+- Add support for paginating live components with the `BabDev\PagerfantaBundle\LiveComponent\ComponentWithPagerfantaTrait` and the `@BabDevPagerfanta/live_component.html.twig` template (requires `symfony/ux-live-component` 2.36 or 3.1 or later)
 
 ## 4.7.0 (2026-10-09)
 
