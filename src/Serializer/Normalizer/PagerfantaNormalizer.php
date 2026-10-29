@@ -37,7 +37,7 @@ final class PagerfantaNormalizer implements NormalizerInterface, NormalizerAware
 
             if (null !== $preserveKeys) {
                 // When requiring PHP 8.2, this `is_array()` check can be removed
-                if (\is_array($items)) {
+                if (\is_array($items)) { // @phpstan-ignore function.impossibleType
                     $items = new \ArrayIterator($items);
                 }
 
