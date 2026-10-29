@@ -42,7 +42,7 @@ final class BlogPostList
 
 The trait receives the services it needs with setter injection, so the component must be autowired, which is typically the default for services in Symfony applications.
 
-The pager is available in the component's template as `this.pager`. Render it with the `pagerfanta()` Twig function, giving it the `this.pagerfantaOptions` options so the links point to the page the component is rendered on, and compose the `@BabDevPagerfanta/live_component.html.twig` template with the template for your pager's markup. This template adds the attributes which change the page with a live action to each link.
+The pager is available in the component's template as `this.pager`. Render it with the `pagerfanta()` Twig function and the Twig view, giving it the `this.pagerfantaOptions` options. These options point the links to the page the component is rendered on, and compose the `@BabDevPagerfanta/live_component.html.twig` template with the [default Twig template](/open-source/packages/pagerfantabundle/docs/5.x/configuring-the-bundle#default-twig-template), which adds the attributes which change the page with a live action to each link.
 
 ```twig
 {# templates/components/BlogPostList.html.twig #}
@@ -51,17 +51,29 @@ The pager is available in the component's template as `this.pager`. Render it wi
         <article>{{ post.title }}</article>
     {% endfor %}
 
-    {{ pagerfanta(this.pager, 'twig', this.pagerfantaOptions|merge({'template': ['@BabDevPagerfanta/live_component.html.twig', '@BabDevPagerfanta/twitter_bootstrap5.html.twig']})) }}
+    {{ pagerfanta(this.pager, 'twig', this.pagerfantaOptions) }}
 </div>
+```
+
+To render the pager with a template other than the default Twig template, give a list of templates as the `template` option, starting with the live component template.
+
+```twig
+{{ pagerfanta(this.pager, 'twig', this.pagerfantaOptions|merge({'template': ['@BabDevPagerfanta/live_component.html.twig', '@Pagerfanta/twitter_bootstrap5.html.twig']})) }}
 ```
 
 Alternatively, create a template which extends the template for your pager's markup and uses the live component template, and give its name as the `template` option instead.
 
 ```twig
 {# templates/pagination/live_component.html.twig #}
-{%- extends '@BabDevPagerfanta/twitter_bootstrap5.html.twig' -%}
+{%- extends '@Pagerfanta/twitter_bootstrap5.html.twig' -%}
 {%- use '@BabDevPagerfanta/live_component.html.twig' -%}
 ```
+
+```twig
+{{ pagerfanta(this.pager, 'twig', this.pagerfantaOptions|merge({'template': 'pagination/live_component.html.twig'})) }}
+```
+
+<div class="docs-note">The <code>template</code> option replaces the live component template given by <code>this.pagerfantaOptions</code>, so a template given in its place must include the live component template for the links to change the page with a live action.</div>
 
 <div class="docs-note">The live component template works by overriding the <code>link_attributes</code> block of the Twig templates, see the <a href="/open-source/packages/pagerfanta/docs/5.x/views#link-attributes">Pagerfanta documentation</a> for more details.</div>
 
@@ -134,5 +146,5 @@ public int $page = 1;
 ```
 
 ```twig
-{{ pagerfanta(this.pager, 'twig', this.pagerfantaOptions|merge({'pageParameter': '[p]', 'template': ['@BabDevPagerfanta/live_component.html.twig', '@BabDevPagerfanta/twitter_bootstrap5.html.twig']})) }}
+{{ pagerfanta(this.pager, 'twig', this.pagerfantaOptions|merge({'pageParameter': '[p]'})) }}
 ```

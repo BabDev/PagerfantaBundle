@@ -26,7 +26,7 @@ final class Configuration implements ConfigurationInterface
                     ->info('The view to render pagers which the default view cannot render (i.e. cursor pagers with a numbered view), defaults to the "<default_view>_sequential" view when one exists')
                     ->defaultNull()
                 ->end()
-                ->scalarNode('default_twig_template')->defaultValue('@BabDevPagerfanta/default.html.twig')->end()
+                ->scalarNode('default_twig_template')->defaultValue('@Pagerfanta/default.html.twig')->end()
                 ->arrayNode('exceptions_strategy')
                     ->addDefaultsIfNotSet()
                     ->children()

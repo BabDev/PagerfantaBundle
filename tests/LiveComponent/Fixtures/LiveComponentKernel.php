@@ -52,6 +52,8 @@ final class LiveComponentKernel extends Kernel
         $container->extension('framework', [
             'secret' => 'secret',
             'test' => true,
+            'default_locale' => 'fr',
+            'translator' => true,
         ]);
 
         $container->extension('twig', [

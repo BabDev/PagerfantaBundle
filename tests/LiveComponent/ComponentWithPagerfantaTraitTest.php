@@ -147,6 +147,28 @@ final class ComponentWithPagerfantaTraitTest extends WebTestCase
         $this->assertStringContainsString('<li>1</li>', (string) $client->getResponse()->getContent());
     }
 
+    public function testTheTemplateFromTheOptionsRendersTheDefaultTemplateWithTranslatedMessages(): void
+    {
+        $client = self::createClient();
+        $client->request('GET', '/offset?page=2');
+
+        $html = (string) $client->getResponse()->getContent();
+
+        self::assertResponseIsSuccessful();
+        $this->assertStringContainsString('<nav class="pagination">', $html);
+        $this->assertStringContainsString('data-live-page-param="1">Précédent</a>', $html);
+        $this->assertStringContainsString('data-live-page-param="3">Suivant</a>', $html);
+    }
+
+    public function testATemplateExtendingASuppliedTemplateRendersTranslatedMessages(): void
+    {
+        $client = self::createClient();
+        $client->request('GET', '/cursor');
+
+        self::assertResponseIsSuccessful();
+        $this->assertMatchesRegularExpression('#data-live-cursor-param="[^"]+">Suivant</a>#', (string) $client->getResponse()->getContent());
+    }
+
     public function testTheRouteOfTheLinksMustBeKnown(): void
     {
         $this->expectExceptionMessage('set the "paginationRoute" property when rendering the component');

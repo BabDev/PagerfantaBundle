@@ -18,6 +18,18 @@ PagerfantaBundle 5.0 requires Pagerfanta 5.0 and removes the page number based r
 - `BabDev\PagerfantaBundle\Serializer\Normalizer\PagerfantaNormalizer` and `BabDev\PagerfantaBundle\Serializer\Handler\PagerfantaHandler` now serialize any `Pagerfanta\OffsetPagerInterface`
 - Made the cursor encoder a required argument in the `BabDev\PagerfantaBundle\RouteGenerator\RequestAwarePositionRouteGeneratorFactory` constructor
 
+### Twig
+
+- The labels of the previous and next links are now translated by the `@BabDevPagerfanta/translations.html.twig` template, which the `pagerfanta.view.twig` service composes after the template being rendered, so the labels are translated for every template which does not override the `previous_page_message` or `next_page_message` blocks
+    - Templates extending one of the `@Pagerfanta` templates (such as `@Pagerfanta/twitter_bootstrap5.html.twig`) now have translated labels
+- The default value of the `default_twig_template` configuration node changed from `@BabDevPagerfanta/default.html.twig` to `@Pagerfanta/default.html.twig`
+- The `default_twig_template` configuration node is now given to the `pagerfanta.view.twig` service as a list of templates, followed by the `@BabDevPagerfanta/translations.html.twig` template
+- `BabDev\PagerfantaBundle\LiveComponent\ComponentWithPagerfantaTrait::getPagerfantaOptions()` now includes a `template` option composing the `@BabDevPagerfanta/live_component.html.twig` template with the default Twig template, a `template` option given in its place must include the live component template
+
+## Deprecations
+
+- The `@BabDevPagerfanta/default.html.twig`, `@BabDevPagerfanta/foundation6.html.twig`, `@BabDevPagerfanta/semantic_ui.html.twig`, `@BabDevPagerfanta/tailwind.html.twig`, `@BabDevPagerfanta/twitter_bootstrap.html.twig`, `@BabDevPagerfanta/twitter_bootstrap3.html.twig`, `@BabDevPagerfanta/twitter_bootstrap4.html.twig`, and `@BabDevPagerfanta/twitter_bootstrap5.html.twig` templates are deprecated, use the `@Pagerfanta` template of the same name instead (i.e. `@Pagerfanta/twitter_bootstrap5.html.twig`)
+
 ## Removed Features
 
 - Removed `BabDev\PagerfantaBundle\RouteGenerator\RequestAwareRouteGeneratorFactory`, use `BabDev\PagerfantaBundle\RouteGenerator\RequestAwarePositionRouteGeneratorFactory` instead

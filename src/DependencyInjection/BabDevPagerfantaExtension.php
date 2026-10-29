@@ -39,8 +39,9 @@ final class BabDevPagerfantaExtension extends ConfigurableExtension implements P
                     ->replaceArgument(0, $mergedConfig['default_view'])
                     ->replaceArgument(3, $mergedConfig['default_sequential_view']);
 
+                // The translated messages are composed after the default template, so they apply to every template which does not override them
                 $container->getDefinition('pagerfanta.view.twig')
-                    ->replaceArgument(1, $mergedConfig['default_twig_template']);
+                    ->replaceArgument(1, [$mergedConfig['default_twig_template'], '@BabDevPagerfanta/translations.html.twig']);
             } else {
                 $container->removeDefinition('pagerfanta.twig_extension');
                 $container->removeDefinition('pagerfanta.twig_runtime');

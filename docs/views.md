@@ -40,18 +40,20 @@ This bundle provides a Pagerfanta view which renders a Twig template. If you hav
 
 The below table lists the available templates and the CSS framework they correspond to.
 
-| Template Name                                    | Framework                                                     |
-|--------------------------------------------------|---------------------------------------------------------------|
-| `@BabDevPagerfanta/default.html.twig`            | None (Pagerfanta's default view)                              |
-| `@BabDevPagerfanta/foundation6.html.twig`        | [Foundation](https://get.foundation/index.html) (version 6.x) |
-| `@BabDevPagerfanta/semantic_ui.html.twig`        | [Semantic UI](https://semantic-ui.com) (version 2.x)          |
-| `@BabDevPagerfanta/tailwind.html.twig`           | [Tailwind CSS](https://tailwindcss.com/)                      |
-| `@BabDevPagerfanta/twitter_bootstrap.html.twig`  | [Bootstrap](https://getbootstrap.com) (version 2.x)           |
-| `@BabDevPagerfanta/twitter_bootstrap3.html.twig` | [Bootstrap](https://getbootstrap.com) (version 3.x)           |
-| `@BabDevPagerfanta/twitter_bootstrap4.html.twig` | [Bootstrap](https://getbootstrap.com) (version 4.x)           |
-| `@BabDevPagerfanta/twitter_bootstrap5.html.twig` | [Bootstrap](https://getbootstrap.com) (version 5.x)           |
+| Template Name                              | Framework                                                     |
+|--------------------------------------------|---------------------------------------------------------------|
+| `@Pagerfanta/default.html.twig`            | None (Pagerfanta's default view)                              |
+| `@Pagerfanta/foundation6.html.twig`        | [Foundation](https://get.foundation/index.html) (version 6.x) |
+| `@Pagerfanta/semantic_ui.html.twig`        | [Semantic UI](https://semantic-ui.com) (version 2.x)          |
+| `@Pagerfanta/tailwind.html.twig`           | [Tailwind CSS](https://tailwindcss.com/)                      |
+| `@Pagerfanta/twitter_bootstrap.html.twig`  | [Bootstrap](https://getbootstrap.com) (version 2.x)           |
+| `@Pagerfanta/twitter_bootstrap3.html.twig` | [Bootstrap](https://getbootstrap.com) (version 3.x)           |
+| `@Pagerfanta/twitter_bootstrap4.html.twig` | [Bootstrap](https://getbootstrap.com) (version 4.x)           |
+| `@Pagerfanta/twitter_bootstrap5.html.twig` | [Bootstrap](https://getbootstrap.com) (version 5.x)           |
 
-The labels of the "Previous" and "Next" buttons are localizable in the Twig templates.
+The labels of the "Previous" and "Next" buttons are translated with the `pagerfanta` translation domain. The bundle composes the `@BabDevPagerfanta/translations.html.twig` template after the template being rendered, so the labels are translated for any template, including your own templates extending one of the supplied templates, unless the template overrides the `previous_page_message` or `next_page_message` blocks. The labels can also be changed with the `prev_message` and `next_message` options.
+
+<div class="docs-note docs-note--deprecated-feature">The <code>@BabDevPagerfanta</code> versions of the templates listed above (i.e. <code>@BabDevPagerfanta/twitter_bootstrap5.html.twig</code>) are deprecated and will be removed in 6.0, use the <code>@Pagerfanta</code> templates instead.</div>
 
 The Twig view can render any pager. Offset pagers are rendered with numbered page links, and all other pagers (such as cursor pagers) are rendered with only the previous and next links using the same templates.
 

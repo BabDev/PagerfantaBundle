@@ -9,7 +9,7 @@ babdev_pagerfanta:
     default_sequential_view: null
 
     # The default Twig template to use when using the Twig Pagerfanta view
-    default_twig_template: '@BabDevPagerfanta/default.html.twig'
+    default_twig_template: '@Pagerfanta/default.html.twig'
 
     exceptions_strategy:
         # The exception strategy if requesting a page outside the available pages in a paginated list; valid options are "custom" or "to_http_not_found"

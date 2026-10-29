@@ -94,7 +94,10 @@ trait ComponentWithPagerfantaTrait
     /**
      * Returns the options for the pagerfanta() Twig function, so the links of the pager point to the page instead of the live component endpoint.
      *
-     * @return array{routeName: string, routeParams: array<string, mixed>}
+     * The live component template is composed with the default Twig template to change the page with a live action, a
+     * template given in place of it must include the live component template to keep this behavior.
+     *
+     * @return array{routeName: string, routeParams: array<string, mixed>, template: list<string>}
      *
      * @throws LogicException if the route of the links is not known
      */
@@ -107,6 +110,7 @@ trait ComponentWithPagerfantaTrait
         return [
             'routeName' => $this->paginationRoute,
             'routeParams' => $this->getPaginationRouteParams(),
+            'template' => ['@BabDevPagerfanta/live_component.html.twig'],
         ];
     }
 

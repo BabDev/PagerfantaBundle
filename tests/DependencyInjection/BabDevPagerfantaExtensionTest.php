@@ -140,6 +140,7 @@ final class BabDevPagerfantaExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 2, new Reference(PositionRouteGeneratorFactoryInterface::class));
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 3, null);
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.twig_runtime', 4, new Reference('pagerfanta.cursor_encoder'));
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('pagerfanta.view.twig', 1, ['@Pagerfanta/default.html.twig', '@BabDevPagerfanta/translations.html.twig']);
 
         $twigConfig = $this->container->getExtensionConfig('twig');
 

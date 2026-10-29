@@ -25,7 +25,7 @@ babdev_pagerfanta:
 
 ## Default Twig Template
 
-The default Twig template for Twig views in your application can be set with the `default_twig_template` configuration node. This defaults to "`@BabDevPagerfanta/default.html.twig`".
+The default Twig template for Twig views in your application can be set with the `default_twig_template` configuration node. This defaults to "`@Pagerfanta/default.html.twig`".
 
 ```yaml
 # config/packages/babdev_pagerfanta.yaml

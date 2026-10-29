@@ -18,6 +18,7 @@ use Pagerfanta\Twig\Extension\PagerfantaRuntime;
 use Pagerfanta\Twig\View\TwigView;
 use Pagerfanta\View\ViewFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,6 +43,19 @@ use Twig\RuntimeLoader\RuntimeLoaderInterface;
  */
 final class TwigViewIntegrationTest extends TestCase
 {
+    /**
+     * The default templates of the Twig view as configured by the bundle.
+     */
+    public const array DEFAULT_TEMPLATES = ['@Pagerfanta/default.html.twig', '@BabDevPagerfanta/translations.html.twig'];
+
+    private const string EXTENDED_TEMPLATE = <<<'TWIG'
+        {%- extends '@Pagerfanta/twitter_bootstrap5.html.twig' -%}
+
+        {%- block next_page_message -%}
+            Onward
+        {%- endblock next_page_message -%}
+        TWIG;
+
     public UrlGeneratorInterface $router;
 
     public RequestStack $requestStack;
@@ -51,6 +65,8 @@ final class TwigViewIntegrationTest extends TestCase
     public SignedCursorEncoder $cursorEncoder;
 
     public Environment $twig;
+
+    public Translator $translator;
 
     public static function setUpBeforeClass(): void
     {
@@ -73,13 +89,15 @@ final class TwigViewIntegrationTest extends TestCase
                 new ArrayLoader([
                     'integration.html.twig' => '{{ pagerfanta(pager, options) }}',
                     'encode_cursor.html.twig' => '{{ pagerfanta_encode_cursor(pager.nextPosition) }}',
+                    'extended.html.twig' => self::EXTENDED_TEMPLATE,
                 ]),
                 $filesystemLoader,
             ],
         );
         $this->twig = new Environment($loader, ['strict_variables' => true]);
         $this->twig->addExtension(new PagerfantaExtension());
-        $this->twig->addExtension(new TranslationExtension($this->createTranslator()));
+        $this->translator = $this->createTranslator();
+        $this->twig->addExtension(new TranslationExtension($this->translator));
         $this->twig->addRuntimeLoader($this->createRuntimeLoader());
 
         $this->router = $this->createRouter();
@@ -107,7 +125,7 @@ final class TwigViewIntegrationTest extends TestCase
     {
         yield 'default template at page 1' => [
             1,
-            ['omitFirstPage' => false, 'template' => '@BabDevPagerfanta/default.html.twig'],
+            ['omitFirstPage' => false, 'template' => '@Pagerfanta/default.html.twig'],
             '<nav class="pagination">
     <span class="pagination__item pagination__item--previous-page pagination__item--disabled">Previous</span>
     <span class="pagination__item pagination__item--current-page" aria-current="page">1</span>
@@ -123,7 +141,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'default template at page 1 with translated labels' => [
             1,
-            ['omitFirstPage' => false, 'template' => '@BabDevPagerfanta/default.html.twig', 'prev_message' => 'Previous Page', 'next_message' => 'Next Page'],
+            ['omitFirstPage' => false, 'template' => '@Pagerfanta/default.html.twig', 'prev_message' => 'Previous Page', 'next_message' => 'Next Page'],
             '<nav class="pagination">
     <span class="pagination__item pagination__item--previous-page pagination__item--disabled">Previous Page</span>
     <span class="pagination__item pagination__item--current-page" aria-current="page">1</span>
@@ -139,7 +157,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'default template at page 5 with first page omitted' => [
             5,
-            ['omitFirstPage' => true, 'template' => '@BabDevPagerfanta/default.html.twig'],
+            ['omitFirstPage' => true, 'template' => '@Pagerfanta/default.html.twig'],
             '<nav class="pagination">
     <a class="pagination__item pagination__item--previous-page" href="/pagerfanta-view?page=4" rel="prev">Previous</a>
     <a class="pagination__item" href="/pagerfanta-view">1</a>
@@ -157,7 +175,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Semantic UI template at page 1' => [
             1,
-            ['omitFirstPage' => false, 'template' => '@BabDevPagerfanta/semantic_ui.html.twig'],
+            ['omitFirstPage' => false, 'template' => '@Pagerfanta/semantic_ui.html.twig'],
             '<div class="ui pagination menu">
     <div class="disabled item">Previous</div>
     <div class="active item" aria-current="page">1</div>
@@ -173,7 +191,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Semantic UI template at page 5 with first page omitted' => [
             5,
-            ['omitFirstPage' => true, 'template' => '@BabDevPagerfanta/semantic_ui.html.twig'],
+            ['omitFirstPage' => true, 'template' => '@Pagerfanta/semantic_ui.html.twig'],
             '<div class="ui pagination menu">
     <a class="item" href="/pagerfanta-view?page=4" rel="prev">Previous</a>
     <a class="item" href="/pagerfanta-view">1</a>
@@ -191,7 +209,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Twitter Bootstrap template at page 1' => [
             1,
-            ['omitFirstPage' => false, 'template' => '@BabDevPagerfanta/twitter_bootstrap.html.twig'],
+            ['omitFirstPage' => false, 'template' => '@Pagerfanta/twitter_bootstrap.html.twig'],
             '<div class="pagination">
     <ul>
         <li class="disabled"><span>Previous</span></li>
@@ -209,7 +227,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Twitter Bootstrap template at page 5 with first page omitted' => [
             5,
-            ['omitFirstPage' => true, 'template' => '@BabDevPagerfanta/twitter_bootstrap.html.twig'],
+            ['omitFirstPage' => true, 'template' => '@Pagerfanta/twitter_bootstrap.html.twig'],
             '<div class="pagination">
     <ul>
         <li><a href="/pagerfanta-view?page=4" rel="prev">Previous</a></li>
@@ -229,7 +247,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Twitter Bootstrap 3 template at page 1' => [
             1,
-            ['omitFirstPage' => false, 'template' => '@BabDevPagerfanta/twitter_bootstrap3.html.twig'],
+            ['omitFirstPage' => false, 'template' => '@Pagerfanta/twitter_bootstrap3.html.twig'],
             '<ul class="pagination">
     <li class="disabled"><span>Previous</span></li>
     <li class="active" aria-current="page"><span>1</span></li>
@@ -245,7 +263,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Twitter Bootstrap 3 template at page 5 with first page omitted' => [
             5,
-            ['omitFirstPage' => true, 'template' => '@BabDevPagerfanta/twitter_bootstrap3.html.twig'],
+            ['omitFirstPage' => true, 'template' => '@Pagerfanta/twitter_bootstrap3.html.twig'],
             '<ul class="pagination">
     <li><a href="/pagerfanta-view?page=4" rel="prev">Previous</a></li>
     <li><a href="/pagerfanta-view">1</a></li>
@@ -263,7 +281,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Twitter Bootstrap 4 template at page 1' => [
             1,
-            ['omitFirstPage' => false, 'template' => '@BabDevPagerfanta/twitter_bootstrap4.html.twig'],
+            ['omitFirstPage' => false, 'template' => '@Pagerfanta/twitter_bootstrap4.html.twig'],
             '<ul class="pagination">
     <li class="page-item disabled"><span class="page-link">Previous</span></li>
     <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
@@ -279,7 +297,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Twitter Bootstrap 4 template at page 5 with first page omitted' => [
             5,
-            ['omitFirstPage' => true, 'template' => '@BabDevPagerfanta/twitter_bootstrap4.html.twig'],
+            ['omitFirstPage' => true, 'template' => '@Pagerfanta/twitter_bootstrap4.html.twig'],
             '<ul class="pagination">
     <li class="page-item"><a class="page-link" href="/pagerfanta-view?page=4" rel="prev">Previous</a></li>
     <li class="page-item"><a class="page-link" href="/pagerfanta-view">1</a></li>
@@ -297,7 +315,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Tailwind CSS template at page 1' => [
             1,
-            ['omitFirstPage' => false, 'template' => '@BabDevPagerfanta/tailwind.html.twig'],
+            ['omitFirstPage' => false, 'template' => '@Pagerfanta/tailwind.html.twig'],
             '<nav role="navigation" class="flex items-center justify-between">
     <div class="flex-1 flex items-center justify-between">
         <div>
@@ -325,7 +343,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Tailwind CSS template at page 5 with first page omitted' => [
             5,
-            ['omitFirstPage' => true, 'template' => '@BabDevPagerfanta/tailwind.html.twig'],
+            ['omitFirstPage' => true, 'template' => '@Pagerfanta/tailwind.html.twig'],
             '<nav role="navigation" class="flex items-center justify-between">
     <div class="flex-1 flex items-center justify-between">
         <div>
@@ -353,7 +371,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Foundation 6 template at page 1' => [
             1,
-            ['omitFirstPage' => false, 'template' => '@BabDevPagerfanta/foundation6.html.twig'],
+            ['omitFirstPage' => false, 'template' => '@Pagerfanta/foundation6.html.twig'],
             '<nav aria-label="Pagination">
     <ul class="pagination">
     <li class="pagination-previous disabled">Previous</li>
@@ -371,7 +389,7 @@ final class TwigViewIntegrationTest extends TestCase
 
         yield 'Foundation 6 template at page 5 with first page omitted' => [
             5,
-            ['omitFirstPage' => true, 'template' => '@BabDevPagerfanta/foundation6.html.twig'],
+            ['omitFirstPage' => true, 'template' => '@Pagerfanta/foundation6.html.twig'],
             '<nav aria-label="Pagination">
     <ul class="pagination">
     <li class="pagination-previous"><a href="/pagerfanta-view?page=4" rel="prev">Previous</a></li>
@@ -420,7 +438,7 @@ final class TwigViewIntegrationTest extends TestCase
         $this->requestStack->push($request);
 
         $this->assertNotEmpty(
-            new TwigView($this->twig)->render(
+            new TwigView($this->twig, self::DEFAULT_TEMPLATES)->render(
                 $this->createPagerfanta(),
                 new RequestAwarePositionRouteGeneratorFactory($this->router, $this->requestStack, $this->propertyAccessor, $this->cursorEncoder)->createPositionRouteGenerator(),
             ),
@@ -444,7 +462,7 @@ final class TwigViewIntegrationTest extends TestCase
             new CursorPosition(new Cursor(['id' => 10])),
         );
 
-        $output = $this->twig->render('integration.html.twig', ['pager' => $pager, 'options' => ['template' => '@BabDevPagerfanta/twitter_bootstrap5.html.twig']]);
+        $output = $this->twig->render('integration.html.twig', ['pager' => $pager, 'options' => ['template' => '@Pagerfanta/twitter_bootstrap5.html.twig']]);
 
         $this->assertViewOutputMatches(
             $output,
@@ -478,6 +496,93 @@ final class TwigViewIntegrationTest extends TestCase
         $this->assertStringContainsString('cursor='.$encoded, $this->twig->render('integration.html.twig', ['pager' => $pager, 'options' => []]));
     }
 
+    /**
+     * @return \Generator<string, array{0: string}>
+     */
+    public static function dataTemplates(): \Generator
+    {
+        foreach (['default', 'foundation6', 'semantic_ui', 'tailwind', 'twitter_bootstrap', 'twitter_bootstrap3', 'twitter_bootstrap4', 'twitter_bootstrap5'] as $template) {
+            yield $template => [$template.'.html.twig'];
+        }
+    }
+
+    #[DataProvider('dataTemplates')]
+    public function testTheMessagesAreTranslatedForEachTemplate(string $template): void
+    {
+        $this->translator->setLocale('fr');
+
+        $output = $this->renderPagerfantaAtPage(5, ['template' => '@Pagerfanta/'.$template]);
+
+        $this->assertStringContainsString('>Précédent</a>', $output);
+        $this->assertStringContainsString('>Suivant</a>', $output);
+    }
+
+    public function testTheMessagesAreTranslatedForTheDefaultTemplate(): void
+    {
+        $this->translator->setLocale('fr');
+
+        $output = $this->renderPagerfantaAtPage(5, []);
+
+        $this->assertStringContainsString('<nav class="pagination">', $output);
+        $this->assertStringContainsString('rel="prev">Précédent</a>', $output);
+        $this->assertStringContainsString('rel="next">Suivant</a>', $output);
+    }
+
+    public function testTheMessagesAreTranslatedForATemplateExtendingASuppliedTemplateUnlessOverridden(): void
+    {
+        $this->translator->setLocale('fr');
+
+        $output = $this->renderPagerfantaAtPage(5, ['template' => 'extended.html.twig']);
+
+        $this->assertStringContainsString('<ul class="pagination">', $output);
+        $this->assertStringContainsString('rel="prev">Précédent</a>', $output);
+        $this->assertStringContainsString('rel="next">Onward</a>', $output);
+    }
+
+    public function testTheMessagesFromTheOptionsTakePrecedenceOverTheTranslations(): void
+    {
+        $this->translator->setLocale('fr');
+
+        $output = $this->renderPagerfantaAtPage(5, ['template' => '@Pagerfanta/twitter_bootstrap5.html.twig', 'prev_message' => 'Back', 'next_message' => 'Forward']);
+
+        $this->assertStringContainsString('rel="prev">Back</a>', $output);
+        $this->assertStringContainsString('rel="next">Forward</a>', $output);
+    }
+
+    #[DataProvider('dataTemplates')]
+    #[IgnoreDeprecations]
+    public function testTheDeprecatedBundleTemplatesRenderTheSuppliedTemplate(string $template): void
+    {
+        $this->expectUserDeprecationMessage(\sprintf('Since babdev/pagerfanta-bundle 5.0: The "@BabDevPagerfanta/%1$s" template is deprecated, use the "@Pagerfanta/%1$s" template instead. in "@BabDevPagerfanta/%1$s" at line 4.', $template));
+
+        $this->translator->setLocale('fr');
+
+        $this->assertSame(
+            $this->renderPagerfantaAtPage(5, ['template' => '@Pagerfanta/'.$template]),
+            $this->renderPagerfantaAtPage(5, ['template' => '@BabDevPagerfanta/'.$template]),
+        );
+    }
+
+    /**
+     * @param positive-int         $page
+     * @param array<string, mixed> $options
+     */
+    private function renderPagerfantaAtPage(int $page, array $options): string
+    {
+        if (!$this->requestStack->getCurrentRequest() instanceof Request) {
+            $request = Request::create('/');
+            $request->attributes->set('_route', 'pagerfanta_view');
+            $request->attributes->set('_route_params', []);
+
+            $this->requestStack->push($request);
+        }
+
+        $pagerfanta = $this->createPagerfanta();
+        $pagerfanta->setCurrentPage($page);
+
+        return $this->twig->render('integration.html.twig', ['pager' => $pagerfanta, 'options' => $options]);
+    }
+
     private function createRouter(): UrlGeneratorInterface
     {
         $routeCollection = new RouteCollection();
@@ -503,7 +608,7 @@ final class TwigViewIntegrationTest extends TestCase
                 switch ($class) {
                     case PagerfantaRuntime::class:
                         $viewFactory = new ViewFactory();
-                        $viewFactory->set('twig', new TwigView($this->testCase->twig));
+                        $viewFactory->set('twig', new TwigView($this->testCase->twig, TwigViewIntegrationTest::DEFAULT_TEMPLATES));
 
                         $routeGeneratorFactory = new RequestAwarePositionRouteGeneratorFactory(
                             $this->testCase->router,
@@ -532,6 +637,7 @@ final class TwigViewIntegrationTest extends TestCase
         $translator = new Translator('en');
         $translator->addLoader('xliff', new XliffFileLoader());
         $translator->addResource('xliff', __DIR__.'/../../translations/pagerfanta.en.xliff', 'en', 'pagerfanta');
+        $translator->addResource('xliff', __DIR__.'/../../translations/pagerfanta.fr.xliff', 'fr', 'pagerfanta');
 
         return $translator;
     }

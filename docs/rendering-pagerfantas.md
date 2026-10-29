@@ -89,7 +89,7 @@ When the pager is rendered outside of the frame it updates, each link must targe
 
 ```twig
 {# templates/pagination/posts_frame.html.twig #}
-{%- extends '@BabDevPagerfanta/twitter_bootstrap5.html.twig' -%}
+{%- extends '@Pagerfanta/twitter_bootstrap5.html.twig' -%}
 
 {%- block link_attributes %} data-turbo-frame="posts"{% endblock link_attributes -%}
 ```

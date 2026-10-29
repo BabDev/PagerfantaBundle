@@ -1,15 +1,15 @@
-{%- macro resolve_previous_page_message(options) -%}
+{%- block previous_page_message -%}
     {%- if options['prev_message'] is defined -%}
         {{- options['prev_message'] -}}
     {%- else -%}
         {{- 'Previous'|trans([], 'pagerfanta') -}}
     {%- endif -%}
-{%- endmacro -%}
+{%- endblock previous_page_message -%}
 
-{%- macro resolve_next_page_message(options) -%}
+{%- block next_page_message -%}
     {%- if options['next_message'] is defined -%}
         {{- options['next_message'] -}}
     {%- else -%}
         {{- 'Next'|trans([], 'pagerfanta') -}}
     {%- endif -%}
-{%- endmacro -%}
+{%- endblock next_page_message -%}

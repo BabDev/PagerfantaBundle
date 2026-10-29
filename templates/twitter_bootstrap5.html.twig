@@ -1,11 +1,6 @@
 {%- extends '@Pagerfanta/twitter_bootstrap5.html.twig' -%}
 
-{%- block previous_page_message -%}
-    {%- from '@BabDevPagerfanta/macros.html.twig' import resolve_previous_page_message -%}
-    {{- resolve_previous_page_message(options) -}}
-{%- endblock previous_page_message -%}
-
-{%- block next_page_message -%}
-    {%- from '@BabDevPagerfanta/macros.html.twig' import resolve_next_page_message -%}
-    {{- resolve_next_page_message(options) -}}
-{%- endblock next_page_message -%}
+{%- block pager_widget -%}
+    {%- deprecated 'The "@BabDevPagerfanta/twitter_bootstrap5.html.twig" template is deprecated, use the "@Pagerfanta/twitter_bootstrap5.html.twig" template instead.' package='babdev/pagerfanta-bundle' version='5.0' -%}
+    {{- parent() -}}
+{%- endblock pager_widget -%}
