@@ -1,0 +1,5 @@
+{%- block link_attributes -%}
+    {%- if page is not null %} data-action="live#action:prevent" data-live-action-param="goToPage" data-live-page-param="{{ page }}"
+    {%- elseif position is not null %} data-action="live#action:prevent" data-live-action-param="goToCursor" data-live-cursor-param="{{ pagerfanta_encode_cursor(position) }}"
+    {%- endif -%}
+{%- endblock link_attributes -%}

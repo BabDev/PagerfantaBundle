@@ -21,6 +21,7 @@ return static function (ContainerConfigurator $container): void {
             service('pagerfanta.view_factory'),
             service(PositionRouteGeneratorFactoryInterface::class),
             abstract_arg('default sequential view'),
+            service('pagerfanta.cursor_encoder'),
         ])
         ->tag('twig.runtime')
     ;

@@ -4,6 +4,7 @@
 - [Rendering Pagerfantas](/open-source/packages/pagerfantabundle/docs/5.x/rendering-pagerfantas)
 - [Generating Paginated Routes](/open-source/packages/pagerfantabundle/docs/5.x/generating-paginated-routes)
 - [Cursor Pagination](/open-source/packages/pagerfantabundle/docs/5.x/cursor-pagination)
+- [Live Components](/open-source/packages/pagerfantabundle/docs/5.x/live-components)
 - [Available Views](/open-source/packages/pagerfantabundle/docs/5.x/views)
 - [Adding Views](/open-source/packages/pagerfantabundle/docs/5.x/adding-views)
 - [Retrieving Views](/open-source/packages/pagerfantabundle/docs/5.x/retrieving-views)
