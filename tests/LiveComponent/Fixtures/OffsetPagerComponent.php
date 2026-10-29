@@ -33,7 +33,7 @@ final class OffsetPagerComponent
      */
     protected function createPager(): PagerfantaInterface
     {
-        return (new Pagerfanta(new ArrayAdapter(range($this->minimum, 50))))->setMaxPerPage(10);
+        return new Pagerfanta(new ArrayAdapter(range($this->minimum, 50)))->setMaxPerPage(10);
     }
 
     /**

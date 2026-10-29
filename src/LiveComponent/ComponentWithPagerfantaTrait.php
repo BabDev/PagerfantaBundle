@@ -187,8 +187,6 @@ trait ComponentWithPagerfantaTrait
      * @param PagerfantaInterface<T>|CursorPagerInterface<T> $pager
      *
      * @return PagerfantaInterface<T>|CursorPagerInterface<T>
-     *
-     * @throws LogicException if a cursor pager cannot be moved to another position
      */
     private function positionPager(PagerfantaInterface|CursorPagerInterface $pager): PagerfantaInterface|CursorPagerInterface
     {
@@ -206,18 +204,7 @@ trait ComponentWithPagerfantaTrait
 
         $this->page = 1;
 
-        // Cursor pagers are not required to implement withPosition() until Pagerfanta 5.0
-        if (!method_exists($pager, 'withPosition')) {
-            throw new LogicException(\sprintf('The "%s" pager created by the "%s" component must implement a withPosition() method to be paginated by the component.', get_debug_type($pager), static::class));
-        }
-
-        $positionedPager = $pager->withPosition($this->resolveCursorPosition());
-
-        if (!$positionedPager instanceof CursorPagerInterface) {
-            throw new LogicException(\sprintf('The withPosition() method of the "%s" pager must return an instance of "%s", "%s" returned.', get_debug_type($pager), CursorPagerInterface::class, get_debug_type($positionedPager)));
-        }
-
-        return $positionedPager;
+        return $pager->withPosition($this->resolveCursorPosition());
     }
 
     private function resolveCursorPosition(): ?CursorPosition

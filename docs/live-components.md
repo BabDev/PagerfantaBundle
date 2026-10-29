@@ -1,7 +1,5 @@
 # Live Components
 
-<div class="docs-note docs-note--new-feature">Live component support was introduced in PagerfantaBundle 4.8.</div>
-
 The bundle integrates with [Symfony UX Live Components](https://symfony.com/bundles/ux-live-component/current/index.html), allowing a live component to change pages without reloading the whole page. The links of the pager keep their URLs, so they also work when the component is not connected, and the URL of the page is kept in sync with the current page.
 
 To use this integration, install the `symfony/ux-live-component` package (version 2.36 or later on the 2.x branch, or 3.1 or later) and the `pagerfanta/twig` package.
@@ -9,8 +7,6 @@ To use this integration, install the `symfony/ux-live-component` package (versio
 ## Creating The Component
 
 Add the `BabDev\PagerfantaBundle\LiveComponent\ComponentWithPagerfantaTrait` to your live component and implement the `createPager()` method, which returns a pager for the component. Both offset pagers (`Pagerfanta\PagerfantaInterface`) and cursor pagers (`Pagerfanta\CursorPagerInterface`) are supported, the trait sets the position of the pager from the state of the component.
-
-<div class="docs-note">Cursor pagers are moved to the current position with their <code>withPosition()</code> method, which is implemented by the cursor pagers provided by Pagerfanta and will be required by the <code>Pagerfanta\CursorPagerInterface</code> in Pagerfanta 5.0. A <code>Pagerfanta\Exception\LogicException</code> is thrown when a custom cursor pager does not implement it.</div>
 
 ```php
 <?php
@@ -37,7 +33,7 @@ final class BlogPostList
 
     protected function createPager(): PagerfantaInterface
     {
-        return (new Pagerfanta(new QueryAdapter($this->blogPostRepository->createQueryBuilder('p'))))->setMaxPerPage(10);
+        return new Pagerfanta(new QueryAdapter($this->blogPostRepository->createQueryBuilder('p')))->setMaxPerPage(10);
     }
 }
 ```
@@ -57,7 +53,7 @@ The pager is available in the component's template as `this.pager`. Render it wi
 </div>
 ```
 
-Composing the templates with a list requires Twig 3.29 or later. With older Twig versions, create a template which extends the template for your pager's markup and uses the live component template, and give its name as the `template` option instead.
+Alternatively, create a template which extends the template for your pager's markup and uses the live component template, and give its name as the `template` option instead.
 
 ```twig
 {# templates/pagination/live_component.html.twig #}

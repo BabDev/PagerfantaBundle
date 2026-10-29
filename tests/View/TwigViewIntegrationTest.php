@@ -474,8 +474,8 @@ final class TwigViewIntegrationTest extends TestCase
 
         $encoded = $this->twig->render('encode_cursor.html.twig', ['pager' => $pager]);
 
-        self::assertEquals(new Cursor(['id' => 20]), $this->cursorEncoder->decode($encoded));
-        self::assertStringContainsString('cursor='.$encoded, $this->twig->render('integration.html.twig', ['pager' => $pager, 'options' => []]));
+        $this->assertEquals(new Cursor(['id' => 20]), $this->cursorEncoder->decode($encoded));
+        $this->assertStringContainsString('cursor='.$encoded, $this->twig->render('integration.html.twig', ['pager' => $pager, 'options' => []]));
     }
 
     private function createRouter(): UrlGeneratorInterface

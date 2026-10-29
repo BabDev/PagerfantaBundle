@@ -71,7 +71,6 @@ final class LiveComponentKernel extends Kernel
                 ->autoconfigure()
             ->set(OffsetPagerComponent::class)
             ->set(CursorPagerComponent::class)
-            ->set(CustomCursorPagerComponent::class)
             ->set('logger', NullLogger::class)
         ;
     }
