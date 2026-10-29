@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "pagerfanta/core": "^4.10",
+        "pagerfanta/core": "^4.11",
         "psr/container": "^1.0 || ^2.0",
         "symfony/config": "^5.4 || ^6.4 || ^7.4 || ^8.1",
         "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.4 || ^8.1",
@@ -26,10 +26,14 @@
         "phpstan/phpstan-phpunit": "2.1.1",
         "phpstan/phpstan-symfony": "2.1.1",
         "phpunit/phpunit": "10.5.66 || 11.5.57 || 12.5.42",
+        "symfony/browser-kit": "^5.4 || ^6.4 || ^7.4 || ^8.1",
+        "symfony/css-selector": "^5.4 || ^6.4 || ^7.4 || ^8.1",
+        "symfony/framework-bundle": "^5.4 || ^6.4 || ^7.4 || ^8.1",
         "symfony/serializer": "^5.4 || ^6.4 || ^7.4 || ^8.1",
         "symfony/twig-bridge": "^5.4 || ^6.4 || ^7.4 || ^8.1",
         "symfony/twig-bundle": "^5.4 || ^6.4 || ^7.4 || ^8.1",
         "symfony/translation": "^5.4 || ^6.4 || ^7.4 || ^8.1",
+        "symfony/ux-live-component": "^2.20 || ^3.0",
         "twig/twig": "^2.13 || ^3.0"
     },
     "conflict": {
@@ -40,6 +44,7 @@
         "symfony/translation": "<5.4 || >=6.0,<6.4 || >=7.0,<7.4 || ~8.0.0",
         "symfony/twig-bridge": "<5.4 || >=6.0,<6.4 || >=7.0,<7.4 || ~8.0.0",
         "symfony/twig-bundle": "<5.4 || >=6.0,<6.4 || >=7.0,<7.4 || ~8.0.0",
+        "symfony/ux-live-component": "<2.20",
         "twig/twig": "<2.13",
         "white-october/pagerfanta-bundle": "*"
     },
@@ -47,6 +52,7 @@
         "jms/serializer-bundle": "To use the Pagerfanta class with the JMS Serializer",
         "symfony/serializer": "To use the Pagerfanta class with the Symfony Serializer",
         "symfony/translation": "To use the Twig templates with translation support",
+        "symfony/ux-live-component": "To paginate within live components",
         "twig/twig": "To integrate Pagerfanta with Twig through extensions"
     },
     "autoload": {

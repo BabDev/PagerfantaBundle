@@ -1,0 +1,4 @@
+<div {{ attributes }}>
+    <ul class="items">{% for item in this.pager %}<li>{{ item }}</li>{% endfor %}</ul>
+    {{ pagerfanta(this.pager, 'twig', this.pagerfantaOptions|merge({template: 'pagination.html.twig'})) }}
+</div>
