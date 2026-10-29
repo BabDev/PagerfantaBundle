@@ -85,9 +85,7 @@ To only update the list when changing pages, wrap the list and its pager in a `<
 
 ### Pagers Outside Of The Frame
 
-<div class="docs-note docs-note--new-feature">Adding attributes to the links of the Twig templates requires PagerfantaBundle 4.8 or later.</div>
-
-When the pager is rendered outside of the frame it updates, each link must target the frame with the `data-turbo-frame` attribute. Add the attribute to the links by overriding the `link_attributes` block of your pager's template, see the [Pagerfanta documentation](/open-source/packages/pagerfanta/docs/4.x/views#link-attributes) for more details.
+When the pager is rendered outside of the frame it updates, each link must target the frame with the `data-turbo-frame` attribute. Add the attribute to the links by overriding the `link_attributes` block of your pager's template, see the [Pagerfanta documentation](/open-source/packages/pagerfanta/docs/5.x/views#link-attributes) for more details.
 
 ```twig
 {# templates/pagination/posts_frame.html.twig #}
@@ -108,4 +106,4 @@ When the pager is rendered outside of the frame it updates, each link must targe
 
 ### Turbo Or Live Components
 
-Turbo Frames are the simplest way to change pages without reloading the whole page, as they do not need any changes to your controllers. When the list has state which should be kept in sync with the pager, such as filters which return to the first page when they change, consider rendering it in a [live component](/open-source/packages/pagerfantabundle/docs/4.x/live-components) instead.
+Turbo Frames are the simplest way to change pages without reloading the whole page, as they do not need any changes to your controllers. When the list has state which should be kept in sync with the pager, such as filters which return to the first page when they change, consider rendering it in a [live component](/open-source/packages/pagerfantabundle/docs/5.x/live-components) instead.

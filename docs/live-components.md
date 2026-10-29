@@ -4,7 +4,7 @@ The bundle integrates with [Symfony UX Live Components](https://symfony.com/bund
 
 To use this integration, install the `symfony/ux-live-component` package (version 2.36 or later on the 2.x branch, or 3.1 or later) and the `pagerfanta/twig` package.
 
-For lists which do not need a component, such as a list without filters, [Turbo Frames](/open-source/packages/pagerfantabundle/docs/4.x/rendering-pagerfantas#turbo) can also change pages without reloading the whole page.
+For lists which do not need a component, such as a list without filters, [Turbo Frames](/open-source/packages/pagerfantabundle/docs/5.x/rendering-pagerfantas#turbo) can also change pages without reloading the whole page.
 
 ## Creating The Component
 
