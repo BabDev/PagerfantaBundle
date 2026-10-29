@@ -77,7 +77,7 @@ jobs:
 
       - name: Remove Twig
         if: matrix.with-twig == false
-        run: composer remove --dev --no-update pagerfanta/twig symfony/twig-bridge symfony/twig-bundle twig/twig
+        run: composer remove --dev --no-update pagerfanta/twig symfony/twig-bridge symfony/twig-bundle symfony/ux-live-component twig/twig
 
       - name: Install dependencies
         run: composer update ${{ matrix.composer-flags }} --prefer-dist
