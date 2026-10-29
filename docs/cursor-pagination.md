@@ -103,6 +103,14 @@ The URLs are generated for the current route, setting the signed cursor to the `
 {% endif %}
 ```
 
+The `pagerfanta_encode_cursor()` Twig function encodes a cursor position with the `pagerfanta.cursor_encoder` service, giving the same signed cursor used in the URLs, for when a cursor needs to be passed to something other than a URL, such as a JavaScript library. See the [Pagerfanta documentation](/open-source/packages/pagerfanta/docs/4.x/views#encoding-cursors) for more details.
+
+```twig
+{% if pager.hasNextPage() %}
+    <button type="button" data-cursor="{{ pagerfanta_encode_cursor(pager.nextPosition) }}">Load more</button>
+{% endif %}
+```
+
 ## APIs
 
 Cursor pagers are [serialized](/open-source/packages/pagerfantabundle/docs/4.x/serializer#cursor-pagers) with the signed cursors for the previous and next pages, which clients pass back in the `cursor` parameter to request those pages.

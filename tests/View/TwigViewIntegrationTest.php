@@ -72,7 +72,13 @@ final class TwigViewIntegrationTest extends TestCase
         $filesystemLoader->addPath($path, 'Pagerfanta');
 
         $loader = new ChainLoader(
-            [new ArrayLoader(['integration.html.twig' => '{{ pagerfanta(pager, options) }}']), $filesystemLoader],
+            [
+                new ArrayLoader([
+                    'integration.html.twig' => '{{ pagerfanta(pager, options) }}',
+                    'encode_cursor.html.twig' => '{{ pagerfanta_encode_cursor(pager.nextPosition) }}',
+                ]),
+                $filesystemLoader,
+            ],
         );
         $this->twig = new Environment($loader, ['strict_variables' => true]);
         $this->twig->addExtension(new PagerfantaExtension());
@@ -457,6 +463,26 @@ final class TwigViewIntegrationTest extends TestCase
         self::assertMatchesRegularExpression('/cursor=[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}&/', $output, 'The cursors are signed');
     }
 
+    public function testAnEncodedCursorMatchesTheCursorInTheGeneratedUrl(): void
+    {
+        $request = Request::create('/', 'GET', ['cursor' => 'current']);
+        $request->attributes->set('_route', 'pagerfanta_view');
+        $request->attributes->set('_route_params', []);
+
+        $this->requestStack->push($request);
+
+        $pager = new CursorPagerfanta(
+            new CallbackCursorAdapter(static fn (?Cursor $cursor, int $limit): CursorSlice => new CursorSlice(range(11, 20), null, new Cursor(['id' => 20])), true),
+            10,
+            new CursorPosition(new Cursor(['id' => 10])),
+        );
+
+        $encoded = $this->twig->render('encode_cursor.html.twig', ['pager' => $pager]);
+
+        self::assertEquals(new Cursor(['id' => 20]), $this->cursorEncoder->decode($encoded));
+        self::assertStringContainsString('cursor='.$encoded, $this->twig->render('integration.html.twig', ['pager' => $pager, 'options' => []]));
+    }
+
     private function createRouter(): UrlGeneratorInterface
     {
         $routeCollection = new RouteCollection();
@@ -494,7 +520,9 @@ final class TwigViewIntegrationTest extends TestCase
                         return new PagerfantaRuntime(
                             'twig',
                             $viewFactory,
-                            $routeGeneratorFactory
+                            $routeGeneratorFactory,
+                            null,
+                            $this->testCase->cursorEncoder,
                         );
 
                     default:
