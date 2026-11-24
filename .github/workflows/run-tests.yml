@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: ['8.4', '8.5']
+        php: ['8.4', '8.5', '8.6']
         symfony: ['6.4.*', '7.4.*', '8.1.*']
         pagerfanta: ['']
         composer-flags: ['--prefer-stable']
@@ -21,7 +21,7 @@ jobs:
         with-twig: [true]
         include:
           # Run "no Twig" build on latest PHP and Symfony LTS
-          - php: '8.4'
+          - php: '8.6'
             symfony: '7.4.*'
             composer-flags: '--prefer-stable'
             can-fail: false
@@ -38,10 +38,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Cache dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.composer/cache/files
           key: dependencies-symfony-${{ matrix.symfony }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}-flags-${{ matrix.composer-flags }}
