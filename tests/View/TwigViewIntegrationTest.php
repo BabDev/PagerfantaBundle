@@ -36,6 +36,7 @@ use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\FilesystemLoader;
+use Twig\RuntimeLoader\FactoryRuntimeLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
 /**
@@ -98,7 +99,27 @@ final class TwigViewIntegrationTest extends TestCase
         $this->twig->addExtension(new PagerfantaExtension());
         $this->translator = $this->createTranslator();
         $this->twig->addExtension(new TranslationExtension($this->translator));
-        $this->twig->addRuntimeLoader($this->createRuntimeLoader());
+        $this->twig->addRuntimeLoader(new FactoryRuntimeLoader([
+            PagerfantaRuntime::class => function (): PagerfantaRuntime {
+                $viewFactory = new ViewFactory();
+                $viewFactory->set('twig', new TwigView($this->twig, TwigViewIntegrationTest::DEFAULT_TEMPLATES));
+
+                $routeGeneratorFactory = new RequestAwarePositionRouteGeneratorFactory(
+                    $this->router,
+                    $this->requestStack,
+                    $this->propertyAccessor,
+                    $this->cursorEncoder,
+                );
+
+                return new PagerfantaRuntime(
+                    'twig',
+                    $viewFactory,
+                    $routeGeneratorFactory,
+                    null,
+                    $this->cursorEncoder,
+                );
+            },
+        ]));
 
         $this->router = $this->createRouter();
         $this->requestStack = new RequestStack();
@@ -589,47 +610,6 @@ final class TwigViewIntegrationTest extends TestCase
         $routeCollection->add('pagerfanta_view', new Route('/pagerfanta-view'));
 
         return new UrlGenerator($routeCollection, new RequestContext());
-    }
-
-    private function createRuntimeLoader(): RuntimeLoaderInterface
-    {
-        return new readonly class($this) implements RuntimeLoaderInterface {
-            public function __construct(private TwigViewIntegrationTest $testCase) {}
-
-            /**
-             * @param string $class
-             *
-             * @phpstan-param class-string $class
-             *
-             * @return object|null
-             */
-            public function load($class)
-            {
-                switch ($class) {
-                    case PagerfantaRuntime::class:
-                        $viewFactory = new ViewFactory();
-                        $viewFactory->set('twig', new TwigView($this->testCase->twig, TwigViewIntegrationTest::DEFAULT_TEMPLATES));
-
-                        $routeGeneratorFactory = new RequestAwarePositionRouteGeneratorFactory(
-                            $this->testCase->router,
-                            $this->testCase->requestStack,
-                            $this->testCase->propertyAccessor,
-                            $this->testCase->cursorEncoder,
-                        );
-
-                        return new PagerfantaRuntime(
-                            'twig',
-                            $viewFactory,
-                            $routeGeneratorFactory,
-                            null,
-                            $this->testCase->cursorEncoder,
-                        );
-
-                    default:
-                        return null;
-                }
-            }
-        };
     }
 
     private function createTranslator(): Translator
